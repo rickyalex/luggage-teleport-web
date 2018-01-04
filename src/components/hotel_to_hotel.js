@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom'
+import { getCurrentUser } from '../aws_cognito';
+import { FormGroup, InputGroup } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { PassBookData } from '../actions';
 
 import FaCalendar from 'react-icons/lib/fa/calendar';
 import MdHotel from 'react-icons/lib/md/hotel';
@@ -13,6 +17,8 @@ class HotelToHotel extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            Email: '',
+            PhoneNumber: '',
             dateType: 'text',
             timeType: 'text',
             HotelPickup: '',
@@ -23,7 +29,8 @@ class HotelToHotel extends Component {
             HotelDropoffBookingRef: '',
             RsvpNameHotelDropoff: '',
             OvernightStorage: false,
-            HotelDropoffDate: ''
+            HotelDropoffDate: '',
+            BookingType: 'HTH'
         }
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -77,144 +84,164 @@ class HotelToHotel extends Component {
 
     buttonSubmit() {
         return (
-            <button
-                className="btn btn-lg"
-                onClick={() => this.SubmitHotelToHotelData()}
-                type="button"
-                style={{ backgroundColor: 'yellow', width: '260px' }}>
-                Next
-        </button>
+            <Link to="/hthreview" style={{color: 'black'}}>
+                <button
+                    className="btn btn-lg"
+                    onClick={() => this.SubmitHotelToHotelData()}
+                    type="button"
+                    style={{ backgroundColor: 'yellow', width: '260px' }}>
+                    Next
+            </button>
+            </Link>
         )
     }
 
     SubmitHotelToHotelData() {
-        const {
-            HotelPickup,
-            HotelPickupBookingRef,
-            RsvpNameHotelPickup,
-            HotelPickupDate,
-            HotelDropoff,
-            HotelDropoffBookingRef,
-            RsvpNameHotelDropoff,
-            OvernightStorage,
-            HotelDropoffDate } = this.state;
+        let datas = [];
+        datas.push(this.state);
+        this.props.PassBookData(datas);
+    }
 
-        console.log(this.state);
+    componentDidMount() {
+        // console.log('this.props', this.props.user);
+        const { Email, PhoneNumber } = this.props.user;
+        this.setState({ Email, PhoneNumber })
     }
 
     render() {
-        const { email, isLogin } = this.props.user.user;
+        const currentUser = getCurrentUser()
         return (
             <div class="polaroid">
                 <div class="container">
                     <div className="form-inline">
                         <div className="form-group">
-                            {/**
-                         * Hotel A Section
-                         */}
-                            <select
-                                className="form-control"
-                                style={{ height: '35px', width: '260px' }}
-                                onChange={event => this.setState({ HotelPickup: event.target.value })}>
-                                <option value="" selected disabled>Hotel for Pick up</option>
-                                <option value="shantika">Shantika Hotel Jakarta</option>
-                                <option value="ritzcarlton">Ritz-Carlton Hotel</option>
-                            </select>
-                            <hr />
-                            <div class="input-group">
-                                <span class="input-group-addon" style={{ backgroundColor: 'white' }}><MdHotel style={{ color: '#00bfff' }} /></span>
-                                <input
-                                    type='text'
-                                    onChange={e => this.setState({ HotelPickupBookingRef: e.target.value })}
-                                    placeholder="Hotel Booking Reference"
-                                    className="form-control"
-                                    style={{ width: '220px' }}
-                                />
-                            </div>
-                            <hr />
-                            <div class="input-group">
-                                <span class="input-group-addon" style={{ backgroundColor: 'white' }}><FaUser style={{ color: '#00bfff' }} /></span>
-                                <input
-                                    type='text'
-                                    onChange={e => this.setState({ RsvpNameHotelPickup: e.target.value })}
-                                    placeholder="Name under Hotel Reservation"
-                                    className="form-control"
-                                    style={{ width: '220px' }}
-                                />
-                            </div>
-                            <hr />
-                            <div class="input-group">
-                                <span class="input-group-addon" style={{ backgroundColor: 'white' }}><FaCalendar style={{ color: '#00bfff' }} /></span>
-                                <input
-                                    type={this.state.dateType}
-                                    className="form-control"
-                                    placeholder="Pick up Date"
-                                    onChange={e => this.setState({ HotelPickupDate: e.target.value })}
-                                    onFocus={() => this.setState({ dateType: 'date' })}
-                                    onBlur={() => this.setState({ dateType: 'text' })}
-                                    style={{ width: '220px' }}
-                                />
-                            </div>
-                            <hr />
-                            {/**
-                             * Hotel B Section
-                             */}
-                            <select
-                                className="form-control"
-                                style={{ height: '35px', width: '260px' }}
-                                onChange={event => this.setState({ HotelDropoff: event.target.value })}>
-                                <option value="" selected disabled>Hotel for Drop off</option>
-                                <option value="shantika">Shantika Hotel Jakarta</option>
-                                <option value="ritzcarlton">Ritz-Carlton Hotel</option>
-                            </select>
-                            <hr />
-                            <div class="input-group">
-                                <span class="input-group-addon" style={{ backgroundColor: 'white' }}><MdHotel style={{ color: '#e6e600' }} /></span>
-                                <input
-                                    type='text'
-                                    onChange={e => this.setState({ HotelDropoffBookingRef: e.target.value })}
-                                    placeholder="Hotel Booking Reference"
-                                    className="form-control"
-                                    style={{ width: '220px' }}
-                                />
-                            </div>
-                            <hr />
-                            <div class="input-group">
-                                <span class="input-group-addon" style={{ backgroundColor: 'white' }}><FaUser style={{ color: '#e6e600' }} /></span>
-                                <input
-                                    type='text'
-                                    onChange={e => this.setState({ RsvpNameHotelDropoff: e.target.value })}
-                                    placeholder="Name under Hotel Reservation"
-                                    className="form-control"
-                                    style={{ width: '220px' }}
-                                />
-                            </div>
-                            <hr />
-                            <div>
-                                <label style={{ float: 'left', marginRight: 5 }}>Overnight Storage</label>
-                                <input type="radio" name="optradio" onChange={e => this.setState({ OvernightStorage: true })} />Yes
-                                <input type="radio" name="optradio" style={{ marginLeft: 5 }} onChange={e => this.setState({ OvernightStorage: false })} />No
-                            </div>
-                            <hr />
-                            <div class="input-group">
-                                <span class="input-group-addon" style={{ backgroundColor: 'white' }}><FaCalendar style={{ color: '#e6e600' }} /></span>
-                                <input
-                                    type={this.state.dateType}
-                                    className="form-control"
-                                    placeholder="Drop off Date"
-                                    onChange={e => this.setState({ HotelDropoffDate: e.target.value })}
-                                    onFocus={() => this.setState({ dateType: 'date' })}
-                                    onBlur={() => this.setState({ dateType: 'text' })}
-                                    style={{ width: '220px' }}
-                                />
-                            </div>
-                            <hr />
-
-                            {
-                                !isLogin ?
-                                    this.PopupModal()
-                                    : this.buttonSubmit()
-                            }
+                            <form>
+                                {/**
+                                * Hotel A Section
+                                */}
+                                <FormGroup>
+                                    <InputGroup>
+                                        <select
+                                            className="inputResponsive"
+                                            style={{ height: '35px', width: '260px' }}
+                                            onChange={event => this.setState({ HotelPickup: event.target.value })}>
+                                            <option value="" selected disabled>Hotel for Pick up</option>
+                                            <option value="Shantika Hotel Jakarta">Shantika Hotel Jakarta</option>
+                                            <option value="Ritz-Carlton Hotel">Ritz-Carlton Hotel</option>
+                                        </select>
+                                    </InputGroup>
+                                </FormGroup>
+                                <hr />
+                                <FormGroup>
+                                    <InputGroup>
+                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><MdHotel style={{ color: '#00bfff' }} /></InputGroup.Addon>
+                                        <input
+                                            type='text'
+                                            onChange={e => this.setState({ HotelPickupBookingRef: e.target.value })}
+                                            placeholder="Hotel Booking Reference"
+                                            className="inputResponsive"
+                                            style={{ width: '220px' }}
+                                        />
+                                    </InputGroup>
+                                </FormGroup>
+                                <hr />
+                                <FormGroup>
+                                    <InputGroup>
+                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaUser style={{ color: '#00bfff' }} /></InputGroup.Addon>
+                                        <input
+                                            type='text'
+                                            onChange={e => this.setState({ RsvpNameHotelPickup: e.target.value })}
+                                            placeholder="Name under Hotel Reservation"
+                                            className="inputResponsive"
+                                            style={{ width: '220px' }}
+                                        />
+                                    </InputGroup>
+                                </FormGroup>
+                                <hr />
+                                <FormGroup>
+                                    <InputGroup>
+                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaCalendar style={{ color: '#00bfff' }} /></InputGroup.Addon>
+                                        <input
+                                            type={this.state.dateType}
+                                            className="inputResponsive"
+                                            placeholder="Pick up Date"
+                                            onChange={e => this.setState({ HotelPickupDate: e.target.value })}
+                                            onFocus={() => this.setState({ dateType: 'date' })}
+                                            onBlur={() => this.setState({ dateType: 'text' })}
+                                            style={{ width: '220px' }}
+                                        />
+                                    </InputGroup>
+                                </FormGroup>
+                                {/**
+                                * Hotel B Section
+                                */}
+                                <hr />
+                                <FormGroup>
+                                    <InputGroup>
+                                        <select
+                                            className="inputResponsive"
+                                            style={{ height: '35px', width: '260px' }}
+                                            onChange={event => this.setState({ HotelDropoff: event.target.value })}>
+                                            <option value="" selected disabled>Hotel for Drop off</option>
+                                            <option value="Shantika Hotel Jakarta">Shantika Hotel Jakarta</option>
+                                            <option value="Ritz-Carlton Hotel">Ritz-Carlton Hotel</option>
+                                        </select>
+                                    </InputGroup>
+                                </FormGroup>
+                                <hr />
+                                <FormGroup>
+                                    <InputGroup>
+                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><MdHotel style={{ color: '#e6e600' }} /></InputGroup.Addon>
+                                        <input
+                                            type='text'
+                                            onChange={e => this.setState({ HotelDropoffBookingRef: e.target.value })}
+                                            placeholder="Hotel Booking Reference"
+                                            className="inputResponsive"
+                                            style={{ width: '220px' }}
+                                        />
+                                    </InputGroup>
+                                </FormGroup>
+                                <hr />
+                                <FormGroup>
+                                    <InputGroup>
+                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaUser style={{ color: '#e6e600' }} /></InputGroup.Addon>
+                                        <input
+                                            type='text'
+                                            onChange={e => this.setState({ RsvpNameHotelDropoff: e.target.value })}
+                                            placeholder="Name under Hotel Reservation"
+                                            className="inputResponsive"
+                                            style={{ width: '220px' }}
+                                        />
+                                    </InputGroup>
+                                </FormGroup>
+                                <hr />
+                                <div>
+                                    Overnight Storage
+                                    <input type="radio" name="optradio" onChange={e => this.setState({ OvernightStorage: true })} />Yes
+                                    <input type="radio" name="optradio" onChange={e => this.setState({ OvernightStorage: false })} />No
+                                </div>
+                                <hr />
+                                <FormGroup>
+                                    <InputGroup>
+                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaCalendar style={{ color: '#e6e600' }} /></InputGroup.Addon>
+                                        <input
+                                            type={this.state.dateType}
+                                            className="inputResponsive"
+                                            placeholder="Drop off Date"
+                                            onChange={e => this.setState({ HotelDropoffDate: e.target.value })}
+                                            onFocus={() => this.setState({ dateType: 'date' })}
+                                            onBlur={() => this.setState({ dateType: 'text' })}
+                                            style={{ width: '220px' }}
+                                        />
+                                    </InputGroup>
+                                </FormGroup>
+                                <hr />
+                                {
+                                    !currentUser ?
+                                        this.PopupModal()
+                                        : this.buttonSubmit()
+                                }
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -223,4 +250,11 @@ class HotelToHotel extends Component {
     }
 }
 
-export default HotelToHotel;
+function mapsStateToProps(state) {
+    const { user } = state;
+    return {
+        user
+    }
+}
+
+export default connect(mapsStateToProps, { PassBookData })(HotelToHotel);
