@@ -62,11 +62,15 @@ class PaymentMethod extends Component {
         const Payment = [
             {
                 id: 1,
-                name: "Cash"
+                name: "Credit Card"
             }
         ]
 
         return Payment;
+    }
+
+    ValidatePayment() {
+        return (this.state.PaymentMethod.length > 0)
     }
 
     render() {
@@ -87,7 +91,7 @@ class PaymentMethod extends Component {
                                 <InputGroup>
                                     <select
                                         className="form-control"
-                                        style={{ height: '35px', width: '260px', marginTop: '4em', marginLeft: '10em'}}
+                                        style={{ height: '35px', width: '260px', marginTop: '4em', marginLeft: '10em' }}
                                         onChange={event => this.setState({ PaymentMethod: event.target.value })}>
                                         <option value="" selected disabled>Choose Your Payment</option>
                                         {
@@ -102,7 +106,7 @@ class PaymentMethod extends Component {
                     </div>
                     <div align="center">
                         <button type="button" class="btn btn-danger btn-lg" style={{ marginRight: '3px' }} onClick={this.backToReview}>Back</button>
-                        <button type="button" class="btn btn-primary btn-lg" onClick={this.toFinalReview}>Next</button>
+                        <button type="button" class="btn btn-primary btn-lg" onClick={this.toFinalReview} disabled={!this.ValidatePayment()}>Next</button>
                     </div>
                 </div>
             </div>

@@ -4,23 +4,37 @@ import { PassBookData } from '../actions';
 import '../App.css';
 import * as moment from 'moment';
 import axios from 'axios';
+import SquarePaymentForm from './square_payment_form';
+import { SQUARE_APP_ID } from '../config';
+
 class ATHFinalReview extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false
+            isLoading: false,
+            TotalCost: 0,
+            Luggage: 0
         }
     }
     PushData() {
         const { dispatch } = this.props;
         dispatch(PassBookData(this.props.BookData));
     }
+    handleNonceError(errors) {
+        console.log('handleNonceError', errors);
+        alert(errors[0].message)
+    }
     backToPayment = async => {
         this.PushData()
         this.props.history.push('/payment');
     }
     Submit = async => {
+        this.paymentForm.generateNonce();
+    }
+
+    handleNonce = async (nonce, cardData) => {
         const { Airline, Airport, ArrivalTime, DropoffDate, Email, FlightNumber, Hotel, HotelBookingRef,
+
             NameUnderHotelRsv, OvernightStorage, PhoneNumber, PickupDate } = this.props.BookData[0]
         // console.log('final submit', this.props.BookData[0])
         // let data = JSON.stringify({
@@ -72,11 +86,66 @@ class ATHFinalReview extends Component {
                 // console.log(err);
                 this.setState({ isLoading: false })
             })
+            
+          NameUnderHotelRsv, OvernightStorage, PhoneNumber, PickupDate } = this.props.BookData[0]
+        const { PaymentMethod } = this.props.payment;
+        const { Luggage, TotalCost } = this.state
+        let data = JSON.stringify({
+         flightNumber: FlightNumber,
+         status: 'Awaiting Payment',
+         hotelReservationName: NameUnderHotelRsv,
+         airport: Airport,
+         hotel: Hotel,
+         pickupDate: PickupDate,
+         airline: Airline,
+         estimatedArrival: ArrivalTime,
+         dropoffDate: DropoffDate,
+         hotelReference: HotelBookingRef,
+         email: Email,
+         phone: PhoneNumber,
+         PaymentWith: PaymentMethod,
+         LuggageQuantity: Luggage,
+         TotalCost: TotalCost,
+         cardNonce: nonce,
+         })
+
+         let token = localStorage.getItem('token')
+         // console.log('token', token)
+         let config = {
+         headers: {
+         'Authorization': `Bearer ${token}`,
+         'Content-Type': 'application/json'
+         }
+         }
+         this.setState({ isLoading: true })
+
+         axios.post('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-create', data, config)
+         .then((response) => {
+         // console.log(response);
+         alert('success booked!')
+         this.props.history.push('/');
+         }, (err) => {
+         // console.log(err);
+         this.setState({ isLoading: false })
+         })
+    }
+    handleLuggage = async => {
+        const { Luggage, TotalCost } = this.state
+        // this.setState({Luggage})
+        if (Luggage > 0 && Luggage <= 2) {
+            this.setState({ TotalCost: 35 })
+        } else if (Luggage > 2) {
+            const TotalWithAdditional = 35 + ((Luggage - 2) * 10);
+            this.setState({ TotalCost: TotalWithAdditional })
+        }
+
     }
     render() {
         const { Airline, Airport, ArrivalTime, DropoffDate, Email, FlightNumber, Hotel, HotelBookingRef,
             NameUnderHotelRsv, OvernightStorage, PhoneNumber, PickupDate } = this.props.BookData[0]
+
         const { PaymentMethod } = this.props.payment;
+        const { Total } = this.state;
         return (
             <div>
                 <div className="containerProgressBar" style={{ marginTop: '1em' }}>
@@ -101,24 +170,40 @@ class ATHFinalReview extends Component {
                         <p><strong>Hotel Drop Off</strong> = {Hotel}</p>
                         <p><strong>Hotel Booking Reference</strong> = {HotelBookingRef}</p>
                         <p><strong>Name under Hotel Reservation</strong> = {NameUnderHotelRsv}</p>
-                        {
+                        {/* {
                             OvernightStorage === true ?
                                 <p><strong>Overnight Storage</strong> = Yes</p>
                                 :
                                 <p><strong>Overnight Storage</strong> = No</p>
-                        }
+                        } */}
                         <p><strong>Drop off Date</strong> = {moment(DropoffDate).format('Do MMMM YYYY')}</p>
                         <hr />
-                        <h3>Payment Method</h3>
-                        with {PaymentMethod}
+
+                        <h3>Your Luggage(s)</h3>
+                        <input onChange={e => this.setState({ Luggage: e.target.value })} placeholder="you luggage quantity" />
+                        <button onClick={this.handleLuggage} style={{ backgroundColor: '#00bfff' }} disabled={!this.state.Luggage}>Add</button>
+                        <hr />
+
+                        <h3>Payment Details</h3>
+                        <p>with {PaymentMethod}</p>
+                        <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
+                        <p><strong>Total = ${this.state.TotalCost}</strong></p>
+
+                        <p><strong>Notes! </strong>
+                            <i className="registerNotes">
+                                $35 fixed price up to 2 Luggages and $10 per additional</i>
+                        </p>
+
                     </div>
                     <div align="center">
-                        <button type="button" class="btn btn-danger btn-lg" onClick={this.backToPayment} style={{ width: '160px' }}>Back</button>
+                        <button type="button" className="btn btn-danger btn-lg" onClick={this.backToPayment} style={{ width: '160px' }}>Back</button>
                         {
                             !this.state.isLoading ?
-                                <button type="button" class="btn btn-primary btn-lg"
+                                <button type="button" className="btn btn-primary btn-lg"
                                     onClick={this.Submit}
-                                    style={{ width: '160px', marginLeft: '1em' }}>Submit Data
+                                    style={{ width: '160px', marginLeft: '1em' }}
+                                    disabled={!this.state.TotalCost}
+                                >Submit Data
                                  </button>
                                 :
                                 <button
