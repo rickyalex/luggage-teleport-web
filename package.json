@@ -2,7 +2,7 @@
   "name": "lugg-web",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://myusername.github.io/my-app",
+  "homepage": "https://luggageteleport.net",
   "dependencies": {
     "amazon-cognito-identity-js": "^1.28.0",
     "apollo-cache-inmemory": "^1.1.4",
