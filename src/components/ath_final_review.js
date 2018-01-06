@@ -10,12 +10,15 @@ import { SQUARE_APP_ID } from '../config';
 class ATHFinalReview extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             isLoading: false,
             TotalCost: 0,
             Luggage: 0
         }
     }
+
+
     PushData() {
         const { dispatch } = this.props;
         dispatch(PassBookData(this.props.BookData));
@@ -34,59 +37,6 @@ class ATHFinalReview extends Component {
 
     handleNonce = async (nonce, cardData) => {
         const { Airline, Airport, ArrivalTime, DropoffDate, Email, FlightNumber, Hotel, HotelBookingRef,
-
-            NameUnderHotelRsv, OvernightStorage, PhoneNumber, PickupDate } = this.props.BookData[0]
-        // console.log('final submit', this.props.BookData[0])
-        // let data = JSON.stringify({
-        //     flightNumber: FlightNumber,
-        //     status: 'Awaiting Payment',
-        //     hotelReservationName: NameUnderHotelRsv,
-        //     airport: Airport,
-        //     hotel: Hotel,
-        //     pickupDate: PickupDate,
-        //     overnight: OvernightStorage,
-        //     airline: Airline,
-        //     estimatedArrival: ArrivalTime,
-        //     type: 'Airport to Hotel',
-        //     overnightDropoffdate: DropoffDate,
-        //     hotelReference: HotelBookingRef,
-        //     email: Email,
-        //     phone: PhoneNumber
-        // })
-        // let token = localStorage.getItem('token')
-        // // console.log('token', token)
-        // let config = {
-        //     headers: {
-        //         'Authorization': `Bearer ${token}`,
-        //         'Content-Type': 'application/json'
-        //     }
-        // }
-        this.setState({ isLoading: true })
-        axios.post('https://adf5ue28ya.execute-api.us-east-1.amazonaws.com/dev/handler/booking-create', {
-            flightNumber: FlightNumber,
-            status: 'Awaiting Payment',
-            hotelReservationName: NameUnderHotelRsv,
-            airport: Airport,
-            hotel: Hotel,
-            pickupDate: PickupDate,
-            overnight: OvernightStorage,
-            airline: Airline,
-            estimatedArrival: ArrivalTime,
-            type: 'Airport to Hotel',
-            overnightDropoffdate: DropoffDate,
-            hotelReference: HotelBookingRef,
-            email: Email,
-            phone: PhoneNumber
-        })
-            .then((response) => {
-                // console.log(response);
-                alert('success booked!')
-                this.props.history.push('/');
-            }, (err) => {
-                // console.log(err);
-                this.setState({ isLoading: false })
-            })
-            
           NameUnderHotelRsv, OvernightStorage, PhoneNumber, PickupDate } = this.props.BookData[0]
         const { PaymentMethod } = this.props.payment;
         const { Luggage, TotalCost } = this.state
@@ -140,6 +90,7 @@ class ATHFinalReview extends Component {
         }
 
     }
+
     render() {
         const { Airline, Airport, ArrivalTime, DropoffDate, Email, FlightNumber, Hotel, HotelBookingRef,
             NameUnderHotelRsv, OvernightStorage, PhoneNumber, PickupDate } = this.props.BookData[0]
@@ -160,6 +111,7 @@ class ATHFinalReview extends Component {
                         <p><strong>Email</strong> = {Email}</p>
                         <p><strong>Phone Number</strong> = {PhoneNumber}</p>
                         <hr />
+
                         <h3>Your Booking</h3>
                         <p><strong>Aiport</strong> = {Airport}</p>
                         <p><strong>Airline</strong> = {Airline}</p>
@@ -167,6 +119,7 @@ class ATHFinalReview extends Component {
                         <p><strong>Pick up Date</strong> = {moment(PickupDate).format('Do MMMM YYYY')}</p>
                         <p><strong>Estimated Time of Arrival</strong> = {moment(ArrivalTime, ["HH:mm"]).format("hh:mm a")}</p>
                         <hr />
+
                         <p><strong>Hotel Drop Off</strong> = {Hotel}</p>
                         <p><strong>Hotel Booking Reference</strong> = {HotelBookingRef}</p>
                         <p><strong>Name under Hotel Reservation</strong> = {NameUnderHotelRsv}</p>
@@ -195,6 +148,7 @@ class ATHFinalReview extends Component {
                         </p>
 
                     </div>
+
                     <div align="center">
                         <button type="button" className="btn btn-danger btn-lg" onClick={this.backToPayment} style={{ width: '160px' }}>Back</button>
                         {
@@ -215,12 +169,14 @@ class ATHFinalReview extends Component {
                                     <i className="fa fa-spinner fa-spin"></i> Submitting...
                                 </button>
                         }
+
                     </div>
                 </div>
             </div>
         )
     }
 }
+
 function mapStateToProps(state) {
     const { BookData, payment } = state;
     return {
@@ -229,3 +185,4 @@ function mapStateToProps(state) {
     }
 }
 export default connect(mapStateToProps, null)(ATHFinalReview);
+
