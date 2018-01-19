@@ -21,20 +21,10 @@ class HTHHistory extends Component {
     }
 
     GetHTHData() {
-        // let token = localStorage.getItem('token')
-        // // console.log('token', token)
-        // let config = {
-        //     headers: {
-        //         'Authorization': `Bearer ${token}`,
-        //         'Content-Type': 'application/json'
-        //     }
-        // }
-
         const { Email } = this.props.user
         axios.get(`https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/HotelToHotel-get/${Email}`)
             .then((res) => {
                 this.setState({ data: res.data.result, isLoading: true })
-                // console.log(res.data.result)
             }).catch((err) => {
                 console.log(err);
             })
@@ -47,15 +37,16 @@ class HTHHistory extends Component {
                 <div>
 
                     {
-                        isLoading && data.length === 0?
+                        isLoading && data.length === 0 ?
                             NullBookingData()
                             :
-                            isLoading && data.length > 0?
+                            isLoading && data.length > 0 ?
                                 data.map((res, k) => {
                                     return (
                                         <div key={k} style={{ margin: 3 }}>
                                             <div className="card">
                                                 <div className="containerCard">
+                                                    <h3>Order No: {res.BookingId}</h3>
                                                     <p>From <strong>{res.HotelPickup}</strong></p>
                                                     <p>to <strong>{res.HotelDropoff}</strong></p>
                                                     <p>Booked at <strong>{moment(res.createdAt).format('DD MMM YYYY, hh:mm a')}</strong></p>
