@@ -1,11 +1,3 @@
-// export default {
-//     cognito: {
-//       REGION: "us-west-2",
-//       USER_POOL_ID: "us-west-2_FLoshMhAR",
-//       APP_CLIENT_ID: "3cda4n7do7f9ou5gqerhue73ro",
-//     }
-//   };
-
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import AWS from 'aws-sdk'
 
