@@ -14,7 +14,6 @@ class App extends Component {
   }
 
   render() {
-    // console.log('this.props', this.props.user);
     return (
       <div>
         <ReactTooltip place="bottom" type="info" effect="solid" />
