@@ -49,18 +49,20 @@ class BookingForm extends Component {
                         </TabList>
 
                         <div>
-                            <TabPanel>
-                                <AirportToHotel />
-                            </TabPanel>
-                            <TabPanel>
-                                <HotelToAirport />
-                            </TabPanel>
-                            <TabPanel>
-                                <HotelToHotel />
-                            </TabPanel>
-                            <TabPanel>
-                                <AirportToAirport />
-                            </TabPanel>
+                            <center>
+                                <TabPanel>
+                                    <AirportToHotel />
+                                </TabPanel>
+                                <TabPanel>
+                                    <HotelToAirport />
+                                </TabPanel>
+                                <TabPanel>
+                                    <HotelToHotel />
+                                </TabPanel>
+                                <TabPanel>
+                                    <AirportToAirport />
+                                </TabPanel>
+                            </center>
                         </div>
                     </Tabs>
                 </div>
