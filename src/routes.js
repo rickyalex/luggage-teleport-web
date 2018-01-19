@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { Route, HashRouter as Router, Redirect } from 'react-router-dom';
 import App from './App';
 import Login from './components/login';
 import Register from './components/register';
@@ -14,18 +14,25 @@ import PaymentMethod from './components/payment_method';
 import ATHFinalReview from './components/ath_final_review';
 import HTAFinalReview from './components/hta_final_review';
 import HTHFinalReview from './components/hth_final_review';
-import ATAFinalReview from './components/ata_final_review'
+import ATAFinalReview from './components/ata_final_review';
 
 
 class Routes extends Component {
 
     render() {
+        const token = localStorage.getItem('token');
         return (
             <div>
                 <Router>
                     <div>
-                        <Route exact path="/" component={Login} />
-                        <Route path="/home" component={App}/>
+                        <Route exact path="/" render={() => (
+                            token === null || token === undefined ? (
+                                <Login />
+                            ) : (
+                                <App />
+                                )
+                        )} />
+                        <Route path="/home" component={App} />
                         <Route path="/register" component={Register} />
                         <Route path="/booking" component={BookingForm} />
                         <Route path="/history" component={History} />
