@@ -26,7 +26,7 @@ class PaymentMethod extends Component {
         this.props.GetPaymentMethod(this.state.PaymentMethod);
     }
 
-   async backToReview() {
+    async backToReview() {
         this.PushData()
         const { BookingType } = this.props.BookData[0];
         if (BookingType === 'ATH') {
@@ -77,7 +77,6 @@ class PaymentMethod extends Component {
     }
 
     render() {
-        // console.log('payment method', this.props.BookData[0]);
         return (
             <div>
                 <div className="containerProgressBar" style={{ marginTop: '1em' }}>
@@ -89,23 +88,27 @@ class PaymentMethod extends Component {
                     </ul>
 
                     <div className="receipt">
-                        <form >
-                            <FormGroup>
-                                <InputGroup>
-                                    <select
-                                        className="form-control"
-                                        style={{ height: '35px', width: '260px', marginTop: '4em', marginLeft: '10em' }}
-                                        onChange={event => this.setState({ PaymentMethod: event.target.value })}>
-                                        <option value="" selected disabled>Choose Your Payment</option>
-                                        {
-                                            this.GetPayment().map((payment) => {
-                                                return <option key={payment.id} value={payment.name}>{payment.name}</option>
-                                            })
-                                        }
-                                    </select>
-                                </InputGroup>
-                            </FormGroup>
-                        </form>
+                        <div className="form-inline">
+                            <div className="form-group">
+                                <form align="center">
+                                    <FormGroup>
+                                        <InputGroup>
+                                            <select
+                                                className="form-control"
+                                                style={{ height: '35px', width: '260px', marginTop: '4em', marginLeft:"-28em"}}
+                                                onChange={event => this.setState({ PaymentMethod: event.target.value })}>
+                                                <option value="" selected disabled>Choose Your Payment</option>
+                                                {
+                                                    this.GetPayment().map((payment) => {
+                                                        return <option key={payment.id} value={payment.name}>{payment.name}</option>
+                                                    })
+                                                }
+                                            </select>
+                                        </InputGroup>
+                                    </FormGroup>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <div align="center">
                         <button type="button" class="btn btn-danger btn-lg" style={{ marginRight: '3px' }} onClick={this.backToReview}>Back</button>
