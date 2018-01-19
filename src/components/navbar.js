@@ -16,23 +16,6 @@ class Navbar extends React.Component {
     super(props);
   }
 
-  componentWillMount() {
-    const currentUser = getCurrentUser();
-    const UserToken = getUserToken(currentUser);
-    // console.log('currentUser', currentUser)
-    if (currentUser) {
-
-      const { dispatch } = this.props;
-      const { jwtToken } = currentUser.signInUserSession.idToken;
-      const { email, phone_number } = currentUser.signInUserSession.idToken.payload;
-      dispatch(LogUser(email, phone_number))
-      localStorage.setItem('token', `"${jwtToken}"`)
-    } else {
-      // this.props.history.push('/')
-      console.log(false)
-    }
-  }
-
   signOutUser() {
     const currentUser = getCurrentUser();
 
@@ -70,18 +53,18 @@ class Navbar extends React.Component {
   }
 
   Login() {
-    this.props.history.push('/login')
+    this.props.history.push('/');
   }
 
   render() {
-    const currentUser = getCurrentUser();
+    const token = localStorage.getItem('token')
     return (
       <div>
         <nav>
           <div>
             <Menu right>
               {
-                !currentUser ? <div></div>
+                !token ? <div></div>
                   :
                   <div>
                     Hi {this.props.user.Email}
@@ -89,13 +72,13 @@ class Navbar extends React.Component {
               }
               <a id="log" className="menu-item">
                 {
-                  !currentUser ? this.RenderLoginButton() :
+                  !token ? this.RenderLoginButton() :
                     this.RenderLogoutButton()
                 }
               </a>
               <a id="history" className="menu-item">
                 {
-                  !currentUser ? <div></div>
+                  !token ? <div></div>
                     :
                     <Link to="/history">History</Link>
                 }
