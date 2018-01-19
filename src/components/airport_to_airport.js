@@ -92,14 +92,11 @@ class AirportToAirport extends Component {
     }
 
     componentDidMount() {
-        // console.log('this.props', this.props.user);
         const { Email, PhoneNumber } = this.props.user;
         this.setState({ Email, PhoneNumber })
     }
 
     render() {
-        // const { email } = this.props.user.user;
-        // const currentUser = getCurrentUser()
         return (
             <div className="polaroid">
                 <div className="container">

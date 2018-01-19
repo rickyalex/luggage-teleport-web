@@ -7,7 +7,7 @@ import Routes from './routes';
 import reducer from './reducers';
 import { loadState, saveState } from './localStorage';
 
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 const persistedState = loadState()
 const store = createStore(reducer, persistedState);
@@ -21,4 +21,4 @@ ReactDOM.render(
         <Routes />
     </Provider>
     , document.getElementById('root'));
-registerServiceWorker();
+// registerServiceWorker();

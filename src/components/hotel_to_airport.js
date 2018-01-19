@@ -37,8 +37,6 @@ class HotelToAirport extends Component {
 
     ValidationForm() {
         const {
-            Email,
-            PhoneNumber,
             Hotel,
             Airport,
             Airline,
@@ -50,7 +48,7 @@ class HotelToAirport extends Component {
         } = this.state
 
         return (
-            Email.length > 0 && PhoneNumber.length > 0 && Hotel.length > 0 && Airport.length > 0 &&
+            Hotel.length > 0 && Airport.length > 0 &&
             Airline.length > 0 && HotelBookingRef.length > 0 && NameUnderHotelRsv.length > 0 &&
             PickupDatetime.length > 0 && FlightNumber.length > 0, DepartureTime.length > 0
         )
@@ -103,14 +101,12 @@ class HotelToAirport extends Component {
     }
 
     componentDidMount() {
-        // console.log('this.props', this.props.user);
         const { Email, PhoneNumber } = this.props.user;
         this.setState({ Email, PhoneNumber })
     }
 
     render() {
-        // const { email } = this.props.user.user;
-        // const currentUser = getCurrentUser()
+        console.log(this.state.Email);
         return (
             <div className="polaroid">
                 <div className="container">
