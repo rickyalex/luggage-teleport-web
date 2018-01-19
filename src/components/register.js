@@ -71,7 +71,6 @@ class Register extends Component {
                     reject(err);
                     return;
                 }
-                // console.log(result)
                 this.props.history.push('/verify');
                 resolve(result.user);
             })
