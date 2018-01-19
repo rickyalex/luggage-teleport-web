@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import axios from 'axios';
 import SquarePaymentForm from './square_payment_form';
 import { SQUARE_APP_ID } from '../config';
+import { BookingId } from './helper';
 
 class HTAFinalReview extends Component {
 
@@ -42,8 +43,10 @@ class HTAFinalReview extends Component {
             PhoneNumber, PickupDatetime } = this.props.BookData[0];
         const { PaymentMethod } = this.props.payment;
         const { Luggage, TotalCost } = this.state
+        const bookingId = BookingId();
 
         let data = JSON.stringify({
+            BookingId: `HTA${bookingId}`,
             airport: Airport,
             airline: Airline,
             flightNumber: FlightNumber,

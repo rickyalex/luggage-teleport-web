@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import axios from 'axios';
 import SquarePaymentForm from './square_payment_form';
 import { SQUARE_APP_ID } from '../config';
+import { BookingId } from './helper';
 
 class ATAFinalReview extends Component {
 
@@ -40,8 +41,11 @@ class ATAFinalReview extends Component {
         const { AirlineDropoff, AirlinePickup, AirportDropoff, AirportPickup, ArrivalTime, DepartureTime,
             DropoffFlightNumber, PickupFlightNumber, Email, PhoneNumber, PickupDate } = this.props.BookData[0];
         const { PaymentMethod } = this.props.payment;
-        const { Luggage, TotalCost } = this.state
+        const { Luggage, TotalCost } = this.state;
+        const bookingId =  BookingId()
+
         let data = JSON.stringify({
+            BookingId: `ATA${bookingId}`,
             AirlineDropoff: AirlineDropoff, 
             AirlinePickup: AirlinePickup, 
             AirportDropoff: AirportDropoff, 

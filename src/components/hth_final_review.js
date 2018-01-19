@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import axios from 'axios';
 import SquarePaymentForm from './square_payment_form';
 import { SQUARE_APP_ID } from '../config';
+import { BookingId } from './helper';
 
 class HTHFInalReview extends Component {
 
@@ -40,8 +41,11 @@ class HTHFInalReview extends Component {
         const { HotelDropoff, HotelDropoffBookingRef, HotelDropoffDate, Email, HotelPickup, HotelPickupBookingRef,
             HotelPickupDate, OvernightStorage, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup } = this.props.BookData[0];
         const { PaymentMethod } = this.props.payment;
-        const { Luggage, TotalCost } = this.state
+        const { Luggage, TotalCost } = this.state;
+        const bookingId = BookingId();
+
         let data = JSON.stringify({
+            BookingId: `HTH${bookingId}`,
             HotelDropoff: HotelDropoff, 
             HotelDropoffBookingRef: HotelDropoffBookingRef, 
             HotelDropoffDate: HotelDropoffDate, 
@@ -59,7 +63,6 @@ class HTHFInalReview extends Component {
         })
 
         let token = localStorage.getItem('token')
-        // console.log('token', token)
         let config = {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -70,11 +73,9 @@ class HTHFInalReview extends Component {
 
         axios.post('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/HotelToHotel-create', data, config)
             .then((response) => {
-                // console.log(response);
                 alert('success booked!')
                 this.props.history.push('/home');
             }, (err) => {
-                // console.log(err);
                 this.setState({ isLoading: false })
             })
     }

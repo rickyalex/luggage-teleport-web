@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import axios from 'axios';
 import SquarePaymentForm from './square_payment_form';
 import { SQUARE_APP_ID } from '../config';
+import { BookingId } from './helper'
 
 class ATHFinalReview extends Component {
     constructor(props) {
@@ -21,6 +22,8 @@ class ATHFinalReview extends Component {
         this.Submit = this.Submit.bind(this);
         this.handleNonce = this.handleNonce.bind(this);
         this.handleLuggage = this.handleLuggage.bind(this);
+
+        // console.log(BookingId());
     }
 
 
@@ -40,8 +43,11 @@ class ATHFinalReview extends Component {
         const { Airline, Airport, ArrivalTime, DropoffDate, Email, FlightNumber, Hotel, HotelBookingRef,
             NameUnderHotelRsv, OvernightStorage, PhoneNumber, PickupDate } = this.props.BookData[0]
         const { PaymentMethod } = this.props.payment;
-        const { Luggage, TotalCost } = this.state
+        const { Luggage, TotalCost } = this.state;
+        const bookingId = BookingId()
+
         let data = JSON.stringify({
+            BookingId: `ATH${bookingId}`,
             flightNumber: FlightNumber,
             status: 'Payment Complete',
             hotelReservationName: NameUnderHotelRsv,
