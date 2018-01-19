@@ -48,6 +48,10 @@ class Login extends Component {
             user.authenticateUser(authenticationDetails, {
                 onSuccess: result => {
                     resolve()
+                    const { jwtToken } = result.idToken;
+                    const { email, phone_number } = result.idToken.payload;
+                    dispatch(LogUser(email, phone_number));
+                    localStorage.setItem('token', `"${jwtToken}"`)
                     this.props.history.push('/home');
                 },
                 onFailure: err => {
