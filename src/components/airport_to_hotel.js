@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { FormGroup, InputGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetHotelData, GetAirportData } from '../actions';
@@ -106,8 +106,12 @@ class AirportToHotel extends Component {
     }
 
     componentDidMount() {
-        // console.log('this.props', this.props.user);
         const { Email, PhoneNumber } = this.props.user;
+        const token = localStorage.getItem('token');
+
+        if (token === null || token === undefined) {
+            this.props.history.push('/');
+        }
         this.setState({
             Email,
             PhoneNumber
@@ -115,9 +119,6 @@ class AirportToHotel extends Component {
     }
 
     render() {
-        // console.log('this.props', this.props.AirportData);
-        // const currentUser = getCurrentUser()
-        // console.log(email, 'email')
         return (
             <div className="polaroid">
                 <div className="container">
@@ -292,4 +293,4 @@ function mapsStateToProps(state) {
     }
 }
 
-export default connect(mapsStateToProps, { PassBookData, GetAirlineData, GetAirportData, GetHotelData })(AirportToHotel);
+export default withRouter(connect(mapsStateToProps, { PassBookData, GetAirlineData, GetAirportData, GetHotelData })(AirportToHotel));

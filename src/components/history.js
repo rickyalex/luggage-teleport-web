@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import '../App.css';
 
@@ -9,6 +9,14 @@ import HTHHistory from './hth_history';
 import ATAHistory from './ata_history';
 
 class History extends Component {
+
+    componentDidMount() {
+        const token = localStorage.getItem('token');
+        
+        if (token === null || token === undefined) {
+            this.props.history.push('/');
+        }
+    }
 
     render() {
         return (
@@ -61,4 +69,4 @@ class History extends Component {
     }
 }
 
-export default History;
+export default withRouter(History);
