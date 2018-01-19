@@ -28,7 +28,6 @@ class HTHReview extends Component {
     }
 
     render() {
-        // console.log('this.props', this.props.BookData[0])
         const { HotelDropoff, HotelDropoffBookingRef, HotelDropoffDate, Email, HotelPickup, HotelPickupBookingRef,
             HotelPickupDate, OvernightStorage, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup } = this.props.BookData[0];
         return (

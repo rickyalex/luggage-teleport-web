@@ -28,7 +28,6 @@ class HTAReview extends Component {
     }
 
     render(){
-        // console.log('this.props', this.props.BookData[0])
         const { Airline, Airport, DepartureTime, Email, FlightNumber, Hotel, HotelBookingRef, NameUnderHotelRsv, 
             PhoneNumber, PickupDatetime } = this.props.BookData[0];
         return(
