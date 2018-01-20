@@ -4,6 +4,8 @@ import App from './App';
 import Login from './components/login';
 import Register from './components/register';
 import VerifyAccount from './components/verify_account';
+import ForgotPassword from './components/forgot_password';
+import ConfirmNewPassword from './components/confirm_new_password';
 import BookingForm from './components/booking_form';
 import History from './components/history';
 import ATHReview from './components/ath_review';
@@ -46,6 +48,8 @@ class Routes extends Component {
                         <Route path="/atafinalreview" component={ATAFinalReview} />
                         <Route path="/payment" component={PaymentMethod} />
                         <Route path="/verify" component={VerifyAccount} />
+                        <Route path="/forgot" component={ForgotPassword} />
+                        <Route path="/confirmnewpassword" component={ConfirmNewPassword} />
                     </div>
                 </Router>
             </div>
