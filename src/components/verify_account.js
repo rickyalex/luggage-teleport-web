@@ -4,7 +4,6 @@ import { verifyUserAccount } from '../aws_cognito';
 import { userPool } from '../config';
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { withRouter } from 'react-router-dom';
-import createHistory from 'history/createBrowserHistory'
 
 class VerifyAccount extends Component {
 
