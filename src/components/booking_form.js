@@ -27,22 +27,22 @@ class BookingForm extends Component {
                     <Tabs>
                         <TabList>
                             <Tab data-tip="Airport - Hotel">
-                                <MdLocalAirport style={{ fontSize: '1.1em', color: '#00bfff' }} />
+                                <MdLocalAirport style={{ fontSize: '1.1em', color: '#1a1aff' }} />
                                 <GoArrowSmallRight />
                                 <MdHotel style={{ fontSize: '1.1em', color: '#e6e600' }} />
                             </Tab>
                             <Tab data-tip="Hotel - Airport">
-                                <MdHotel style={{ fontSize: '1.1em', color: '#00bfff' }} />
+                                <MdHotel style={{ fontSize: '1.1em', color: '#1a1aff' }} />
                                 <GoArrowSmallRight />
                                 <MdLocalAirport style={{ fontSize: '1.1em', color: '#e6e600' }} />
                             </Tab>
                             <Tab data-tip="Hotel - Hotel">
-                                <MdHotel style={{ fontSize: '1.1em', color: '#00bfff' }} />
+                                <MdHotel style={{ fontSize: '1.1em', color: '#1a1aff' }} />
                                 <GoArrowSmallRight />
                                 <MdHotel style={{ fontSize: '1.1em', color: '#e6e600' }} />
                             </Tab>
                             <Tab data-tip="Airport - Airport">
-                                <MdLocalAirport style={{ fontSize: '1.1em', color: '#00bfff' }} />
+                                <MdLocalAirport style={{ fontSize: '1.1em', color: '#1a1aff' }} />
                                 <GoArrowSmallRight />
                                 <MdLocalAirport style={{ fontSize: '1.1em', color: '#e6e600' }} />
                             </Tab>
