@@ -62,7 +62,7 @@ class Login extends Component {
         );
     }
 
-    async handleSubmit(event){
+    async handleSubmit(event) {
         event.preventDefault();
         this.setState({ isLoading: true })
 
@@ -105,6 +105,7 @@ class Login extends Component {
                                 placeholder="password"
                                 style={{ marginTop: '10px' }} required />
                         </div>
+
                         {
                             !isLoading ?
                                 <button
@@ -115,15 +116,15 @@ class Login extends Component {
                                 >
                                     Login
                             </button>
-                            
+
                                 :
                                 <button
                                     className="btn btn-lg"
                                     type="submit"
                                     disabled={true}
-                                    style={{ color: '#00bfff', backgroundColor: 'white', width: '140px'  }}
+                                    style={{ color: '#00bfff', backgroundColor: 'white', width: '140px' }}
                                 >
-                                   <i className="fa fa-spinner fa-spin"></i> Loggedin...
+                                    <i className="fa fa-spinner fa-spin"></i> Loggedin...
                             </button>
                         }
 
@@ -132,6 +133,10 @@ class Login extends Component {
                         <div style={{ marginTop: '3em' }}>
                             <p><strong>Do not have an Account yet?</strong>
                                 <Link to="/register"> <a style={{ color: 'white' }}>Let's Register!</a></Link></p>
+                            <p><strong>Or</strong></p>
+
+                            <p> <Link to="/forgot"> <a style={{ color: 'white' }}>Forgot your Password?</a></Link></p>
+
                         </div>
                     </form>
                 </div>
