@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 
 import ReactTooltip from 'react-tooltip';
-import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import Navbar from './components/navbar';
 import BookingForm from './components/booking_form';
+import './App.css';
 
 
 
@@ -13,11 +14,19 @@ class App extends Component {
     super(props);
   }
 
+  componentDidMount(){
+    const token = localStorage.getItem('token');
+
+    if(token === null || token === undefined){
+      this.props.history.push('/')
+    }
+  }
+
   render() {
     return (
-      <div>
+      <div className="history-bg-image">
         <ReactTooltip place="bottom" type="info" effect="solid" />
-        <div style={{backgroundColor: 'black'}}>
+        <div>
           < Navbar />
         </div>
         <div>
@@ -28,11 +37,4 @@ class App extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { user } = state;
-  return {
-    user
-  }
-}
-
-export default connect(mapStateToProps, null)(App);
+export default withRouter(App);
