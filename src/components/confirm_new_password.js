@@ -22,6 +22,13 @@ class ConfirmNewPassword extends Component {
         this.handleConfirmationSubmit = this.handleConfirmationSubmit.bind(this);
     }
 
+    validateForm() {
+        return(
+            this.state.email.length > 0 && this.state.pin.length > 0 &&
+            this.state.newPassword.length > 0
+        )
+    }
+
     ConfirmNewPassword(email, pin, newPassword) {
 
         const userData = {
@@ -95,6 +102,7 @@ class ConfirmNewPassword extends Component {
                                         className="btn btn-lg btn-primary"
                                         type="submit"
                                         style={{ width: '160px' }}
+                                        disabled={!this.validateForm()}
                                     >
                                         Submit
                                 </button>
