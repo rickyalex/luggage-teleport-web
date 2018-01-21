@@ -71,7 +71,6 @@ class Register extends Component {
                     reject(err);
                     return;
                 }
-                this.props.history.push('/verify');
                 resolve(result.user);
             })
         );
@@ -82,6 +81,8 @@ class Register extends Component {
         this.setState({ isLoading: true })
         try {
             const newUser = await this.signup(this.state.name, this.state.email, this.state.phone_number, this.state.password);
+            alert('success register! Please check your email for verify')
+            this.props.history.push('/verify');
         } catch (e) {
             this.setState({
                 error: e,

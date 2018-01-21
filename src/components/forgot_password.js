@@ -54,6 +54,7 @@ class ForgotPassword extends Component {
         this.setState({ isLoading: true })
         try {
             await this.ForgottenPassword(this.state.email);
+            alert('Please check your Email for Get the PIN');
             this.props.history.push('/confirmnewpassword');
         } catch (e) {
             this.setState({
@@ -67,7 +68,7 @@ class ForgotPassword extends Component {
 
     render() {
 
-        const { isLoading } = this.state;
+        const { email, isLoading } = this.state;
         return (
             <div>
                 <div className="bg-image">
@@ -88,6 +89,7 @@ class ForgotPassword extends Component {
                                     <button
                                         className="btn btn-lg btn-primary"
                                         type="submit"
+                                        disabled={!email}
                                         style={{ width: '160px' }}
                                     >
                                         Send Pin

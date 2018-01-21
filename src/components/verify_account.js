@@ -53,6 +53,7 @@ class VerifyAccount extends Component {
         this.setState({ isLoading: true })
         try {
             await this.confirm(this.state.email, this.state.pin);
+            alert('Success verify your Account');
             this.props.history.push('/');
         } catch (e) {
             this.setState({
