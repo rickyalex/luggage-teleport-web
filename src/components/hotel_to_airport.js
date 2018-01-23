@@ -106,7 +106,7 @@ class HotelToAirport extends Component {
     }
 
     render() {
-        console.log(this.state.Email);
+        // console.log(this.state.Email);
         return (
             <div className="polaroid">
                 <div className="container">
