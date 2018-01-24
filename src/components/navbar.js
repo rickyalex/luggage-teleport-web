@@ -24,6 +24,7 @@ class Navbar extends React.Component {
     }
     localStorage.removeItem('state')
     localStorage.removeItem('token')
+    localStorage.removeItem('CustName')
     if (AWS.config.credentials) {
       AWS.config.credentials.clearCachedId();
       AWS.config.credentials = new AWS.CognitoIdentityCredentials({});
