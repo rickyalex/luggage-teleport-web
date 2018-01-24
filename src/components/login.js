@@ -49,7 +49,8 @@ class Login extends Component {
                 onSuccess: result => {
                     resolve()
                     const { jwtToken } = result.idToken;
-                    const { email, phone_number } = result.idToken.payload;
+                    const { email, phone_number, name } = result.idToken.payload;
+                    localStorage.setItem('CustName', `${name}`);
                     dispatch(LogUser(email, phone_number));
                     localStorage.setItem('token', `"${jwtToken}"`)
                     this.props.history.push('/home');
