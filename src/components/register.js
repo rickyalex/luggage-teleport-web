@@ -79,8 +79,10 @@ class Register extends Component {
     async handleSubmit(event) {
         event.preventDefault();
         this.setState({ isLoading: true })
+        const phoneNumber = this.state.phone_number.replace(/\s/g, '')
+        localStorage.setItem('EmailRegist', `${this.state.email}`);
         try {
-            const newUser = await this.signup(this.state.name, this.state.email, this.state.phone_number, this.state.password);
+            const newUser = await this.signup(this.state.name, this.state.email, phoneNumber, this.state.password);
             alert('success register! Please check your email for verify')
             this.props.history.push('/verify');
         } catch (e) {
@@ -125,7 +127,7 @@ class Register extends Component {
                                 type="text"
                                 onChange={e => this.setState({ phone_number: e.target.value })}
                                 style={{ marginTop: '10px' }}
-                                placeholder="Phone Number" required />
+                                placeholder="Phone Number, ex: +1XXXXXXXX" required />
                         </div>
 
                         <div className="form-group">
