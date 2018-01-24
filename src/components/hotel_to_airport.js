@@ -114,7 +114,7 @@ class HotelToAirport extends Component {
     }
 
     render() {
-        // console.log(this.state.Email);
+        const CustomerName = localStorage.getItem('CustName');
         return (
             <div className="polaroid">
                 <div className="container">
@@ -157,6 +157,7 @@ class HotelToAirport extends Component {
                                     <InputGroup>
                                         <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaUser style={{ color: '#00bfff' }} /></InputGroup.Addon>
                                         <input
+                                            defaultValue={CustomerName}
                                             type='text'
                                             onChange={e => this.setState({ NameUnderHotelRsv: e.target.value })}
                                             placeholder="Name under Hotel Reservation"

@@ -90,6 +90,7 @@ class HotelToHotel extends Component {
     }
 
     render() {
+        const CustomerName = localStorage.getItem('CustName');
         return (
             <div className="polaroid">
                 <div className="container">
@@ -132,6 +133,7 @@ class HotelToHotel extends Component {
                                     <InputGroup>
                                         <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaUser style={{ color: '#00bfff' }} /></InputGroup.Addon>
                                         <input
+                                            defaultValue={CustomerName}
                                             type='text'
                                             onChange={e => this.setState({ RsvpNameHotelPickup: e.target.value })}
                                             placeholder="Name under Hotel Reservation"
@@ -192,6 +194,7 @@ class HotelToHotel extends Component {
                                     <InputGroup>
                                         <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaUser style={{ color: '#e6e600' }} /></InputGroup.Addon>
                                         <input
+                                            defaultValue={CustomerName}
                                             type='text'
                                             onChange={e => this.setState({ RsvpNameHotelDropoff: e.target.value })}
                                             placeholder="Name under Hotel Reservation"

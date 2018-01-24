@@ -122,6 +122,7 @@ class AirportToHotel extends Component {
     }
 
     render() {
+        const CustomerName = localStorage.getItem('CustName');
         return (
             <div className="polaroid">
                 <div className="container">
@@ -242,6 +243,7 @@ class AirportToHotel extends Component {
                                     <InputGroup>
                                         <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaUser style={{ color: '#e6e600' }} /></InputGroup.Addon>
                                         <input
+                                            defaultValue={CustomerName}
                                             type='text'
                                             placeholder="Name under Hotel Reservation"
                                             className="form-control"
