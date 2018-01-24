@@ -23,7 +23,7 @@ class VerifyAccount extends Component {
 
     validateForm() {
         return (
-            this.state.email.length > 0 &&
+            // this.state.email.length > 0 &&
             this.state.pin.length >= 6
         );
     }
@@ -49,12 +49,15 @@ class VerifyAccount extends Component {
     }
 
     async handleConfirmationSubmit(event) {
+        const email = localStorage.getItem('EmailRegist');
+        console.log(email)
         event.preventDefault();
         this.setState({ isLoading: true })
         try {
-            await this.confirm(this.state.email, this.state.pin);
+            await this.confirm(email, this.state.pin);
             alert('Success verify your Account');
             this.props.history.push('/');
+            localStorage.removeItem('EmailRegist');
         } catch (e) {
             this.setState({
                 error: e,
@@ -72,14 +75,6 @@ class VerifyAccount extends Component {
 
                     <h1 style={{ color: 'yellow', marginBottom: '2em' }}>Verify your Account</h1>
                     <form onSubmit={this.handleConfirmationSubmit}>
-                        <div className="form-group">
-                            <input
-                                className="form-control"
-                                type="text"
-                                onChange={e => this.setState({ email: e.target.value })}
-                                placeholder="Your Email" required />
-                        </div>
-
                         <div className="form-group">
                             <input
                                 className="form-control"
