@@ -77,7 +77,9 @@ class AirportToAirport extends Component {
     componentWillMount() {
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airport-scan')
             .then((res) => {
-                // console.log(res)
+                res.data.Myresult.sort(function(a,b){
+                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+                });
                 this.props.GetAirportData(res.data.Myresult);
             }).catch((err) => {
                 console.log(err)
@@ -85,6 +87,9 @@ class AirportToAirport extends Component {
 
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airline-scan')
             .then((res) => {
+                res.data.Myresult.sort(function(a,b){
+                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+                });
                 this.props.GetAirlineData(res.data.Myresult);
             }).catch((err) => {
                 console.log(err);
