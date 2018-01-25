@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { FormGroup, InputGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetAirportData } from '../actions';
-
-import FaPlane from 'react-icons/lib/fa/plane';
-import FaClockO from 'react-icons/lib/fa/clock-o';
-import FaCalendar from 'react-icons/lib/fa/calendar';
 import '../App.css';
-
 import axios from 'axios';
 
 class AirportToAirport extends Component {
@@ -77,7 +71,7 @@ class AirportToAirport extends Component {
     componentWillMount() {
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airport-scan')
             .then((res) => {
-                res.data.Myresult.sort(function(a,b){
+                res.data.Myresult.sort(function (a, b) {
                     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
                 });
                 this.props.GetAirportData(res.data.Myresult);
@@ -87,7 +81,7 @@ class AirportToAirport extends Component {
 
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airline-scan')
             .then((res) => {
-                res.data.Myresult.sort(function(a,b){
+                res.data.Myresult.sort(function (a, b) {
                     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
                 });
                 this.props.GetAirlineData(res.data.Myresult);
@@ -111,143 +105,120 @@ class AirportToAirport extends Component {
                                 {/**
                                 * Airport A Section
                                 */}
-                                <FormGroup>
-                                    <InputGroup>
-                                        <select
-                                            className="form-control"
-                                            style={{ height: '35px', width: '260px' }}
-                                            onChange={event => this.setState({ AirportPickup: event.target.value })}>
-                                            <option value="" selected disabled>Choose Airport for pickup</option>
-                                            {
-                                                this.props.AirportData.map((airport) => {
-                                                    return <option key={airport.id} value={airport.name}>{airport.name}</option>
-                                                })
-                                            }
-                                        </select>
-                                    </InputGroup>
-                                </FormGroup>
+
+                                <select
+                                    className="form-control"
+                                    style={{ height: '35px', width: '260px' }}
+                                    onChange={event => this.setState({ AirportPickup: event.target.value })}>
+                                    <option value="" selected disabled>Choose Airport for pickup</option>
+                                    {
+                                        this.props.AirportData.map((airport) => {
+                                            return <option key={airport.id} value={airport.name}>{airport.name}</option>
+                                        })
+                                    }
+                                </select>
+
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <select
-                                            className="form-control"
-                                            style={{ height: '35px', width: '260px' }}
-                                            onChange={event => this.setState({ AirlinePickup: event.target.value })}>
-                                            <option value="" selected disabled>Airline</option>
-                                            {
-                                                this.props.AirlineData.map((airline) => {
-                                                    return <option key={airline.id} value={airline.name}>{airline.name}</option>
-                                                })
-                                            }
-                                        </select>
-                                    </InputGroup>
-                                </FormGroup>
+                                <select
+                                    className="form-control"
+                                    style={{ height: '35px', width: '260px' }}
+                                    onChange={event => this.setState({ AirlinePickup: event.target.value })}>
+                                    <option value="" selected disabled>Airline</option>
+                                    {
+                                        this.props.AirlineData.map((airline) => {
+                                            return <option key={airline.id} value={airline.name}>{airline.name}</option>
+                                        })
+                                    }
+                                </select>
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaPlane style={{ color: '#00bfff' }} /></InputGroup.Addon>
-                                        <input
-                                            type="text"
-                                            onChange={e => this.setState({ PickupFlightNumber: e.target.value })}
-                                            placeholder="Flight Number"
-                                            className="form-control"
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-plane" style={{ color: '#00bfff' }}></i>
+                                    <input
+                                        type="text"
+                                        onChange={e => this.setState({ PickupFlightNumber: e.target.value })}
+                                        placeholder="Flight Number"
+                                        className="form-control"
+                                        style={{ width: '260px' }}
+                                    />
+                                </div>
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaCalendar style={{ color: '#00bfff' }} /></InputGroup.Addon>
-                                        <input
-                                            type={this.state.dateType}
-                                            className="form-control"
-                                            placeholder="Pick up Date"
-                                            onChange={e => this.setState({ PickupDate: e.target.value })}
-                                            onFocus={() => this.setState({ dateType: 'date' })}
-                                            onBlur={() => this.setState({ dateType: 'text' })}
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-calendar" style={{ color: '#00bfff' }}></i>
+                                    <input
+                                        type={this.state.dateType}
+                                        className="form-control"
+                                        placeholder="Pick up Date"
+                                        onChange={e => this.setState({ PickupDate: e.target.value })}
+                                        onFocus={() => this.setState({ dateType: 'date' })}
+                                        onBlur={() => this.setState({ dateType: 'text' })}
+                                        style={{ width: '260px' }}
+                                    />
+                                </div>
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaClockO style={{ color: '#00bfff' }} /></InputGroup.Addon>
-                                        <input
-                                            type={this.state.timeType}
-                                            placeholder="Estimated Time of Arrival"
-                                            className="form-control"
-                                            onChange={e => this.setState({ ArrivalTime: e.target.value })}
-                                            onFocus={() => this.setState({ timeType: 'time' })}
-                                            onBlur={() => this.setState({ timeType: 'text' })}
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-time" style={{ color: '#00bfff' }}></i>
+                                    <input
+                                        type={this.state.timeType}
+                                        placeholder="Estimated Time of Arrival"
+                                        className="form-control"
+                                        onChange={e => this.setState({ ArrivalTime: e.target.value })}
+                                        onFocus={() => this.setState({ timeType: 'time' })}
+                                        onBlur={() => this.setState({ timeType: 'text' })}
+                                        style={{ width: '260px' }}
+                                    />
+                                </div>
                                 {/**
                              * Airport B Section
                              */}
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <select
-                                            className="form-control"
-                                            style={{ height: '35px', width: '260px' }}
-                                            onChange={event => this.setState({ AirportDropoff: event.target.value })}>
-                                            <option value="" selected disabled>Choose Airport for Drop off</option>
-                                            {
-                                                this.props.AirportData.map((airport) => {
-                                                    return <option key={airport.id} value={airport.name}>{airport.name}</option>
-                                                })
-                                            }
-                                        </select>
-                                    </InputGroup>
-                                </FormGroup>
+                                <select
+                                    className="form-control"
+                                    style={{ height: '35px', width: '260px' }}
+                                    onChange={event => this.setState({ AirportDropoff: event.target.value })}>
+                                    <option value="" selected disabled>Choose Airport for Drop off</option>
+                                    {
+                                        this.props.AirportData.map((airport) => {
+                                            return <option key={airport.id} value={airport.name}>{airport.name}</option>
+                                        })
+                                    }
+                                </select>
+
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <select
-                                            className="form-control"
-                                            style={{ height: '35px', width: '260px' }}
-                                            onChange={event => this.setState({ AirlineDropoff: event.target.value })}>
-                                            <option value="" selected disabled>Airline</option>
-                                            {
-                                                this.props.AirlineData.map((airline) => {
-                                                    return <option key={airline.id} value={airline.name}>{airline.name}</option>
-                                                })
-                                            }
-                                        </select>
-                                    </InputGroup>
-                                </FormGroup>
+                                <select
+                                    className="form-control"
+                                    style={{ height: '35px', width: '260px' }}
+                                    onChange={event => this.setState({ AirlineDropoff: event.target.value })}>
+                                    <option value="" selected disabled>Airline</option>
+                                    {
+                                        this.props.AirlineData.map((airline) => {
+                                            return <option key={airline.id} value={airline.name}>{airline.name}</option>
+                                        })
+                                    }
+                                </select>
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaPlane style={{ color: '#e6e600' }} /></InputGroup.Addon>
-                                        <input
-                                            type="text"
-                                            onChange={e => this.setState({ DropoffFlightNumber: e.target.value })}
-                                            placeholder="Flight Number"
-                                            className="form-control"
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-plane" style={{ color: '#e6e600' }}></i>
+                                    <input
+                                        type="text"
+                                        onChange={e => this.setState({ DropoffFlightNumber: e.target.value })}
+                                        placeholder="Flight Number"
+                                        className="form-control"
+                                        style={{ width: '260px' }}
+                                    />
+                                </div>
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaClockO style={{ color: '#e6e600' }} /></InputGroup.Addon>
-                                        <input
-                                            type={this.state.timeType}
-                                            placeholder="Departure Time"
-                                            className="form-control"
-                                            onChange={e => this.setState({ DepartureTime: e.target.value })}
-                                            onFocus={() => this.setState({ timeType: 'time' })}
-                                            onBlur={() => this.setState({ timeType: 'text' })}
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-time" style={{ color: '#e6e600' }}></i>
+                                    <input
+                                        type={this.state.timeType}
+                                        placeholder="Departure Time"
+                                        className="form-control"
+                                        onChange={e => this.setState({ DepartureTime: e.target.value })}
+                                        onFocus={() => this.setState({ timeType: 'time' })}
+                                        onBlur={() => this.setState({ timeType: 'text' })}
+                                        style={{ width: '260px' }}
+                                    />
+                                </div>
                                 <hr />
                                 {
                                     this.buttonSubmit()

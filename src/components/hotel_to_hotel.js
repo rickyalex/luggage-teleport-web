@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-import { FormGroup, InputGroup } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { PassBookData, GetHotelData } from '../actions';
-
-import FaCalendar from 'react-icons/lib/fa/calendar';
-import MdHotel from 'react-icons/lib/md/hotel';
-import FaUser from 'react-icons/lib/fa/user';
 import '../App.css';
-
 import axios from 'axios';
 
 class HotelToHotel extends Component {
@@ -75,7 +69,7 @@ class HotelToHotel extends Component {
     componentWillMount() {
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Hotel-scan')
             .then((res) => {
-                res.data.Myresult.sort(function(a,b){
+                res.data.Myresult.sort(function (a, b) {
                     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
                 });
                 this.props.GetHotelData(res.data.Myresult);
@@ -100,130 +94,105 @@ class HotelToHotel extends Component {
                                 {/**
                                 * Hotel A Section
                                 */}
-                                <FormGroup>
-                                    <InputGroup>
-                                        <select
-                                            className="form-control"
-                                            style={{ height: '35px', width: '260px' }}
-                                            onChange={event => this.setState({ HotelPickup: event.target.value })}>
-                                            <option value="" selected disabled>Hotel for Pick up</option>
-                                            {
-                                                this.props.HotelData.map((hotel) => {
-                                                    return <option key={hotel.id} value={hotel.name}>{hotel.name}</option>
-                                                })
-                                            }
-                                        </select>
-                                    </InputGroup>
-                                </FormGroup>
+                                <select
+                                    className="form-control"
+                                    style={{ height: '35px', width: '260px' }}
+                                    onChange={event => this.setState({ HotelPickup: event.target.value })}>
+                                    <option value="" selected disabled>Hotel for Pick up</option>
+                                    {
+                                        this.props.HotelData.map((hotel) => {
+                                            return <option key={hotel.id} value={hotel.name}>{hotel.name}</option>
+                                        })
+                                    }
+                                </select>
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><MdHotel style={{ color: '#00bfff' }} /></InputGroup.Addon>
-                                        <input
-                                            type='text'
-                                            onChange={e => this.setState({ HotelPickupBookingRef: e.target.value })}
-                                            placeholder="Hotel Booking Reference"
-                                            className="form-control"
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-home" style={{ color: '#00bfff' }}></i>
+                                    <input
+                                        type='text'
+                                        onChange={e => this.setState({ HotelPickupBookingRef: e.target.value })}
+                                        placeholder="Hotel Booking Reference"
+                                        className="form-control"
+                                        style={{ width: '260px' }}
+                                    />
+                                </div>
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaUser style={{ color: '#00bfff' }} /></InputGroup.Addon>
-                                        <input
-                                            defaultValue={CustomerName}
-                                            type='text'
-                                            onChange={e => this.setState({ RsvpNameHotelPickup: e.target.value })}
-                                            placeholder="Name under Hotel Reservation"
-                                            className="form-control"
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-user" style={{ color: '#00bfff' }}></i>
+                                    <input
+                                        defaultValue={CustomerName}
+                                        type='text'
+                                        onChange={e => this.setState({ RsvpNameHotelPickup: e.target.value })}
+                                        placeholder="Name under Hotel Reservation"
+                                        className="form-control"
+                                        style={{ width: '260px' }}
+                                    />
+                                </div>
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaCalendar style={{ color: '#00bfff' }} /></InputGroup.Addon>
-                                        <input
-                                            type={this.state.dateType}
-                                            className="form-control"
-                                            placeholder="Pick up Date"
-                                            onChange={e => this.setState({ HotelPickupDate: e.target.value })}
-                                            onFocus={() => this.setState({ dateType: 'date' })}
-                                            onBlur={() => this.setState({ dateType: 'text' })}
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-calendar" style={{ color: '#00bfff' }}></i>
+                                    <input
+                                        type={this.state.dateType}
+                                        className="form-control"
+                                        placeholder="Pick up Date"
+                                        onChange={e => this.setState({ HotelPickupDate: e.target.value })}
+                                        onFocus={() => this.setState({ dateType: 'date' })}
+                                        onBlur={() => this.setState({ dateType: 'text' })}
+                                        style={{ width: '260px' }}
+                                    />
+                                </div>
                                 {/**
                                 * Hotel B Section
                                 */}
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <select
-                                            className="form-control"
-                                            style={{ height: '35px', width: '260px' }}
-                                            onChange={event => this.setState({ HotelDropoff: event.target.value })}>
-                                            <option value="" selected disabled>Hotel for Drop off</option>
-                                            {
-                                                this.props.HotelData.map((hotel) => {
-                                                    return <option key={hotel.id} value={hotel.name}>{hotel.name}</option>
-                                                })
-                                            }
-                                        </select>
-                                    </InputGroup>
-                                </FormGroup>
+
+                                <select
+                                    className="form-control"
+                                    style={{ height: '35px', width: '260px' }}
+                                    onChange={event => this.setState({ HotelDropoff: event.target.value })}>
+                                    <option value="" selected disabled>Hotel for Drop off</option>
+                                    {
+                                        this.props.HotelData.map((hotel) => {
+                                            return <option key={hotel.id} value={hotel.name}>{hotel.name}</option>
+                                        })
+                                    }
+                                </select>
                                 <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><MdHotel style={{ color: '#e6e600' }} /></InputGroup.Addon>
-                                        <input
-                                            type='text'
-                                            onChange={e => this.setState({ HotelDropoffBookingRef: e.target.value })}
-                                            placeholder="Hotel Booking Reference"
-                                            className="form-control"
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
-                                <hr />
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaUser style={{ color: '#e6e600' }} /></InputGroup.Addon>
-                                        <input
-                                            defaultValue={CustomerName}
-                                            type='text'
-                                            onChange={e => this.setState({ RsvpNameHotelDropoff: e.target.value })}
-                                            placeholder="Name under Hotel Reservation"
-                                            className="form-control"
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
-                                <hr />
-                                {/* <div>
-                                    Overnight Storage
-                                    <input type="radio" name="optradio" onChange={e => this.setState({ OvernightStorage: true })} />Yes
-                                    <input type="radio" name="optradio" onChange={e => this.setState({ OvernightStorage: false })} />No
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-home" style={{ color: '#e6e600' }}></i>
+                                    <input
+                                        type='text'
+                                        onChange={e => this.setState({ HotelDropoffBookingRef: e.target.value })}
+                                        placeholder="Hotel Booking Reference"
+                                        className="form-control"
+                                        style={{ width: '260px' }}
+                                    />
                                 </div>
-                                <hr /> */}
-                                <FormGroup>
-                                    <InputGroup>
-                                        <InputGroup.Addon style={{ backgroundColor: 'white' }}><FaCalendar style={{ color: '#e6e600' }} /></InputGroup.Addon>
-                                        <input
-                                            type={this.state.dateType}
-                                            className="form-control"
-                                            placeholder="Drop off Date"
-                                            onChange={e => this.setState({ HotelDropoffDate: e.target.value })}
-                                            onFocus={() => this.setState({ dateType: 'date' })}
-                                            onBlur={() => this.setState({ dateType: 'text' })}
-                                            style={{ width: '220px' }}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
+                                <hr />
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-user" style={{ color: '#e6e600' }}></i>
+                                    <input
+                                        defaultValue={CustomerName}
+                                        type='text'
+                                        onChange={e => this.setState({ RsvpNameHotelDropoff: e.target.value })}
+                                        placeholder="Name under Hotel Reservation"
+                                        className="form-control"
+                                        style={{ width: '260px' }}
+                                    />
+                                </div>
+                                <hr />
+                                <div className="inner-addon left-addon">
+                                    <i className="glyphicon glyphicon-calendar" style={{ color: '#e6e600' }}></i>
+                                    <input
+                                        type={this.state.dateType}
+                                        className="form-control"
+                                        placeholder="Drop off Date"
+                                        onChange={e => this.setState({ HotelDropoffDate: e.target.value })}
+                                        onFocus={() => this.setState({ dateType: 'date' })}
+                                        onBlur={() => this.setState({ dateType: 'text' })}
+                                        style={{ width: '260px' }}
+                                    />
+                                </div>
                                 <hr />
                                 {
                                     this.buttonSubmit()
