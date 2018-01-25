@@ -94,7 +94,7 @@ class Navbar extends React.Component {
             </Menu>
           </div>
           <div className="container">
-            <a className="navbar-brand" href="https://www.luggageteleport.com">
+            <a className="navbar-brand" href="https://www.luggageteleport.com" target="_blank">
               <img
                 src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png"
                 alt

@@ -53,7 +53,6 @@ class Login extends Component {
                     localStorage.setItem('CustName', `${name}`);
                     dispatch(LogUser(email, phone_number));
                     localStorage.setItem('token', `"${jwtToken}"`)
-                    this.props.history.push('/home');
                 },
                 onFailure: err => {
                     reject(err)
@@ -69,7 +68,7 @@ class Login extends Component {
 
         try {
             await this.Login(this.state.email, this.state.password);
-
+            this.props.history.push('/home');
         } catch (e) {
             this.setState({
                 isLoading: false,
