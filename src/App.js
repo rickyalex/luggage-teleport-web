@@ -25,7 +25,7 @@ class App extends Component {
   render() {
     return (
       <div className="history-bg-image">
-        <ReactTooltip place="bottom" type="info" effect="solid" />
+        <ReactTooltip place="bottom" type="info" effect="solid"/>
         <div>
           < Navbar />
         </div>

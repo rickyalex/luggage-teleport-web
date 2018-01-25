@@ -92,7 +92,7 @@ class Login extends Component {
                         <div className="form-group">
                             <input
                                 className="form-control"
-                                type="text"
+                                type="email"
                                 onChange={e => this.setState({ email: e.target.value })}
                                 placeholder="Email" required />
                         </div>
