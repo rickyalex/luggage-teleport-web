@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetHotelData, GetAirportData } from '../actions';
 import '../App.css';
 import axios from 'axios';
+import TimePicker from 'rc-time-picker';
+import * as moment from 'moment';
+
+import 'rc-time-picker/assets/index.css';
 
 class AirportToHotel extends Component {
 
@@ -12,8 +16,6 @@ class AirportToHotel extends Component {
         this.state = {
             Email: '',
             PhoneNumber: '',
-            dateType: 'text',
-            timeType: 'text',
             Airport: '',
             Airline: '',
             Hotel: '',
@@ -27,6 +29,8 @@ class AirportToHotel extends Component {
             showModal: false,
             BookingType: 'ATH'
         }
+
+        this.handleChangeTime = this.handleChangeTime.bind(this);
 
     }
 
@@ -45,7 +49,7 @@ class AirportToHotel extends Component {
 
         return (
             Airport.length > 0 && Airline.length > 0 && Hotel.length > 0
-            && FlightNumber.length > 0 && ArrivalTime.length > 0 && PickupDate.length > 0
+            && FlightNumber.length > 0 && PickupDate.length > 0
             && HotelBookingRef.length > 0 && NameUnderHotelRsv.length > 0 && DropoffDate.length > 0
         )
     }
@@ -111,6 +115,12 @@ class AirportToHotel extends Component {
             Email,
             PhoneNumber
         })
+    }
+
+    handleChangeTime(time) {
+        this.setState({
+            ArrivalTime: time
+        });
     }
 
     render() {
@@ -179,17 +189,14 @@ class AirportToHotel extends Component {
 
                                 <hr />
                                 <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-time" style={{ color: '#00bfff' }}></i>
-                                    <input
-                                        type={this.state.timeType}
-                                        placeholder="Estimated Time of Arrival"
-                                        className="form-control"
-                                        onChange={event => this.setState({ ArrivalTime: event.target.value })}
-                                        onFocus={() => this.setState({ timeType: 'time' })}
-                                        onBlur={() => this.setState({ timeType: 'text' })}
+                                    <TimePicker
+                                        defaultValue={moment()}
+                                        showSecond={false}
+                                        onChange={this.handleChangeTime}
                                         style={{ width: '260px' }}
-                                    />
+                                        className="form-control" />
                                 </div>
+
                                 {/**
                              * Hotel Section
                              */}

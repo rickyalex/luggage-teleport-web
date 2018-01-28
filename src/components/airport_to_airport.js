@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetAirportData } from '../actions';
 import '../App.css';
 import axios from 'axios';
+import TimePicker from 'rc-time-picker';
+import * as moment from 'moment';
+
+import 'rc-time-picker/assets/index.css';
 
 class AirportToAirport extends Component {
 
@@ -25,6 +29,21 @@ class AirportToAirport extends Component {
             DepartureTime: '',
             BookingType: 'ATA'
         }
+
+        this.handleChangeArrivalTime = this.handleChangeArrivalTime.bind(this);
+        this.handleChangeDepartureTime = this.handleChangeDepartureTime.bind(this);
+    }
+
+    handleChangeArrivalTime(time) {
+        this.setState({
+            ArrivalTime: time
+        });
+    }
+
+    handleChangeDepartureTime(time) {
+        this.setState({
+            DepartureTime: time
+        });
     }
 
     validationForm() {
@@ -42,8 +61,8 @@ class AirportToAirport extends Component {
 
         return (
             AirportPickup.length > 0 && AirlinePickup.length > 0 && PickupFlightNumber.length > 0 &&
-            PickupDate.length > 0 && ArrivalTime.length > 0 && AirportDropoff.length > 0 &&
-            AirlineDropoff.length > 0 && DropoffFlightNumber.length > 0 && DepartureTime.length > 0
+            PickupDate.length > 0 && AirportDropoff.length > 0 &&
+            AirlineDropoff.length > 0 && DropoffFlightNumber.length > 0
         )
     }
 
@@ -156,16 +175,12 @@ class AirportToAirport extends Component {
                                 </div>
                                 <hr />
                                 <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-time" style={{ color: '#00bfff' }}></i>
-                                    <input
-                                        type={this.state.timeType}
-                                        placeholder="Estimated Time of Arrival"
-                                        className="form-control"
-                                        onChange={e => this.setState({ ArrivalTime: e.target.value })}
-                                        onFocus={() => this.setState({ timeType: 'time' })}
-                                        onBlur={() => this.setState({ timeType: 'text' })}
+                                    <TimePicker
+                                        defaultValue={moment()}
+                                        showSecond={false}
+                                        onChange={this.handleChangeArrivalTime}
                                         style={{ width: '260px' }}
-                                    />
+                                        className="form-control" />
                                 </div>
                                 {/**
                              * Airport B Section
@@ -208,16 +223,12 @@ class AirportToAirport extends Component {
                                 </div>
                                 <hr />
                                 <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-time" style={{ color: '#e6e600' }}></i>
-                                    <input
-                                        type={this.state.timeType}
-                                        placeholder="Departure Time"
-                                        className="form-control"
-                                        onChange={e => this.setState({ DepartureTime: e.target.value })}
-                                        onFocus={() => this.setState({ timeType: 'time' })}
-                                        onBlur={() => this.setState({ timeType: 'text' })}
+                                    <TimePicker
+                                        defaultValue={moment()}
+                                        showSecond={false}
+                                        onChange={this.handleChangeDepartureTime}
                                         style={{ width: '260px' }}
-                                    />
+                                        className="form-control" />
                                 </div>
                                 <hr />
                                 {

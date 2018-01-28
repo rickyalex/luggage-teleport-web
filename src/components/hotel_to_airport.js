@@ -4,6 +4,12 @@ import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetHotelData, GetAirportData } from '../actions'
 import '../App.css';
 import axios from 'axios';
+import TimePicker from 'rc-time-picker';
+import DatePicker from 'react-datepicker';
+import * as moment from 'moment';
+
+import 'rc-time-picker/assets/index.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 class HotelToAirport extends Component {
 
@@ -12,19 +18,31 @@ class HotelToAirport extends Component {
         this.state = {
             Email: '',
             PhoneNumber: '',
-            dateType: 'text',
-            timeType: 'text',
             Hotel: '',
             Airport: '',
             Airline: '',
             HotelBookingRef: '',
             NameUnderHotelRsv: '',
-            PickupDatetime: '',
+            PickupDatetime: moment(),
             FlightNumber: '',
             DepartureTime: '',
             BookingType: 'HTA'
         }
 
+        this.handleChangeDateTime = this.handleChangeDateTime.bind(this);
+        this.handleTime = this.handleTime.bind(this);
+    }
+
+    handleChangeDateTime(dateTime) {
+        this.setState({
+            PickupDatetime: dateTime
+        });
+    }
+
+    handleTime(time) {
+        this.setState({
+            DepartureTime: time
+        });
     }
 
     ValidationForm() {
@@ -42,7 +60,7 @@ class HotelToAirport extends Component {
         return (
             Hotel.length > 0 && Airport.length > 0 &&
             Airline.length > 0 && HotelBookingRef.length > 0 && NameUnderHotelRsv.length > 0 &&
-            PickupDatetime.length > 0 && FlightNumber.length > 0, DepartureTime.length > 0
+            FlightNumber.length > 0
         )
     }
 
@@ -154,14 +172,14 @@ class HotelToAirport extends Component {
                                 </div>
                                 <hr />
                                 <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-calendar" style={{ color: '#00bfff' }}></i>
-                                    <input
-                                        type={this.state.dateType}
+                                    <DatePicker
+                                        selected={this.state.PickupDatetime}
+                                        onChange={this.handleChangeDateTime}
+                                        showTimeSelect
+                                        timeFormat="HH:mm"
+                                        timeIntervals={15}
+                                        dateFormat="MM/DD/YYYY HH:mm"
                                         className="form-control"
-                                        placeholder="Pick up Date and Time"
-                                        onChange={e => this.setState({ PickupDatetime: e.target.value })}
-                                        onFocus={() => this.setState({ dateType: 'datetime-local' })}
-                                        onBlur={() => this.setState({ dateType: 'text' })}
                                         style={{ width: '260px' }}
                                     />
                                 </div>
@@ -210,16 +228,12 @@ class HotelToAirport extends Component {
                                 </div>
                                 <hr />
                                 <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-calendar" style={{ color: '#e6e600' }}></i>
-                                    <input
-                                        type={this.state.timeType}
-                                        placeholder="Departure Time"
-                                        className="form-control"
-                                        onChange={e => this.setState({ DepartureTime: e.target.value })}
-                                        onFocus={() => this.setState({ timeType: 'time' })}
-                                        onBlur={() => this.setState({ timeType: 'text' })}
+                                    <TimePicker
+                                        defaultValue={moment()}
+                                        showSecond={false}
+                                        onChange={this.handleTime}
                                         style={{ width: '260px' }}
-                                    />
+                                        className="form-control" />
                                 </div>
 
                                 <hr />
