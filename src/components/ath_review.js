@@ -51,7 +51,7 @@ class ATHReview extends Component {
                         <p><strong>Airline</strong> = {Airline}</p>
                         <p><strong>Flight Number</strong> = {FlightNumber}</p>
                         <p><strong>Pick up Date</strong> = {moment(PickupDate).format('Do MMMM YYYY')}</p>
-                        <p><strong>Estimated Time of Arrival</strong> = {moment(ArrivalTime, ["HH:mm"]).format("hh:mm a")}</p>
+                        <p><strong>Estimated Time of Arrival</strong> = {moment(ArrivalTime, ["HH:mm"]).format("HH:mm")}</p>
                         <hr />
 
                         <p><strong>Hotel Drop Off</strong> = {Hotel}</p>

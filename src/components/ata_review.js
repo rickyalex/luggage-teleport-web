@@ -50,13 +50,13 @@ class ATAReview extends Component {
                         <p><strong>Airline</strong> = {AirlinePickup}</p>
                         <p><strong>Flight Number</strong> = {PickupFlightNumber}</p>
                         <p><strong>Pick up Date</strong> = {moment(PickupDate).format('Do MMMM YYYY')}</p>
-                        <p><strong>Estimated Time of Arrival</strong> = {moment(ArrivalTime, ["HH:mm"]).format("hh:mm a")}</p>
+                        <p><strong>Estimated Time of Arrival</strong> = {moment(ArrivalTime, ["HH:mm"]).format("HH:mm")}</p>
                         <hr />
 
                         <p><strong>Airport for Dropoff</strong> = {AirportDropoff}</p>
                         <p><strong>Airline</strong> = {AirlineDropoff}</p>
                         <p><strong>Flight Number</strong> = {DropoffFlightNumber}</p>
-                        <p><strong>Departure Time</strong> = {moment(DepartureTime, ["HH:mm"]).format("hh:mm a")}</p>
+                        <p><strong>Departure Time</strong> = {moment(DepartureTime, ["HH:mm"]).format("HH:mm")}</p>
                     </div>
                     <div align="center">
                         <button type="button" class="btn btn-danger btn-lg" style={{ marginRight: '3px' }} onClick={this.backToMainMenu}>Back</button>

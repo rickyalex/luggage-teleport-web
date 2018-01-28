@@ -50,13 +50,13 @@ class HTAReview extends Component {
                         <p><strong>Hotel for Pickup</strong> = {Hotel}</p>
                         <p><strong>Hotel Booking Reference</strong> = {HotelBookingRef}</p>
                         <p><strong>Name under Hotel Reservation</strong> = {NameUnderHotelRsv}</p>
-                        <p><strong>Pick up Date &amp; Time</strong> = {moment(PickupDatetime).format('Do MMMM YYYY | hh:mm a')}</p>
+                        <p><strong>Pick up Date &amp; Time</strong> = {moment(PickupDatetime).format('Do MMMM YYYY | HH:mm')}</p>
                         <hr />
                         
                         <p><strong>Airport for Dropoff</strong> = {Airport}</p>
                         <p><strong>Airline</strong> = {Airline}</p>
                         <p><strong>Flight Number</strong> = {FlightNumber}</p>
-                        <p><strong>Departure Time</strong> = {moment(DepartureTime, ["HH:mm"]).format("hh:mm a")}</p>
+                        <p><strong>Departure Time</strong> = {moment(DepartureTime, ["HH:mm"]).format("HH:mm")}</p>
                     </div>
                     <div align="center">
                     <button type="button" class="btn btn-danger btn-lg" style={{ marginRight: '3px' }} onClick={this.backToMainMenu}>Back</button>
