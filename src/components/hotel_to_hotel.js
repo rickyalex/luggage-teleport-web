@@ -16,11 +16,11 @@ class HotelToHotel extends Component {
             timeType: 'text',
             HotelPickup: '',
             HotelPickupBookingRef: '',
-            RsvpNameHotelPickup: '',
+            RsvpNameHotelPickup: localStorage.getItem('CustName'),
             HotelPickupDate: '',
             HotelDropoff: '',
             HotelDropoffBookingRef: '',
-            RsvpNameHotelDropoff: '',
+            RsvpNameHotelDropoff: localStorage.getItem('CustName'),
             OvernightStorage: false,
             HotelDropoffDate: '',
             BookingType: 'HTH'

@@ -24,7 +24,7 @@ class AirportToHotel extends Component {
             PickupDate: '',
             DropoffDate: '',
             HotelBookingRef: '',
-            NameUnderHotelRsv: '',
+            NameUnderHotelRsv: localStorage.getItem('CustName'),
             OvernightStorage: false,
             showModal: false,
             BookingType: 'ATH'
@@ -50,7 +50,7 @@ class AirportToHotel extends Component {
         return (
             Airport.length > 0 && Airline.length > 0 && Hotel.length > 0
             && FlightNumber.length > 0 && PickupDate.length > 0
-            && HotelBookingRef.length > 0 && NameUnderHotelRsv.length > 0 && DropoffDate.length > 0
+            && HotelBookingRef.length > 0 && DropoffDate.length > 0
         )
     }
 

@@ -22,7 +22,7 @@ class HotelToAirport extends Component {
             Airport: '',
             Airline: '',
             HotelBookingRef: '',
-            NameUnderHotelRsv: '',
+            NameUnderHotelRsv: localStorage.getItem('CustName'),
             PickupDatetime: moment(),
             FlightNumber: '',
             DepartureTime: '',
