@@ -48,9 +48,8 @@ class AirportToHotel extends Component {
         } = this.state;
 
         return (
-            Airport.length > 0 && Airline.length > 0 && Hotel.length > 0
-            && FlightNumber.length > 0 && PickupDate.length > 0
-            && HotelBookingRef.length > 0 && DropoffDate.length > 0
+            Airport.length > 0 && Airline.length > 0 && Hotel.length > 0 && FlightNumber.length > 0 && 
+            PickupDate.length > 0 && HotelBookingRef.length > 0 && DropoffDate.length > 0
         )
     }
 

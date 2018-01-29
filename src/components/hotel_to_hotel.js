@@ -39,9 +39,8 @@ class HotelToHotel extends Component {
             HotelDropoffDate } = this.state;
 
         return (
-            HotelPickup.length > 0 && HotelPickupBookingRef.length > 0 && RsvpNameHotelPickup.length > 0 &&
-            HotelPickupDate.length > 0 && HotelDropoff.length > 0 && HotelDropoffBookingRef.length > 0 &&
-            RsvpNameHotelDropoff.length > 0 && HotelDropoffDate.length > 0
+            HotelPickup.length > 0 && HotelPickupBookingRef.length > 0 && HotelPickupDate.length > 0 && 
+            HotelDropoff.length > 0 && HotelDropoffBookingRef.length > 0 && HotelDropoffDate.length > 0
         )
     }
 
