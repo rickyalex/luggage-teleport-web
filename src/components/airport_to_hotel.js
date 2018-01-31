@@ -6,6 +6,7 @@ import '../App.css';
 import axios from 'axios';
 import TimePicker from 'rc-time-picker';
 import * as moment from 'moment';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 import 'rc-time-picker/assets/index.css';
 
@@ -27,11 +28,12 @@ class AirportToHotel extends Component {
             NameUnderHotelRsv: localStorage.getItem('CustName'),
             OvernightStorage: false,
             showModal: false,
-            BookingType: 'ATH'
+            BookingType: 'ATH',
+            address: ''
         }
 
         this.handleChangeTime = this.handleChangeTime.bind(this);
-
+        this.onChange = (address) => this.setState({address});
     }
 
     ValidationForm() {
@@ -124,6 +126,14 @@ class AirportToHotel extends Component {
 
     render() {
         const CustomerName = localStorage.getItem('CustName');
+
+        const inputProps = {
+          value: this.state.address,
+          onChange: this.onChange,
+          placeholder: 'Search Airport',
+          types: ['lodging']
+        }
+
         return (
             <div className="polaroid">
                 <div className="container">
@@ -133,17 +143,7 @@ class AirportToHotel extends Component {
                                 {/**
                                 * Airport Section
                                 */}
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ Airport: event.target.value })}>
-                                    <option value="" selected disabled>Choose Airport for pickup</option>
-                                    {
-                                        this.props.AirportData.map((airport) => {
-                                            return <option key={airport.id} value={airport.name}>{airport.name}</option>
-                                        })
-                                    }
-                                </select>
+                                <PlacesAutocomplete inputProps={inputProps} />
                                 <hr />
 
                                 <select
