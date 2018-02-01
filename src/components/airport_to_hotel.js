@@ -6,7 +6,8 @@ import '../App.css';
 import axios from 'axios';
 import TimePicker from 'rc-time-picker';
 import * as moment from 'moment';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import PlacesAutocomplete from 'react-places-autocomplete';
+import { defaultStyles } from './helper';
 
 import 'rc-time-picker/assets/index.css';
 
@@ -28,12 +29,11 @@ class AirportToHotel extends Component {
             NameUnderHotelRsv: localStorage.getItem('CustName'),
             OvernightStorage: false,
             showModal: false,
-            BookingType: 'ATH',
-            address: ''
+            BookingType: 'ATH'
         }
 
         this.handleChangeTime = this.handleChangeTime.bind(this);
-        this.onChange = (address) => this.setState({address});
+        this.onChange = (Airport) => this.setState({ Airport });
     }
 
     ValidationForm() {
@@ -50,7 +50,7 @@ class AirportToHotel extends Component {
         } = this.state;
 
         return (
-            Airport.length > 0 && Airline.length > 0 && Hotel.length > 0 && FlightNumber.length > 0 && 
+            Airport.length > 0 && Airline.length > 0 && Hotel.length > 0 && FlightNumber.length > 0 &&
             PickupDate.length > 0 && HotelBookingRef.length > 0 && DropoffDate.length > 0
         )
     }
@@ -125,13 +125,11 @@ class AirportToHotel extends Component {
     }
 
     render() {
-        const CustomerName = localStorage.getItem('CustName');
-
         const inputProps = {
-          value: this.state.address,
-          onChange: this.onChange,
-          placeholder: 'Search Airport',
-          types: ['lodging']
+            value: this.state.Airport,
+            onChange: this.onChange,
+            placeholder: 'Search Airport',
+            types: ['lodging']
         }
 
         return (
@@ -143,7 +141,7 @@ class AirportToHotel extends Component {
                                 {/**
                                 * Airport Section
                                 */}
-                                <PlacesAutocomplete inputProps={inputProps} />
+                                <PlacesAutocomplete inputProps={inputProps} styles={defaultStyles} />
                                 <hr />
 
                                 <select
@@ -228,7 +226,7 @@ class AirportToHotel extends Component {
                                 <div className="inner-addon left-addon">
                                     <i className="glyphicon glyphicon-user" style={{ color: '#e6e600' }}></i>
                                     <input
-                                        defaultValue={CustomerName}
+                                        defaultValue={this.state.NameUnderHotelRsv}
                                         type='text'
                                         placeholder="Name under Hotel Reservation"
                                         className="form-control"

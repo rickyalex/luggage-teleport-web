@@ -11,9 +11,18 @@ export function NullBookingData() {
 export function BookingId() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  
+
     for (var i = 0; i < 7; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-  
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
     return text;
-  }
+}
+
+export const defaultStyles = {
+    root: 'form-group',
+    input: 'form-control',
+    autocompleteContainer: {
+        zIndex: '999'
+    },
+
+}
