@@ -18,10 +18,20 @@ export function BookingId() {
     return text;
 }
 
+// For Searching Hotel
 export const defaultStyles = {
     root: 'form-group',
     input: 'form-control',
     autocompleteContainer: {
         zIndex: '999'
+    }
+}
+
+export function inputProps(StateHotel, functionOnChange, placeHolder) {
+    return inputProps = {
+        value: StateHotel,
+        onChange: functionOnChange,
+        placeholder: placeHolder,
+        types: ['lodging']
     }
 }

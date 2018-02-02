@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { PassBookData, GetHotelData } from '../actions';
+import { PassBookData } from '../actions';
 import '../App.css';
 import axios from 'axios';
+import PlacesAutocomplete from 'react-places-autocomplete';
+import { defaultStyles, inputProps } from './helper';
 
 class HotelToHotel extends Component {
 
@@ -25,6 +27,7 @@ class HotelToHotel extends Component {
             HotelDropoffDate: '',
             BookingType: 'HTH'
         }
+        this.onChange = (Hotel) => this.setState({ Hotel });
     }
 
     validationForm() {
@@ -39,7 +42,7 @@ class HotelToHotel extends Component {
             HotelDropoffDate } = this.state;
 
         return (
-            HotelPickup.length > 0 && HotelPickupBookingRef.length > 0 && HotelPickupDate.length > 0 && 
+            HotelPickup.length > 0 && HotelPickupBookingRef.length > 0 && HotelPickupDate.length > 0 &&
             HotelDropoff.length > 0 && HotelDropoffBookingRef.length > 0 && HotelDropoffDate.length > 0
         )
     }
@@ -65,18 +68,6 @@ class HotelToHotel extends Component {
         this.props.PassBookData(datas);
     }
 
-    componentWillMount() {
-        axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Hotel-scan')
-            .then((res) => {
-                res.data.Myresult.sort(function (a, b) {
-                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-                });
-                this.props.GetHotelData(res.data.Myresult);
-            }).catch((err) => {
-                console.log(err);
-            })
-    }
-
     componentDidMount() {
         const { Email, PhoneNumber } = this.props.user;
         this.setState({ Email, PhoneNumber })
@@ -93,17 +84,9 @@ class HotelToHotel extends Component {
                                 {/**
                                 * Hotel A Section
                                 */}
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ HotelPickup: event.target.value })}>
-                                    <option value="" selected disabled>Hotel for Pick up</option>
-                                    {
-                                        this.props.HotelData.map((hotel) => {
-                                            return <option key={hotel.id} value={hotel.name}>{hotel.name}</option>
-                                        })
-                                    }
-                                </select>
+                                <PlacesAutocomplete
+                                    inputProps={inputProps(this.state.Hotel, this.onChange, 'Hotel For Pick Up')}
+                                    styles={defaultStyles} />
                                 <hr />
                                 <div className="inner-addon left-addon">
                                     <i className="glyphicon glyphicon-home" style={{ color: '#00bfff' }}></i>
@@ -145,17 +128,9 @@ class HotelToHotel extends Component {
                                 */}
                                 <hr />
 
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ HotelDropoff: event.target.value })}>
-                                    <option value="" selected disabled>Hotel for Drop off</option>
-                                    {
-                                        this.props.HotelData.map((hotel) => {
-                                            return <option key={hotel.id} value={hotel.name}>{hotel.name}</option>
-                                        })
-                                    }
-                                </select>
+                                <PlacesAutocomplete
+                                    inputProps={inputProps(this.state.Hotel, this.onChange, 'Hotel for Drop Off')}
+                                    styles={defaultStyles} />
                                 <hr />
                                 <div className="inner-addon left-addon">
                                     <i className="glyphicon glyphicon-home" style={{ color: '#e6e600' }}></i>
@@ -206,11 +181,10 @@ class HotelToHotel extends Component {
 }
 
 function mapsStateToProps(state) {
-    const { user, HotelData } = state;
+    const { user } = state;
     return {
-        user,
-        HotelData
+        user
     }
 }
 
-export default connect(mapsStateToProps, { PassBookData, GetHotelData })(HotelToHotel);
+export default connect(mapsStateToProps, { PassBookData })(HotelToHotel);

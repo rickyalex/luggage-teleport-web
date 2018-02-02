@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
-import { PassBookData, GetAirlineData, GetHotelData, GetAirportData } from '../actions'
+import { PassBookData, GetAirlineData, GetAirportData } from '../actions'
 import '../App.css';
 import axios from 'axios';
 import TimePicker from 'rc-time-picker';
 import DatePicker from 'react-datepicker';
 import * as moment from 'moment';
+import PlacesAutocomplete from 'react-places-autocomplete';
+import { defaultStyles, inputProps } from './helper';
 
 import 'rc-time-picker/assets/index.css';
-import 'react-datepicker/dist/react-datepicker.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 class HotelToAirport extends Component {
 
@@ -31,6 +33,7 @@ class HotelToAirport extends Component {
 
         this.handleChangeDateTime = this.handleChangeDateTime.bind(this);
         this.handleTime = this.handleTime.bind(this);
+        this.onChange = (Hotel) => this.setState({ Hotel });
     }
 
     handleChangeDateTime(dateTime) {
@@ -58,7 +61,7 @@ class HotelToAirport extends Component {
         } = this.state
 
         return (
-            Hotel.length > 0 && Airport.length > 0 && Airline.length > 0 
+            Hotel.length > 0 && Airport.length > 0 && Airline.length > 0
             && HotelBookingRef.length > 0 && FlightNumber.length > 0
         )
     }
@@ -105,16 +108,6 @@ class HotelToAirport extends Component {
             }).catch((err) => {
                 console.log(err);
             })
-
-        axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Hotel-scan')
-            .then((res) => {
-                res.data.Myresult.sort(function (a, b) {
-                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-                });
-                this.props.GetHotelData(res.data.Myresult);
-            }).catch((err) => {
-                console.log(err);
-            })
     }
 
     componentDidMount() {
@@ -134,17 +127,9 @@ class HotelToAirport extends Component {
                          */}
                             <form align="center">
 
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ Hotel: event.target.value })}>
-                                    <option value="" selected disabled>Hotel for Pick up</option>
-                                    {
-                                        this.props.HotelData.map((hotel) => {
-                                            return <option key={hotel.id} value={hotel.name}>{hotel.name}</option>
-                                        })
-                                    }
-                                </select>
+                                <PlacesAutocomplete
+                                    inputProps={inputProps(this.state.Hotel, this.onChange, 'Search Hotel for Pick Up')}
+                                    styles={defaultStyles} />
 
                                 <hr />
                                 <div className="inner-addon left-addon">
@@ -179,7 +164,6 @@ class HotelToAirport extends Component {
                                         timeIntervals={15}
                                         dateFormat="MM/DD/YYYY HH:mm"
                                         className="form-control"
-                                        style={{ width: '260px' }}
                                     />
                                 </div>
                                 <hr />
@@ -249,13 +233,12 @@ class HotelToAirport extends Component {
 }
 
 function mapsStateToProps(state) {
-    const { user, AirportData, AirlineData, HotelData } = state;
+    const { user, AirportData, AirlineData } = state;
     return {
         user,
         AirportData,
-        AirlineData,
-        HotelData
+        AirlineData
     }
 }
 
-export default connect(mapsStateToProps, { PassBookData, GetAirlineData, GetAirportData, GetHotelData })(HotelToAirport);
+export default connect(mapsStateToProps, { PassBookData, GetAirlineData, GetAirportData })(HotelToAirport);

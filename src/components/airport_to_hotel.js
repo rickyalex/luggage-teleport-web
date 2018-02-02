@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { PassBookData, GetAirlineData, GetHotelData, GetAirportData } from '../actions';
+import { PassBookData, GetAirlineData, GetAirportData } from '../actions';
 import '../App.css';
 import axios from 'axios';
 import TimePicker from 'rc-time-picker';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { defaultStyles } from './helper';
+import { defaultStyles, inputProps } from './helper';
 
 import 'rc-time-picker/assets/index.css';
 
@@ -33,7 +33,7 @@ class AirportToHotel extends Component {
         }
 
         this.handleChangeTime = this.handleChangeTime.bind(this);
-        this.onChange = (Airport) => this.setState({ Airport });
+        this.onChange = (Hotel) => this.setState({ Hotel });
     }
 
     ValidationForm() {
@@ -98,16 +98,6 @@ class AirportToHotel extends Component {
             }).catch((err) => {
                 console.log(err);
             })
-
-        axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Hotel-scan')
-            .then((res) => {
-                res.data.Myresult.sort(function (a, b) {
-                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-                });
-                this.props.GetHotelData(res.data.Myresult);
-            }).catch((err) => {
-                console.log(err);
-            })
     }
 
     componentDidMount() {
@@ -125,12 +115,6 @@ class AirportToHotel extends Component {
     }
 
     render() {
-        const inputProps = {
-            value: this.state.Airport,
-            onChange: this.onChange,
-            placeholder: 'Search Airport',
-            types: ['lodging']
-        }
 
         return (
             <div className="polaroid">
@@ -141,7 +125,17 @@ class AirportToHotel extends Component {
                                 {/**
                                 * Airport Section
                                 */}
-                                <PlacesAutocomplete inputProps={inputProps} styles={defaultStyles} />
+                                <select
+                                    className="form-control"
+                                    style={{ height: '35px', width: '260px' }}
+                                    onChange={event => this.setState({ Airport: event.target.value })}>
+                                    <option value="" selected disabled>Choose Aiport</option>
+                                    {
+                                        this.props.AirportData.map((airport) => {
+                                            return <option key={airport.id} value={airport.name}>{airport.name}</option>
+                                        })
+                                    }
+                                </select>
                                 <hr />
 
                                 <select
@@ -199,17 +193,9 @@ class AirportToHotel extends Component {
                              */}
                                 <hr />
 
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ Hotel: event.target.value })}>
-                                    <option value="" selected disabled>Hotel for Drop off</option>
-                                    {
-                                        this.props.HotelData.map((hotel) => {
-                                            return <option key={hotel.id} value={hotel.name}>{hotel.name}</option>
-                                        })
-                                    }
-                                </select>
+                                <PlacesAutocomplete
+                                    inputProps={inputProps(this.state.Hotel, this.onChange, 'Search Hotel for Drop Off')}
+                                    styles={defaultStyles} />
 
                                 <hr />
                                 <div className="inner-addon left-addon">
@@ -263,13 +249,12 @@ class AirportToHotel extends Component {
 }
 
 function mapsStateToProps(state) {
-    const { user, AirportData, AirlineData, HotelData } = state;
+    const { user, AirportData, AirlineData } = state;
     return {
         user,
         AirportData,
-        AirlineData,
-        HotelData
+        AirlineData
     }
 }
 
-export default connect(mapsStateToProps, { PassBookData, GetAirlineData, GetAirportData, GetHotelData })(AirportToHotel);
+export default connect(mapsStateToProps, { PassBookData, GetAirlineData, GetAirportData })(AirportToHotel);
