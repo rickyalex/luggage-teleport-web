@@ -23,6 +23,5 @@ export const defaultStyles = {
     input: 'form-control',
     autocompleteContainer: {
         zIndex: '999'
-    },
-
+    }
 }
