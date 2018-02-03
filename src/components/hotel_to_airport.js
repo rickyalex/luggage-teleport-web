@@ -164,6 +164,7 @@ class HotelToAirport extends Component {
                                         timeIntervals={15}
                                         dateFormat="MM/DD/YYYY HH:mm"
                                         className="form-control"
+                                        style={{width: '260px'}}
                                     />
                                 </div>
                                 <hr />
@@ -212,7 +213,7 @@ class HotelToAirport extends Component {
                                 <hr />
                                 <div className="inner-addon left-addon">
                                     <TimePicker
-                                        defaultValue={moment()}
+                                        placeholder="Departure Time"
                                         showSecond={false}
                                         onChange={this.handleTime}
                                         style={{ width: '260px' }}

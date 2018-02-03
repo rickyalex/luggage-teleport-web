@@ -176,7 +176,7 @@ class AirportToAirport extends Component {
                                 <hr />
                                 <div className="inner-addon left-addon">
                                     <TimePicker
-                                        defaultValue={moment()}
+                                        placeholder="Time of Arrival"
                                         showSecond={false}
                                         onChange={this.handleChangeArrivalTime}
                                         style={{ width: '260px' }}
@@ -224,7 +224,7 @@ class AirportToAirport extends Component {
                                 <hr />
                                 <div className="inner-addon left-addon">
                                     <TimePicker
-                                        defaultValue={moment()}
+                                        placeholder="Departure Time"
                                         showSecond={false}
                                         onChange={this.handleChangeDepartureTime}
                                         style={{ width: '260px' }}

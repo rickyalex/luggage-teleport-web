@@ -181,7 +181,8 @@ class AirportToHotel extends Component {
                                 <hr />
                                 <div className="inner-addon left-addon">
                                     <TimePicker
-                                        defaultValue={moment()}
+                                        // defaultValue={moment()}
+                                        placeholder="Time of Arrival"
                                         showSecond={false}
                                         onChange={this.handleChangeTime}
                                         style={{ width: '260px' }}
