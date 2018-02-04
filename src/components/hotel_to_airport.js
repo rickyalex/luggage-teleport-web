@@ -129,7 +129,7 @@ class HotelToAirport extends Component {
 
                                 <PlacesAutocomplete
                                     inputProps={inputProps(this.state.Hotel, this.onChange, 'Search Hotel for Pick Up')}
-                                    styles={defaultStyles} />
+                                     />
 
                                 <hr />
                                 <div className="inner-addon left-addon">

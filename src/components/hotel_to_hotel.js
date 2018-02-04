@@ -86,7 +86,7 @@ class HotelToHotel extends Component {
                                 */}
                                 <PlacesAutocomplete
                                     inputProps={inputProps(this.state.Hotel, this.onChange, 'Hotel For Pick Up')}
-                                    styles={defaultStyles} />
+                                     />
                                 <hr />
                                 <div className="inner-addon left-addon">
                                     <i className="glyphicon glyphicon-home" style={{ color: '#00bfff' }}></i>
@@ -130,7 +130,7 @@ class HotelToHotel extends Component {
 
                                 <PlacesAutocomplete
                                     inputProps={inputProps(this.state.Hotel, this.onChange, 'Hotel for Drop Off')}
-                                    styles={defaultStyles} />
+                                     />
                                 <hr />
                                 <div className="inner-addon left-addon">
                                     <i className="glyphicon glyphicon-home" style={{ color: '#e6e600' }}></i>
