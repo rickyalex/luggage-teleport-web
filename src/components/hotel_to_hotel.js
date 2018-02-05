@@ -27,7 +27,8 @@ class HotelToHotel extends Component {
             HotelDropoffDate: '',
             BookingType: 'HTH'
         }
-        this.onChange = (Hotel) => this.setState({ Hotel });
+        this.onChangePickUpHotel = (HotelPickup) => this.setState({ HotelPickup });
+        this.onChangeDropOffHotel = (HotelDropoff) => this.setState({ HotelDropoff });
     }
 
     validationForm() {
@@ -85,8 +86,8 @@ class HotelToHotel extends Component {
                                 * Hotel A Section
                                 */}
                                 <PlacesAutocomplete
-                                    inputProps={inputProps(this.state.Hotel, this.onChange, 'Hotel For Pick Up')}
-                                     />
+                                    inputProps={inputProps(this.state.HotelPickup, this.onChangePickUpHotel, 'Hotel For Pick Up')}
+                                />
                                 <hr />
                                 <div className="inner-addon left-addon">
                                     <i className="glyphicon glyphicon-home" style={{ color: '#00bfff' }}></i>
@@ -129,8 +130,8 @@ class HotelToHotel extends Component {
                                 <hr />
 
                                 <PlacesAutocomplete
-                                    inputProps={inputProps(this.state.Hotel, this.onChange, 'Hotel for Drop Off')}
-                                     />
+                                    inputProps={inputProps(this.state.HotelDropoff, this.onChangeDropOffHotel, 'Hotel for Drop Off')}
+                                />
                                 <hr />
                                 <div className="inner-addon left-addon">
                                     <i className="glyphicon glyphicon-home" style={{ color: '#e6e600' }}></i>
