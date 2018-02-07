@@ -15,14 +15,11 @@ class HTAFinalReview extends Component {
 
         this.state = {
             isLoading: false,
-            TotalCost: 0,
-            Luggage: 0
         }
 
         this.backToPayment = this.backToPayment.bind(this);
         this.Submit = this.Submit.bind(this);
         this.handleNonce = this.handleNonce.bind(this);
-        this.handleLuggage = this.handleLuggage.bind(this);
     }
 
     PushData() {
@@ -42,7 +39,7 @@ class HTAFinalReview extends Component {
         const { Airline, Airport, DepartureTime, Email, FlightNumber, Hotel, HotelBookingRef, NameUnderHotelRsv,
             PhoneNumber, PickupDatetime } = this.props.BookData[0];
         const { PaymentMethod } = this.props.payment;
-        const { Luggage, TotalCost } = this.state
+        const { Luggage, TotalCost } = this.props.LuggageData;
         const bookingId = BookingId();
 
         let data = JSON.stringify({
@@ -65,7 +62,6 @@ class HTAFinalReview extends Component {
         })
 
         let token = localStorage.getItem('token')
-        // console.log('token', token)
         let config = {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -76,11 +72,9 @@ class HTAFinalReview extends Component {
 
         axios.post('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/HotelToAirport-create', data, config)
             .then((response) => {
-                // console.log(response);
                 alert('success booked!')
                 this.props.history.push('/home');
             }, (err) => {
-                // console.log(err);
                 this.setState({ isLoading: false })
             })
 
@@ -91,32 +85,17 @@ class HTAFinalReview extends Component {
         alert(errors[0].message)
     }
 
-    async handleLuggage() {
-        const { Luggage, TotalCost } = this.state
-        // this.setState({Luggage})
-        if (Luggage > 0 && Luggage <= 2) {
-            this.setState({ TotalCost: 35 })
-        } else if (Luggage > 2) {
-            const TotalWithAdditional = 35 + ((Luggage - 2) * 10);
-            this.setState({ TotalCost: TotalWithAdditional })
-        }
-
-    }
-
     render() {
-        // console.log('final review', this.props.BookData[0])
-        // console.log('final review', this.props.payment)
         const { Airline, Airport, DepartureTime, Email, FlightNumber, Hotel, HotelBookingRef, NameUnderHotelRsv,
             PhoneNumber, PickupDatetime } = this.props.BookData[0];
         const { PaymentMethod } = this.props.payment;
-
-        const { Total } = this.state;
+        const { Luggage, TotalCost } = this.props.LuggageData;
         return (
             <div>
                 <div className="containerProgressBar" style={{ marginTop: '1em' }}>
                     <ul className="progressbar">
                         <li className="active">Booking</li>
-                        <li className="active">Booking Review</li>
+                        <li className="active">Add Luggage</li>
                         <li className="active">Payment Method</li>
                         <li>Booking/Payment Review &amp; Submit</li>
                     </ul>
@@ -139,20 +118,12 @@ class HTAFinalReview extends Component {
                         <p><strong>Departure Time</strong> = {moment(DepartureTime, ["HH:mm"]).format("HH:mm")}</p>
                         <hr />
 
-                        <h3>Your Luggage(s)</h3>
-                        <input onChange={e => this.setState({ Luggage: e.target.value })} placeholder="you luggage quantity" />
-                        <button onClick={this.handleLuggage} style={{ backgroundColor: '#00bfff' }} disabled={!this.state.Luggage}>Add</button>
-                        <hr />
-
                         <h3>Payment Details</h3>
-                        <p>with {PaymentMethod}</p>
-                        <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
-                        <p><strong>Total = ${this.state.TotalCost}</strong></p>
+                        <p><strong>with</strong> {PaymentMethod}</p>
+                        <p><strong>Luggage = </strong> {Luggage} item(s)</p>
+                        <p><strong>Total =</strong> ${TotalCost}</p>
 
-                        <p><strong>Notes! </strong>
-                            <i className="registerNotes">
-                                $35 fixed price up to 2 Luggages and $10 per additional</i>
-                        </p>
+                        <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
                     </div>
 
                     <div align="center">
@@ -162,7 +133,6 @@ class HTAFinalReview extends Component {
                                 <button type="button" class="btn btn-primary btn-lg"
                                     onClick={this.Submit}
                                     style={{ width: '160px', marginLeft: '1em' }}
-                                    disabled={!this.state.TotalCost}
                                 >Submit Data
                                  </button>
                                 :
@@ -183,10 +153,11 @@ class HTAFinalReview extends Component {
 }
 
 function mapStateToProps(state) {
-    const { BookData, payment } = state;
+    const { BookData, payment, LuggageData } = state;
     return {
         BookData,
-        payment
+        payment,
+        LuggageData
     }
 }
 

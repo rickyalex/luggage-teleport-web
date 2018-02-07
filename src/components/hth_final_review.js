@@ -15,14 +15,11 @@ class HTHFInalReview extends Component {
 
         this.state = {
             isLoading: false,
-            TotalCost: 0,
-            Luggage: 0
         }
 
         this.backToPayment = this.backToPayment.bind(this);
         this.Submit = this.Submit.bind(this);
         this.handleNonce = this.handleNonce.bind(this);
-        this.handleLuggage = this.handleLuggage.bind(this);
     }
 
     PushData() {
@@ -41,20 +38,20 @@ class HTHFInalReview extends Component {
         const { HotelDropoff, HotelDropoffBookingRef, HotelDropoffDate, Email, HotelPickup, HotelPickupBookingRef,
             HotelPickupDate, OvernightStorage, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup } = this.props.BookData[0];
         const { PaymentMethod } = this.props.payment;
-        const { Luggage, TotalCost } = this.state;
+        const { Luggage, TotalCost } = this.props.LuggageData;
         const bookingId = BookingId();
 
         let data = JSON.stringify({
             BookingId: `HTH${bookingId}`,
-            HotelDropoff: HotelDropoff, 
-            HotelDropoffBookingRef: HotelDropoffBookingRef, 
-            HotelDropoffDate: HotelDropoffDate, 
-            email: Email, 
-            HotelPickup: HotelPickup, 
+            HotelDropoff: HotelDropoff,
+            HotelDropoffBookingRef: HotelDropoffBookingRef,
+            HotelDropoffDate: HotelDropoffDate,
+            email: Email,
+            HotelPickup: HotelPickup,
             HotelPickupBookingRef: HotelPickupBookingRef,
-            HotelPickupDate: HotelPickupDate, 
-            PhoneNumber: PhoneNumber, 
-            RsvpNameHotelDropoff: RsvpNameHotelDropoff, 
+            HotelPickupDate: HotelPickupDate,
+            PhoneNumber: PhoneNumber,
+            RsvpNameHotelDropoff: RsvpNameHotelDropoff,
             RsvpNameHotelPickup: RsvpNameHotelPickup,
             PaymentWith: PaymentMethod,
             LuggageQuantity: Luggage,
@@ -84,29 +81,17 @@ class HTHFInalReview extends Component {
         alert(errors[0].message)
     }
 
-    async handleLuggage() {
-        const { Luggage, TotalCost } = this.state
-        // this.setState({Luggage})
-        if (Luggage > 0 && Luggage <= 2) {
-            this.setState({ TotalCost: 35 })
-        } else if (Luggage > 2) {
-            const TotalWithAdditional = 35 + ((Luggage - 2) * 10);
-            this.setState({ TotalCost: TotalWithAdditional })
-        }
-
-    }
-
     render() {
-        // console.log('this.props', this.props.BookData[0])
         const { HotelDropoff, HotelDropoffBookingRef, HotelDropoffDate, Email, HotelPickup, HotelPickupBookingRef,
             HotelPickupDate, OvernightStorage, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup } = this.props.BookData[0];
         const { PaymentMethod } = this.props.payment;
+        const { Luggage, TotalCost } = this.props.LuggageData;
         return (
             <div>
                 <div className="containerProgressBar" style={{ marginTop: '1em' }}>
                     <ul className="progressbar">
                         <li className="active">Booking</li>
-                        <li className="active">Booking Review</li>
+                        <li className="active">Add Luggage</li>
                         <li className="active">Payment Method</li>
                         <li>Booking/Payment Review &amp; Submit</li>
                     </ul>
@@ -126,29 +111,15 @@ class HTHFInalReview extends Component {
                         <p><strong>Hotel for Dropoff</strong> = {HotelDropoff}</p>
                         <p><strong>Hotel Booking Reference</strong> = {HotelDropoffBookingRef}</p>
                         <p><strong>Name under Hotel Reservation</strong> = {RsvpNameHotelDropoff}</p>
-                        {/* {
-                            OvernightStorage === true ?
-                                <p><strong>Overnight Storage</strong> = Yes</p>
-                                :
-                                <p><strong>Overnight Storage</strong> = No</p>
-                        } */}
                         <p><strong>Drop off Date</strong> = {moment(HotelDropoffDate).format('Do MMMM YYYY')}</p>
                         <hr />
 
-                        <h3>Your Luggage(s)</h3>
-                        <input onChange={e => this.setState({ Luggage: e.target.value })} placeholder="you luggage quantity" />
-                        <button onClick={this.handleLuggage} style={{ backgroundColor: '#00bfff' }} disabled={!this.state.Luggage}>Add</button>
-                        <hr />
-
                         <h3>Payment Details</h3>
-                        <p>with {PaymentMethod}</p>
-                        <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
-                        <p><strong>Total = ${this.state.TotalCost}</strong></p>
+                        <p><strong>with</strong> {PaymentMethod}</p>
+                        <p><strong>Luggage = </strong> {Luggage} item(s)</p>
+                        <p><strong>Total =</strong> ${TotalCost}</p>
 
-                        <p><strong>Notes! </strong>
-                            <i className="registerNotes">
-                                $35 fixed price up to 2 Luggages and $10 per additional</i>
-                        </p>
+                        <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
                     </div>
 
                     <div align="center">
@@ -158,7 +129,6 @@ class HTHFInalReview extends Component {
                                 <button type="button" className="btn btn-primary btn-lg"
                                     onClick={this.Submit}
                                     style={{ width: '160px', marginLeft: '1em' }}
-                                    disabled={!this.state.TotalCost}
                                 >Submit Data
                                  </button>
                                 :
@@ -180,10 +150,11 @@ class HTHFInalReview extends Component {
 }
 
 function mapStateToProps(state) {
-    const { BookData, payment } = state;
+    const { BookData, payment, LuggageData } = state;
     return {
         BookData,
-        payment
+        payment,
+        LuggageData
     }
 }
 
