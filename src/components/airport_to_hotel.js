@@ -57,7 +57,7 @@ class AirportToHotel extends Component {
 
     buttonSubmit() {
         return (
-            <Link to="/athreview" style={{ color: 'black' }}>
+            <Link to="/addluggage" style={{ color: 'black' }}>
                 <button
                     className="btn btn-lg"
                     onClick={() => this.SubmitHotelToAirportData()}
