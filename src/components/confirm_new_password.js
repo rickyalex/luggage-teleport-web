@@ -11,7 +11,6 @@ class ConfirmNewPassword extends Component {
         super(props);
 
         this.state = {
-            email: '',
             newPassword: '',
             pin: '',
             isLoading: false,
@@ -24,8 +23,7 @@ class ConfirmNewPassword extends Component {
 
     validateForm() {
         return(
-            this.state.email.length > 0 && this.state.pin.length > 0 &&
-            this.state.newPassword.length > 0
+            this.state.pin.length > 0 && this.state.newPassword.length > 0
         )
     }
 
@@ -50,11 +48,13 @@ class ConfirmNewPassword extends Component {
     }
 
     async handleConfirmationSubmit(event) {
+        const email = localStorage.getItem('EmailForgot');
         event.preventDefault();
         this.setState({ isLoading: true })
         try {
-            await this.ConfirmNewPassword(this.state.email, this.state.pin, this.state.newPassword);
-            alert('success change password!')
+            await this.ConfirmNewPassword(email, this.state.pin, this.state.newPassword);
+            alert('success change password!');
+            localStorage.removeItem('EmailForgot');
             this.props.history.push('/');
         } catch (e) {
             this.setState({
@@ -74,13 +74,6 @@ class ConfirmNewPassword extends Component {
 
                         <h1 style={{ color: 'yellow', marginBottom: '2em' }}>Change Password</h1>
                         <form onSubmit={this.handleConfirmationSubmit}>
-                            <div className="form-group">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    onChange={e => this.setState({ email: e.target.value })}
-                                    placeholder="Your Email" required />
-                            </div>
                             <div className="form-group">
                                 <input
                                     className="form-control"
