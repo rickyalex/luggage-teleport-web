@@ -53,6 +53,7 @@ class ForgotPassword extends Component {
         event.preventDefault();
         this.setState({ isLoading: true })
         try {
+            localStorage.setItem('EmailForgot', `${this.state.email}`)
             await this.ForgottenPassword(this.state.email);
             alert('Please check your Email for Get the PIN');
             this.props.history.push('/confirmnewpassword');
