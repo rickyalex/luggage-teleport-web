@@ -23,7 +23,6 @@ class VerifyAccount extends Component {
 
     validateForm() {
         return (
-            // this.state.email.length > 0 &&
             this.state.pin.length >= 6
         );
     }
@@ -50,7 +49,6 @@ class VerifyAccount extends Component {
 
     async handleConfirmationSubmit(event) {
         const email = localStorage.getItem('EmailRegist');
-        console.log(email)
         event.preventDefault();
         this.setState({ isLoading: true })
         try {
@@ -103,9 +101,6 @@ class VerifyAccount extends Component {
                                     <i className="fa fa-spinner fa-spin"></i> Verifying...
                                 </button>
                         }
-
-
-
                     </form>
                 </div>
             </div>
