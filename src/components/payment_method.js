@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { PassBookData, GetPaymentMethod } from '../actions';
+import { PassBookData, GetPaymentMethod, GetLuggageData } from '../actions';
 import { FormGroup, InputGroup } from 'react-bootstrap';
 import '../App.css';
 
@@ -19,27 +19,17 @@ class PaymentMethod extends Component {
     }
 
     PushData() {
-        this.props.PassBookData(this.props.BookData)
+        this.props.PassBookData(this.props.BookData);
     }
 
     setPayment() {
         this.props.GetPaymentMethod(this.state.PaymentMethod);
+        this.props.GetLuggageData(this.props.LuggageData.TotalCost, this.props.LuggageData.Luggage);
     }
 
     async backToReview() {
         this.PushData()
-        const { BookingType } = this.props.BookData[0];
-        if (BookingType === 'ATH') {
-            this.props.history.push('/athreview');
-        } else if (BookingType === 'HTA') {
-            this.props.history.push('/htareview');
-        } else if (BookingType === 'HTH') {
-            this.props.history.push('/hthreview');
-        } else if (BookingType === 'ATA') {
-            this.props.history.push('/atareview');
-        } else {
-            alert('Ooops Something wrong :(')
-        }
+        this.props.history.push('/addluggage');
     }
 
 
@@ -82,7 +72,7 @@ class PaymentMethod extends Component {
                 <div className="containerProgressBar" style={{ marginTop: '1em' }}>
                     <ul className="progressbar">
                         <li className="active">Booking</li>
-                        <li className="active">Booking Review</li>
+                        <li className="active">Add Luggage</li>
                         <li>Payment Method</li>
                         <li>Booking/Payment Review &amp; Submit</li>
                     </ul>
@@ -95,7 +85,7 @@ class PaymentMethod extends Component {
                                         <InputGroup>
                                             <select
                                                 className="form-control"
-                                                style={{ height: '35px', width: '260px', marginTop: '4em', marginLeft:"-28em"}}
+                                                style={{ height: '35px', width: '260px', marginTop: '4em', marginLeft: "-28em" }}
                                                 onChange={event => this.setState({ PaymentMethod: event.target.value })}>
                                                 <option value="" selected disabled>Choose Your Payment</option>
                                                 {
@@ -123,10 +113,11 @@ class PaymentMethod extends Component {
 
 
 function mapStateToProps(state) {
-    const { BookData } = state;
+    const { BookData, LuggageData } = state;
     return {
-        BookData
+        BookData,
+        LuggageData
     }
 }
 
-export default connect(mapStateToProps, { PassBookData, GetPaymentMethod })(PaymentMethod)
+export default connect(mapStateToProps, { PassBookData, GetPaymentMethod, GetLuggageData })(PaymentMethod)
