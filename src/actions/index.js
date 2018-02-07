@@ -1,10 +1,12 @@
-import { 
-    SIGNED_IN, 
-    PASSING_BOOK_DATA, 
-    GET_PAYMENT_METHOD, 
+import {
+    SIGNED_IN,
+    PASSING_BOOK_DATA,
+    GET_PAYMENT_METHOD,
     GET_AIRLINE_DATA,
-    GET_AIRPORT_DATA, 
-    GET_HOTEL_DATA } from '../constants';
+    GET_AIRPORT_DATA,
+    GET_HOTEL_DATA,
+    GET_LUGGAGE_DATA
+} from '../constants';
 
 export function LogUser(Email, PhoneNumber) {
     const action = {
@@ -56,5 +58,14 @@ export function GetHotelData(HotelData) {
         HotelData
     }
 
+    return action;
+}
+
+export function GetLuggageData(TotalCost, Luggage) {
+    const action = {
+        type: GET_LUGGAGE_DATA,
+        TotalCost,
+        Luggage
+    }
     return action;
 }
