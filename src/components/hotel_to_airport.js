@@ -25,7 +25,7 @@ class HotelToAirport extends Component {
             Airline: '',
             HotelBookingRef: '',
             NameUnderHotelRsv: localStorage.getItem('CustName'),
-            PickupDatetime: moment(),
+            PickupDatetime: null,
             FlightNumber: '',
             DepartureTime: '',
             BookingType: 'HTA'
@@ -68,7 +68,7 @@ class HotelToAirport extends Component {
 
     buttonSubmit() {
         return (
-            <Link to="/htareview" style={{ color: 'black' }}>
+            <Link to="/addluggage" style={{ color: 'black' }}>
                 <button
                     className="btn btn-lg"
                     onClick={() => this.SubmitHotelToAirportData()}
@@ -164,6 +164,7 @@ class HotelToAirport extends Component {
                                         timeIntervals={15}
                                         dateFormat="MM/DD/YYYY HH:mm"
                                         className="form-control"
+                                        placeholderText="Pick up Date and Time"
                                         style={{width: '260px'}}
                                     />
                                 </div>
