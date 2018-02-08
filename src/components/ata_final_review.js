@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import axios from 'axios';
 import SquarePaymentForm from './square_payment_form';
 import { SQUARE_APP_ID } from '../config';
-import { BookingId } from './helper';
+import { BookingId, GetPayment } from './helper';
 
 class ATAFinalReview extends Component {
 
@@ -15,9 +15,10 @@ class ATAFinalReview extends Component {
 
         this.state = {
             isLoading: false,
+            PaymentMethod: ''
         }
 
-        this.backToPayment = this.backToPayment.bind(this);
+        this.backToAddLuggage = this.backToAddLuggage.bind(this);
         this.Submit = this.Submit.bind(this);
         this.handleNonce = this.handleNonce.bind(this);
     }
@@ -26,9 +27,9 @@ class ATAFinalReview extends Component {
         const { dispatch } = this.props;
         dispatch(PassBookData(this.props.BookData));
     }
-    async backToPayment() {
+    async backToAddLuggage() {
         this.PushData()
-        this.props.history.push('/payment');
+        this.props.history.push('/addluggage');
     }
     async Submit() {
         this.paymentForm.generateNonce();
@@ -37,9 +38,9 @@ class ATAFinalReview extends Component {
     async handleNonce(nonce, cardData) {
         const { AirlineDropoff, AirlinePickup, AirportDropoff, AirportPickup, ArrivalTime, DepartureTime,
             DropoffFlightNumber, PickupFlightNumber, Email, PhoneNumber, PickupDate } = this.props.BookData[0];
-        const { PaymentMethod } = this.props.payment;
+        const { PaymentMethod } = this.state;
         const { Luggage, TotalCost } = this.props.LuggageData;
-        const bookingId = BookingId()
+        const bookingId = BookingId();
 
         let data = JSON.stringify({
             BookingId: `ATA${bookingId}`,
@@ -47,8 +48,8 @@ class ATAFinalReview extends Component {
             AirlinePickup: AirlinePickup,
             AirportDropoff: AirportDropoff,
             AirportPickup: AirportPickup,
-            ArrivalTime: ArrivalTime,
-            DepartureTime: DepartureTime,
+            ArrivalTime: moment(ArrivalTime, ["HH:mm"]).format("HH:mm"),
+            DepartureTime: moment(DepartureTime, ["HH:mm"]).format("HH:mm"),
             DropoffFlightNumber: DropoffFlightNumber,
             PickupFlightNumber: PickupFlightNumber,
             email: Email,
@@ -93,7 +94,6 @@ class ATAFinalReview extends Component {
                 <ul className="progressbar">
                     <li className="active">Booking</li>
                     <li className="active">Add Luggage</li>
-                    <li className="active">Payment Method</li>
                     <li>Booking/Payment Review &amp; Submit</li>
                 </ul>
                 <div className="receipt">
@@ -116,20 +116,38 @@ class ATAFinalReview extends Component {
                     <p><strong>Departure Time</strong> = {moment(DepartureTime, ["HH:mm"]).format("HH:mm")}</p>
                     <hr />
 
-                    <h3>Payment Details</h3>
-                    <p><strong>with</strong> {PaymentMethod}</p>
+                    <h3>Total Payment</h3>
                     <p><strong>Luggage = </strong> {Luggage} item(s)</p>
                     <p><strong>Total =</strong> ${TotalCost}</p>
+                    <hr />
+                    <h3>Payment Method</h3>
+                    <select
+                        className="form-control"
+                        style={{ width: '200px', height: '30px' }}
+                        onChange={event => this.setState({ PaymentMethod: event.target.value })}>
+                        <option value="" selected disabled>Choose Your Payment</option>
+                        {
+                            GetPayment().map((payment) => {
+                                return <option key={payment.id} value={payment.name}>{payment.name}</option>
+                            })
+                        }
+                    </select>
 
-                    <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
+                    {
+                        this.state.PaymentMethod ?
+                            <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
+                            :
+                            <div></div>
+                    }
                 </div>
 
                 <div align="center">
-                    <button type="button" className="btn btn-danger btn-lg" onClick={this.backToPayment} style={{ width: '160px' }}>Back</button>
+                    <button type="button" className="btn btn-danger btn-lg" onClick={this.backToAddLuggage} style={{ width: '160px' }}>Back</button>
                     {
                         !this.state.isLoading ?
                             <button type="button" className="btn btn-primary btn-lg"
                                 onClick={this.Submit}
+                                disabled={!this.state.PaymentMethod}
                                 style={{ width: '160px', marginLeft: '1em' }}
                             >Submit Data
                                  </button>
