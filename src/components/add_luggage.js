@@ -17,7 +17,7 @@ class AddLuggage extends Component {
 
         this.handleLuggage = this.handleLuggage.bind(this);
         this.backToMainMenu = this.backToMainMenu.bind(this);
-        this.toPaymentMethod = this.toPaymentMethod.bind(this);
+        this.toFinalReview = this.toFinalReview.bind(this);
     }
 
     PushData() {
@@ -25,10 +25,21 @@ class AddLuggage extends Component {
     }
 
 
-    async toPaymentMethod() {
+    async toFinalReview() {
         this.PushData()
         this.props.GetLuggageData(this.state.TotalCost, this.state.Luggage)
-        this.props.history.push('/payment')
+        const { BookingType } = this.props.BookData[0];
+        if (BookingType === 'ATH') {
+            this.props.history.push('/athfinalreview')
+        } else if (BookingType === 'HTA') {
+            this.props.history.push('/htafinalreview')
+        } else if (BookingType === 'HTH') {
+            this.props.history.push('/hthfinalreview');
+        } else if (BookingType === 'ATA') {
+            this.props.history.push('/atafinalreview');
+        } else {
+            alert('Ooops Something wrong :(')
+        }
     }
 
     async backToMainMenu() {
@@ -55,7 +66,6 @@ class AddLuggage extends Component {
                     <ul className="progressbar">
                         <li className="active">Booking</li>
                         <li>Add Luggage</li>
-                        <li>Payment Method</li>
                         <li>Booking/Payment Review &amp; Submit</li>
                     </ul>
                     <div className="receipt" align="center" style={{ marginTop: '3em' }}>
@@ -74,7 +84,7 @@ class AddLuggage extends Component {
                     </div>
                     <div align="center">
                         <button type="button" class="btn btn-danger btn-lg" style={{ marginRight: '3px' }} onClick={this.backToMainMenu}>Back</button>
-                        <button type="button" class="btn btn-primary btn-lg" onClick={this.toPaymentMethod} disabled={!this.state.TotalCost}>Next</button>
+                        <button type="button" class="btn btn-primary btn-lg" onClick={this.toFinalReview} disabled={!this.state.TotalCost}>Next</button>
                     </div>
                 </div>
 
