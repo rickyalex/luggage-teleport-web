@@ -1,13 +1,6 @@
 import React from 'react';
 
-export function NullBookingData() {
-    return (
-        <div>
-            <h1 style={{ color: 'white', marginTop: '30px' }}> No Booking Data</h1>
-        </div>
-    )
-}
-
+//Random Booking Id
 export function BookingId() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -18,6 +11,7 @@ export function BookingId() {
     return text;
 }
 
+//For auto complete
 export function inputProps(StateHotel, functionOnChange, placeHolder) {
     return inputProps = {
         value: StateHotel,
@@ -25,4 +19,30 @@ export function inputProps(StateHotel, functionOnChange, placeHolder) {
         placeholder: placeHolder,
         types: ['establishment']
     }
+}
+
+//Ordering data Ascending
+export function OrderASC(data, dataType) {
+
+    if (dataType == 'string') {
+        data.sort(function (a, b) {
+            return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        });
+    } else if (dataType == 'date') {
+        data.sort(function (a, b) {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+    }
+}
+
+//Getting Payment Data
+export function GetPayment() {
+    const Payment = [
+        {
+            id: 1,
+            name: "Credit Card"
+        }
+    ]
+
+    return Payment;
 }
