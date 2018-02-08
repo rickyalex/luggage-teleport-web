@@ -9,7 +9,6 @@ import ConfirmNewPassword from './components/confirm_new_password';
 import BookingForm from './components/booking_form';
 import History from './components/history';
 import AddLuggage from './components/add_luggage';
-import PaymentMethod from './components/payment_method';
 import ATHFinalReview from './components/ath_final_review';
 import HTAFinalReview from './components/hta_final_review';
 import HTHFinalReview from './components/hth_final_review';
@@ -39,7 +38,6 @@ class Routes extends Component {
                         <Route path="/htafinalreview" component={HTAFinalReview} />
                         <Route path="/hthfinalreview" component={HTHFinalReview} />
                         <Route path="/atafinalreview" component={ATAFinalReview} />
-                        <Route path="/payment" component={PaymentMethod} />
                         <Route path="/addluggage" component={AddLuggage} />
                         <Route path="/verify" component={VerifyAccount} />
                         <Route path="/forgot" component={ForgotPassword} />
