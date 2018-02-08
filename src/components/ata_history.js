@@ -4,6 +4,7 @@ import '../App.css';
 import axios from 'axios';
 import * as moment from 'moment';
 import ReactTable from 'react-table';
+import { OrderASC } from './helper';
 import 'react-table/react-table.css';
 
 class ATAHistory extends Component {
@@ -33,6 +34,7 @@ class ATAHistory extends Component {
         const { Email } = this.props.user
         axios.get(`https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToAirport-get/${Email}`, config)
             .then((res) => {
+                OrderASC(res.data.result, 'date');
                 this.setState({ data: res.data.result, isLoading: true })
             }).catch((err) => {
                 console.log(err);
