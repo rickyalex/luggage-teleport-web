@@ -18,7 +18,6 @@ class Navbar extends React.Component {
 
   signOutUser() {
     const currentUser = getCurrentUser();
-
     if (currentUser !== null) {
       currentUser.signOut();
     }
@@ -31,6 +30,7 @@ class Navbar extends React.Component {
     }
     this.props.history.push('/')
     window.location.reload();
+
   }
 
   RenderLoginButton() {
@@ -59,6 +59,7 @@ class Navbar extends React.Component {
 
   render() {
     const token = localStorage.getItem('token')
+    const currentUser = getCurrentUser();
     return (
       <div>
         <nav>
@@ -68,7 +69,7 @@ class Navbar extends React.Component {
                 !token ? <div></div>
                   :
                   <div>
-                    Hi {this.props.user.Email}
+                    Hi {currentUser.pool.storage.CustName}
                   </div>
               }
               <a id="log" className="menu-item">

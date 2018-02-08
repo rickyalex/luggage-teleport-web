@@ -129,7 +129,7 @@ class AirportToHotel extends Component {
                                     className="form-control"
                                     style={{ height: '35px', width: '260px' }}
                                     onChange={event => this.setState({ Airport: event.target.value })}>
-                                    <option value="" selected disabled>Choose Aiport</option>
+                                    <option value="" selected disabled>Choose Airport</option>
                                     {
                                         this.props.AirportData.map((airport) => {
                                             return <option key={airport.id} value={airport.name}>{airport.name}</option>

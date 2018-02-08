@@ -83,7 +83,7 @@ class Register extends Component {
         localStorage.setItem('EmailRegist', `${this.state.email}`);
         try {
             const newUser = await this.signup(this.state.name, this.state.email, phoneNumber, this.state.password);
-            alert('success register! Please check your email for verify')
+            alert('Thank you for the registration. We have sent a verification email to your email address')
             this.props.history.push('/verify');
         } catch (e) {
             this.setState({

@@ -53,7 +53,7 @@ class VerifyAccount extends Component {
         this.setState({ isLoading: true })
         try {
             await this.confirm(email, this.state.pin);
-            alert('Success verify your Account');
+            alert('Email verification success');
             this.props.history.push('/');
             localStorage.removeItem('EmailRegist');
         } catch (e) {

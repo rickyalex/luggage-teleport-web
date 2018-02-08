@@ -23,6 +23,6 @@ export function inputProps(StateHotel, functionOnChange, placeHolder) {
         value: StateHotel,
         onChange: functionOnChange,
         placeholder: placeHolder,
-        types: ['lodging']
+        types: ['establishment']
     }
 }
