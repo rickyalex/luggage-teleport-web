@@ -144,10 +144,15 @@ class HTAFinalReview extends Component {
                     </div>
 
                     <div align="center">
-                        <button type="button" class="btn btn-danger btn-lg" style={{ width: '160px' }} onClick={this.backToAddLuggage}>Back</button>
+                        <button
+                            disabled={this.state.isLoading}
+                            type="button"
+                            className="btn btn-danger btn-lg"
+                            style={{ width: '160px' }}
+                            onClick={this.backToAddLuggage}>Back</button>
                         {
                             !this.state.isLoading ?
-                                <button type="button" class="btn btn-primary btn-lg"
+                                <button type="button" className="btn btn-primary btn-lg"
                                     onClick={this.Submit}
                                     disabled={!this.state.PaymentMethod}
                                     style={{ width: '160px', marginLeft: '1em' }}

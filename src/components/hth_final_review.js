@@ -95,7 +95,7 @@ class HTHFInalReview extends Component {
                         <li className="active">Add Luggage</li>
                         <li>Booking/Payment Review &amp; Submit</li>
                     </ul>
-                    <div className="receipt" style={{marginTop: '30px'}}>
+                    <div className="receipt" style={{ marginTop: '30px' }}>
                         <h3>Contact Info</h3>
                         <p><strong>Email</strong> = {Email}</p>
                         <p><strong>Phone Number</strong> = {PhoneNumber}</p>
@@ -140,10 +140,17 @@ class HTHFInalReview extends Component {
                     </div>
 
                     <div align="center">
-                        <button type="button" className="btn btn-danger btn-lg" onClick={this.backToAddLuggage} style={{ width: '160px' }}>Back</button>
+                        <button
+                            disabled={this.state.isLoading}
+                            type="button"
+                            className="btn btn-danger btn-lg"
+                            onClick={this.backToAddLuggage}
+                            style={{ width: '160px' }}>Back</button>
                         {
                             !this.state.isLoading ?
-                                <button type="button" className="btn btn-primary btn-lg"
+                                <button
+                                    type="button"
+                                    className="btn btn-primary btn-lg"
                                     onClick={this.Submit}
                                     disabled={!this.state.PaymentMethod}
                                     style={{ width: '160px', marginLeft: '1em' }}
