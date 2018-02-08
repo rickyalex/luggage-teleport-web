@@ -8,7 +8,7 @@ import TimePicker from 'rc-time-picker';
 import DatePicker from 'react-datepicker';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { defaultStyles, inputProps } from './helper';
+import { inputProps, OrderASC } from './helper';
 
 import 'rc-time-picker/assets/index.css';
 import "react-datepicker/dist/react-datepicker.css";
@@ -91,9 +91,7 @@ class HotelToAirport extends Component {
     componentWillMount() {
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airport-scan')
             .then((res) => {
-                res.data.Myresult.sort(function (a, b) {
-                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-                });
+                OrderASC(res.data.Myresult, 'string');
                 this.props.GetAirportData(res.data.Myresult);
             }).catch((err) => {
                 console.log(err)
@@ -101,9 +99,7 @@ class HotelToAirport extends Component {
 
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airline-scan')
             .then((res) => {
-                res.data.Myresult.sort(function (a, b) {
-                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-                });
+                OrderASC(res.data.Myresult, 'string');
                 this.props.GetAirlineData(res.data.Myresult);
             }).catch((err) => {
                 console.log(err);
@@ -129,7 +125,7 @@ class HotelToAirport extends Component {
 
                                 <PlacesAutocomplete
                                     inputProps={inputProps(this.state.Hotel, this.onChange, 'Search Hotel for Pick Up')}
-                                     />
+                                />
 
                                 <hr />
                                 <div className="inner-addon left-addon">
@@ -165,7 +161,7 @@ class HotelToAirport extends Component {
                                         dateFormat="MM/DD/YYYY HH:mm"
                                         className="form-control"
                                         placeholderText="Pick up Date and Time"
-                                        style={{width: '260px'}}
+                                        style={{ width: '260px' }}
                                     />
                                 </div>
                                 <hr />

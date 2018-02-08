@@ -5,6 +5,7 @@ import { PassBookData, GetAirlineData, GetAirportData } from '../actions';
 import '../App.css';
 import axios from 'axios';
 import TimePicker from 'rc-time-picker';
+import { OrderASC } from './helper';
 import * as moment from 'moment';
 
 import 'rc-time-picker/assets/index.css';
@@ -90,9 +91,7 @@ class AirportToAirport extends Component {
     componentWillMount() {
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airport-scan')
             .then((res) => {
-                res.data.Myresult.sort(function (a, b) {
-                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-                });
+                OrderASC(res.data.Myresult, 'string');
                 this.props.GetAirportData(res.data.Myresult);
             }).catch((err) => {
                 console.log(err)
@@ -100,9 +99,7 @@ class AirportToAirport extends Component {
 
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airline-scan')
             .then((res) => {
-                res.data.Myresult.sort(function (a, b) {
-                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-                });
+                OrderASC(res.data.Myresult, 'string');
                 this.props.GetAirlineData(res.data.Myresult);
             }).catch((err) => {
                 console.log(err);

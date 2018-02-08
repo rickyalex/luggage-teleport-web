@@ -7,7 +7,7 @@ import axios from 'axios';
 import TimePicker from 'rc-time-picker';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { defaultStyles, inputProps } from './helper';
+import { inputProps, OrderASC } from './helper';
 
 import 'rc-time-picker/assets/index.css';
 
@@ -81,9 +81,8 @@ class AirportToHotel extends Component {
     componentWillMount() {
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airport-scan')
             .then((res) => {
-                res.data.Myresult.sort(function (a, b) {
-                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-                });
+                // res.
+                OrderASC(res.data.Myresult, 'string');
                 this.props.GetAirportData(res.data.Myresult);
             }).catch((err) => {
                 console.log(err)
@@ -91,9 +90,7 @@ class AirportToHotel extends Component {
 
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airline-scan')
             .then((res) => {
-                res.data.Myresult.sort(function (a, b) {
-                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-                });
+                OrderASC(res.data.Myresult, 'string');
                 this.props.GetAirlineData(res.data.Myresult);
             }).catch((err) => {
                 console.log(err);
@@ -115,7 +112,6 @@ class AirportToHotel extends Component {
     }
 
     render() {
-
         return (
             <div className="polaroid">
                 <div className="container">
@@ -196,7 +192,7 @@ class AirportToHotel extends Component {
 
                                 <PlacesAutocomplete
                                     inputProps={inputProps(this.state.Hotel, this.onChange, 'Search Hotel for Drop Off')}
-                                     />
+                                />
 
                                 <hr />
                                 <div className="inner-addon left-addon">
