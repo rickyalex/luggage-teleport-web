@@ -85,7 +85,6 @@ class HTHFInalReview extends Component {
     render() {
         const { HotelDropoff, HotelDropoffBookingRef, HotelDropoffDate, Email, HotelPickup, HotelPickupBookingRef,
             HotelPickupDate, OvernightStorage, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup } = this.props.BookData[0];
-        const { PaymentMethod } = this.props.payment;
         const { Luggage, TotalCost } = this.props.LuggageData;
         return (
             <div>
@@ -133,7 +132,10 @@ class HTHFInalReview extends Component {
 
                         {
                             this.state.PaymentMethod ?
-                                <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
+                                <div>
+                                    <hr style={{ marginTop: '10px' }} />
+                                    <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
+                                </div>
                                 :
                                 <div></div>
                         }
@@ -175,10 +177,9 @@ class HTHFInalReview extends Component {
 }
 
 function mapStateToProps(state) {
-    const { BookData, payment, LuggageData } = state;
+    const { BookData, LuggageData } = state;
     return {
         BookData,
-        payment,
         LuggageData
     }
 }

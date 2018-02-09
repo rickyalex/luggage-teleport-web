@@ -86,7 +86,6 @@ class ATAFinalReview extends Component {
     render() {
         const { AirlineDropoff, AirlinePickup, AirportDropoff, AirportPickup, ArrivalTime, DepartureTime,
             DropoffFlightNumber, PickupFlightNumber, Email, PhoneNumber, PickupDate } = this.props.BookData[0];
-        const { PaymentMethod } = this.props.payment;
         const { Luggage, TotalCost } = this.props.LuggageData;
 
         return (
@@ -135,7 +134,10 @@ class ATAFinalReview extends Component {
 
                     {
                         this.state.PaymentMethod ?
-                            <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
+                            <div >
+                                <hr style={{marginTop: '10px'}}/>
+                                <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
+                            </div>
                             :
                             <div></div>
                     }
@@ -176,10 +178,9 @@ class ATAFinalReview extends Component {
 }
 
 function mapStateToProps(state) {
-    const { BookData, payment, LuggageData } = state;
+    const { BookData, LuggageData } = state;
     return {
         BookData,
-        payment,
         LuggageData
     }
 }
