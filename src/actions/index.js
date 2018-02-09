@@ -1,7 +1,6 @@
 import {
     SIGNED_IN,
     PASSING_BOOK_DATA,
-    GET_PAYMENT_METHOD,
     GET_AIRLINE_DATA,
     GET_AIRPORT_DATA,
     GET_HOTEL_DATA,
@@ -23,14 +22,6 @@ export function PassBookData(BookData) {
         BookData
     }
 
-    return action;
-}
-
-export function GetPaymentMethod(PaymentMethod) {
-    const action = {
-        type: GET_PAYMENT_METHOD,
-        PaymentMethod
-    }
     return action;
 }
 
