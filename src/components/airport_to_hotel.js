@@ -230,8 +230,6 @@ class AirportToHotel extends Component {
                                         style={{ width: '260px' }}
                                     />
                                 </div>
-                                <hr />
-
                                 {
                                     this.buttonSubmit()
                                 }

@@ -227,7 +227,6 @@ class AirportToAirport extends Component {
                                         style={{ width: '260px' }}
                                         className="form-control" />
                                 </div>
-                                <hr />
                                 {
                                     this.buttonSubmit()
                                 }
