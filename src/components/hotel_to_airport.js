@@ -4,14 +4,10 @@ import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetAirportData } from '../actions'
 import '../App.css';
 import axios from 'axios';
-import TimePicker from 'rc-time-picker';
-import DatePicker from 'react-datepicker';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { inputProps, OrderASC } from './helper';
-
-import 'rc-time-picker/assets/index.css';
-import "react-datepicker/dist/react-datepicker.css";
+import { TimePicker, DatePicker } from 'antd';
 
 class HotelToAirport extends Component {
 
@@ -33,6 +29,7 @@ class HotelToAirport extends Component {
 
         this.handleChangeDateTime = this.handleChangeDateTime.bind(this);
         this.handleTime = this.handleTime.bind(this);
+        this.disabledDate = this.disabledDate.bind(this);
         this.onChange = (Hotel) => this.setState({ Hotel });
     }
 
@@ -46,6 +43,10 @@ class HotelToAirport extends Component {
         this.setState({
             DepartureTime: time
         });
+    }
+
+    disabledDate(current) {
+        return current && current < moment().endOf('day');
     }
 
     ValidationForm() {
@@ -151,19 +152,14 @@ class HotelToAirport extends Component {
                                     />
                                 </div>
                                 <hr />
-                                <div className="inner-addon left-addon">
-                                    <DatePicker
-                                        selected={this.state.PickupDatetime}
-                                        onChange={this.handleChangeDateTime}
-                                        showTimeSelect
-                                        timeFormat="HH:mm"
-                                        timeIntervals={15}
-                                        dateFormat="MM/DD/YYYY HH:mm"
-                                        className="form-control"
-                                        placeholderText="Pick up Date and Time"
-                                        style={{ width: '260px' }}
-                                    />
-                                </div>
+                                <DatePicker
+                                    format="YYYY-MM-DD HH:mm"
+                                    disabledDate={this.disabledDate}
+                                    onChange={this.handleChangeDateTime}
+                                    placeholder="Pick up Date and Time"
+                                    style={{width: '260px'}}
+                                    showTime={{ defaultOpenValue: moment() }}
+                                />
                                 <hr />
                                 {
                                     /**
@@ -208,14 +204,13 @@ class HotelToAirport extends Component {
                                     />
                                 </div>
                                 <hr />
-                                <div className="inner-addon left-addon">
-                                    <TimePicker
-                                        placeholder="Departure Time"
-                                        showSecond={false}
-                                        onChange={this.handleTime}
-                                        style={{ width: '260px' }}
-                                        className="form-control" />
-                                </div>
+ 
+                                <TimePicker
+                                    onChange={this.handleTime}
+                                    defaultOpenValue={moment()}
+                                    style={{ width: '260px' }}
+                                    placeholder="Departure Time"
+                                    format="HH:mm" />
                                 {
                                     this.buttonSubmit()
                                 }
