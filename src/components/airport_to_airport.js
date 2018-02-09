@@ -4,11 +4,9 @@ import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetAirportData } from '../actions';
 import '../App.css';
 import axios from 'axios';
-import TimePicker from 'rc-time-picker';
+import { TimePicker } from 'antd';
 import { OrderASC } from './helper';
 import * as moment from 'moment';
-
-import 'rc-time-picker/assets/index.css';
 
 class AirportToAirport extends Component {
 
@@ -171,14 +169,12 @@ class AirportToAirport extends Component {
                                     />
                                 </div>
                                 <hr />
-                                <div className="inner-addon left-addon">
-                                    <TimePicker
-                                        placeholder="Time of Arrival"
-                                        showSecond={false}
-                                        onChange={this.handleChangeArrivalTime}
-                                        style={{ width: '260px' }}
-                                        className="form-control" />
-                                </div>
+                                <TimePicker
+                                    onChange={this.handleChangeArrivalTime}
+                                    defaultOpenValue={moment()}
+                                    style={{ width: '260px' }}
+                                    placeholder="Time of Arrival"
+                                    format="HH:mm" />
                                 {/**
                              * Airport B Section
                              */}
@@ -219,14 +215,12 @@ class AirportToAirport extends Component {
                                     />
                                 </div>
                                 <hr />
-                                <div className="inner-addon left-addon">
-                                    <TimePicker
-                                        placeholder="Departure Time"
-                                        showSecond={false}
-                                        onChange={this.handleChangeDepartureTime}
-                                        style={{ width: '260px' }}
-                                        className="form-control" />
-                                </div>
+                                <TimePicker
+                                    onChange={this.handleChangeDepartureTime}
+                                    defaultOpenValue={moment()}
+                                    style={{ width: '260px' }}
+                                    placeholder="Departure Time"
+                                    format="HH:mm" />
                                 {
                                     this.buttonSubmit()
                                 }
