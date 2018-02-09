@@ -4,12 +4,10 @@ import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetAirportData } from '../actions';
 import '../App.css';
 import axios from 'axios';
-import TimePicker from 'rc-time-picker';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { inputProps, OrderASC } from './helper';
-
-import 'rc-time-picker/assets/index.css';
+import { TimePicker } from 'antd';
 
 class AirportToHotel extends Component {
 
@@ -175,15 +173,13 @@ class AirportToHotel extends Component {
                                 </div>
 
                                 <hr />
-                                <div className="inner-addon left-addon">
-                                    <TimePicker
-                                        // defaultValue={moment()}
-                                        placeholder="Time of Arrival"
-                                        showSecond={false}
-                                        onChange={this.handleChangeTime}
-                                        style={{ width: '260px' }}
-                                        className="form-control" />
-                                </div>
+
+                                <TimePicker
+                                    onChange={this.handleChangeTime}
+                                    defaultOpenValue={moment()}
+                                    style={{ width: '260px' }}
+                                    placeholder="Time of Arrival"
+                                    format="HH:mm" />
 
                                 {/**
                              * Hotel Section
