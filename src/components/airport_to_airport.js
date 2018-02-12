@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetAirportData } from '../actions';
 import '../App.css';
 import axios from 'axios';
-import { TimePicker } from 'antd';
+import { TimePicker, DatePicker, Input, Select } from 'antd';
 import { OrderASC } from './helper';
 import * as moment from 'moment';
+
+const Option = Select.Option;
 
 class AirportToAirport extends Component {
 
@@ -31,6 +33,11 @@ class AirportToAirport extends Component {
 
         this.handleChangeArrivalTime = this.handleChangeArrivalTime.bind(this);
         this.handleChangeDepartureTime = this.handleChangeDepartureTime.bind(this);
+        this.handlePickupAirport = this.handlePickupAirport.bind(this);
+        this.handlePickupAirline = this.handlePickupAirline.bind(this);
+        this.handleDropoffAirport = this.handleDropoffAirport.bind(this);
+        this.handleDropoffAirline = this.handleDropoffAirline.bind(this);
+        this.handlePickupDate = this.handlePickupDate.bind(this);
     }
 
     handleChangeArrivalTime(time) {
@@ -59,9 +66,7 @@ class AirportToAirport extends Component {
         } = this.state;
 
         return (
-            AirportPickup.length > 0 && AirlinePickup.length > 0 && PickupFlightNumber.length > 0 &&
-            PickupDate.length > 0 && AirportDropoff.length > 0 &&
-            AirlineDropoff.length > 0 && DropoffFlightNumber.length > 0
+            AirportPickup && AirlinePickup && PickupFlightNumber && PickupDate && AirportDropoff && AirlineDropoff && DropoffFlightNumber
         )
     }
 
@@ -109,125 +114,121 @@ class AirportToAirport extends Component {
         this.setState({ Email, PhoneNumber })
     }
 
+    handlePickupDate(date) {
+        this.setState({ PickupDate: date })
+    }
+
+    handlePickupAirport(airportPickup) {
+        this.setState({ AirportPickup: airportPickup })
+    }
+
+    handleDropoffAirport(airportDropoff) {
+        this.setState({ AirportDropoff: airportDropoff })
+    }
+
+    handlePickupAirline(airlinePickup) {
+        this.setState({ AirlinePickup: airlinePickup })
+    }
+
+    handleDropoffAirline(airlineDropoff) {
+        this.setState({ AirlineDropoff: airlineDropoff })
+    }
+
     render() {
         return (
             <div className="polaroid">
                 <div className="container">
-                    <div className="form-inline">
-                        <div className="form-group">
-                            <form align="center">
-                                {/**
-                                * Airport A Section
-                                */}
-
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ AirportPickup: event.target.value })}>
-                                    <option value="" selected disabled>Choose Airport for pickup</option>
-                                    {
-                                        this.props.AirportData.map((airport) => {
-                                            return <option key={airport.id} value={airport.name}>{airport.name}</option>
-                                        })
-                                    }
-                                </select>
-
-                                <hr />
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ AirlinePickup: event.target.value })}>
-                                    <option value="" selected disabled>Airline</option>
-                                    {
-                                        this.props.AirlineData.map((airline) => {
-                                            return <option key={airline.id} value={airline.name}>{airline.name}</option>
-                                        })
-                                    }
-                                </select>
-                                <hr />
-                                <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-plane" style={{ color: '#00bfff' }}></i>
-                                    <input
-                                        type="text"
-                                        onChange={e => this.setState({ PickupFlightNumber: e.target.value })}
-                                        placeholder="Flight Number"
-                                        className="form-control"
-                                        style={{ width: '260px' }}
-                                    />
-                                </div>
-                                <hr />
-                                <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-calendar" style={{ color: '#00bfff' }}></i>
-                                    <input
-                                        type={this.state.dateType}
-                                        className="form-control"
-                                        placeholder="Pick up Date"
-                                        onChange={e => this.setState({ PickupDate: e.target.value })}
-                                        onFocus={() => this.setState({ dateType: 'date' })}
-                                        onBlur={() => this.setState({ dateType: 'text' })}
-                                        style={{ width: '260px' }}
-                                    />
-                                </div>
-                                <hr />
-                                <TimePicker
-                                    onChange={this.handleChangeArrivalTime}
-                                    defaultOpenValue={moment()}
-                                    style={{ width: '260px' }}
-                                    placeholder="Time of Arrival"
-                                    format="HH:mm" />
-                                {/**
-                             * Airport B Section
-                             */}
-                                <hr />
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ AirportDropoff: event.target.value })}>
-                                    <option value="" selected disabled>Choose Airport for Drop off</option>
-                                    {
-                                        this.props.AirportData.map((airport) => {
-                                            return <option key={airport.id} value={airport.name}>{airport.name}</option>
-                                        })
-                                    }
-                                </select>
-
-                                <hr />
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ AirlineDropoff: event.target.value })}>
-                                    <option value="" selected disabled>Airline</option>
-                                    {
-                                        this.props.AirlineData.map((airline) => {
-                                            return <option key={airline.id} value={airline.name}>{airline.name}</option>
-                                        })
-                                    }
-                                </select>
-                                <hr />
-                                <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-plane" style={{ color: '#e6e600' }}></i>
-                                    <input
-                                        type="text"
-                                        onChange={e => this.setState({ DropoffFlightNumber: e.target.value })}
-                                        placeholder="Flight Number"
-                                        className="form-control"
-                                        style={{ width: '260px' }}
-                                    />
-                                </div>
-                                <hr />
-                                <TimePicker
-                                    onChange={this.handleChangeDepartureTime}
-                                    defaultOpenValue={moment()}
-                                    style={{ width: '260px' }}
-                                    placeholder="Departure Time"
-                                    format="HH:mm" />
-                                {
-                                    this.buttonSubmit()
-                                }
-                            </form>
-
-                        </div>
-                    </div>
+                    {/**
+                        * Airport A Section
+                    */}
+                    <Select
+                        style={{ width: 260 }}
+                        placeholder="Choose Airport for Pick up"
+                        onChange={this.handlePickupAirport}>
+                        {
+                            this.props.AirportData.map((airport) => {
+                                return (
+                                    <Option key={airport.id} value={airport.name} style={{ width: 400 }}>{airport.name}</Option>
+                                )
+                            })
+                        }
+                    </Select>
+                    <hr />
+                    <Select
+                        style={{ width: 260 }}
+                        placeholder="Choose Airline"
+                        onChange={this.handlePickupAirline}>
+                        {
+                            this.props.AirlineData.map((airline) => {
+                                return (
+                                    <Option key={airline.id} value={airline.name} style={{ width: 400 }}>{airline.name}</Option>
+                                )
+                            })
+                        }
+                    </Select>
+                    <hr />
+                    <Input
+                        style={{ width: 260 }}
+                        placeholder="Flight Number"
+                        onChange={e => this.setState({ PickupFlightNumber: e.target.value })}
+                    />
+                    <hr />
+                    <DatePicker
+                        onChange={this.handlePickupDate}
+                        placeholder="Pick up Date"
+                        style={{ width: 260 }} />
+                    <hr />
+                    <TimePicker
+                        onChange={this.handleChangeArrivalTime}
+                        defaultOpenValue={moment()}
+                        style={{ width: '260px' }}
+                        placeholder="Time of Arrival"
+                        format="HH:mm" />
+                    {/**
+                         * Airport B Section
+                    */}
+                    <hr />
+                    <Select
+                        style={{ width: 260 }}
+                        placeholder="Choose Airport for Drop off"
+                        onChange={this.handleDropoffAirport}>
+                        {
+                            this.props.AirportData.map((airport) => {
+                                return (
+                                    <Option key={airport.id} value={airport.name} style={{ width: 400 }}>{airport.name}</Option>
+                                )
+                            })
+                        }
+                    </Select>
+                    <hr />
+                    <Select
+                        style={{ width: 260 }}
+                        placeholder="Choose Airline"
+                        onChange={this.handleDropoffAirline}>
+                        {
+                            this.props.AirlineData.map((airline) => {
+                                return (
+                                    <Option key={airline.id} value={airline.name} style={{ width: 400 }}>{airline.name}</Option>
+                                )
+                            })
+                        }
+                    </Select>
+                    <hr />
+                    <Input
+                        style={{ width: 260 }}
+                        placeholder="Flight Number"
+                        onChange={e => this.setState({ DropoffFlightNumber: e.target.value })}
+                    />
+                    <hr />
+                    <TimePicker
+                        onChange={this.handleChangeDepartureTime}
+                        defaultOpenValue={moment()}
+                        style={{ width: '260px' }}
+                        placeholder="Departure Time"
+                        format="HH:mm" />
+                    {
+                        this.buttonSubmit()
+                    }
                 </div>
             </div>
         )
