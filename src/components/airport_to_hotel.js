@@ -7,7 +7,9 @@ import axios from 'axios';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { inputProps, OrderASC } from './helper';
-import { TimePicker } from 'antd';
+import { TimePicker, Input, Select, DatePicker } from 'antd';
+
+const Option = Select.Option;
 
 class AirportToHotel extends Component {
 
@@ -31,6 +33,10 @@ class AirportToHotel extends Component {
         }
 
         this.handleChangeTime = this.handleChangeTime.bind(this);
+        this.handleAiport = this.handleAiport.bind(this);
+        this.handlePickupDate = this.handlePickupDate.bind(this);
+        this.handleAirline = this.handleAirline.bind(this);
+        this.handleDropoffDate = this.handleDropoffDate.bind(this);
         this.onChange = (Hotel) => this.setState({ Hotel });
     }
 
@@ -48,8 +54,7 @@ class AirportToHotel extends Component {
         } = this.state;
 
         return (
-            Airport.length > 0 && Airline.length > 0 && Hotel.length > 0 && FlightNumber.length > 0 &&
-            PickupDate.length > 0 && HotelBookingRef.length > 0 && DropoffDate.length > 0
+            Airport && Airline && Hotel && FlightNumber && PickupDate && HotelBookingRef && DropoffDate
         )
     }
 
@@ -58,9 +63,9 @@ class AirportToHotel extends Component {
             <Link to="/addluggage" style={{ color: 'black' }}>
                 <button
                     className="btn btn-lg"
+                    disabled={!this.ValidationForm()}
                     onClick={() => this.SubmitHotelToAirportData()}
                     type="button"
-                    disabled={!this.ValidationForm()}
                     style={{ backgroundColor: 'yellow', width: '260px' }}>
                     Next
             </button>
@@ -109,130 +114,104 @@ class AirportToHotel extends Component {
         });
     }
 
+    handleAiport(airport) {
+        this.setState({
+            Airport: airport
+        })
+    }
+
+    handlePickupDate(date) {
+        this.setState({ PickupDate: date })
+    }
+
+    handleAirline(airline) {
+        this.setState({ Airline: airline })
+    }
+
+    handleDropoffDate(DropoffDate) {
+        this.setState({ DropoffDate: DropoffDate })
+    }
+
     render() {
         return (
             <div className="polaroid">
                 <div className="container">
-                    <div className="form-inline">
-                        <div className="form-group">
-                            <form align="center">
-                                {/**
-                                * Airport Section
-                                */}
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ Airport: event.target.value })}>
-                                    <option value="" selected disabled>Choose Airport</option>
-                                    {
-                                        this.props.AirportData.map((airport) => {
-                                            return <option key={airport.id} value={airport.name}>{airport.name}</option>
-                                        })
-                                    }
-                                </select>
-                                <hr />
 
-                                <select
-                                    className="form-control"
-                                    style={{ height: '35px', width: '260px' }}
-                                    onChange={event => this.setState({ Airline: event.target.value })}>
-                                    <option value="" selected disabled>Airline</option>
-                                    {
-                                        this.props.AirlineData.map((airline) => {
-                                            return <option key={airline.id} value={airline.name}>{airline.name}</option>
-                                        })
-                                    }
-                                </select>
+                    {/**
+                        * Airport Section
+                    */}
 
-                                <hr />
-                                <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-plane" style={{ color: '#00bfff' }}></i>
-                                    <input
-                                        type="text"
-                                        style={{ width: '260px' }}
-                                        type="text"
-                                        onChange={event => this.setState({ FlightNumber: event.target.value })}
-                                        placeholder="Flight Number"
-                                        className="form-control"
-                                    />
-                                </div>
-
-                                <hr />
-                                <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-calendar" style={{ color: '#00bfff' }}></i>
-                                    <input
-                                        type={this.state.dateType}
-                                        className="form-control"
-                                        style={{ width: '260px' }}
-                                        placeholder="Pick up Date"
-                                        onChange={event => this.setState({ PickupDate: event.target.value })}
-                                        onFocus={() => this.setState({ dateType: 'date' })}
-                                        onBlur={() => this.setState({ dateType: 'text' })}
-                                        style={{ width: '260px' }}
-                                    />
-                                </div>
-
-                                <hr />
-
-                                <TimePicker
-                                    onChange={this.handleChangeTime}
-                                    defaultOpenValue={moment()}
-                                    style={{ width: '260px' }}
-                                    placeholder="Time of Arrival"
-                                    format="HH:mm" />
-
-                                {/**
+                    <Select
+                        style={{ width: 260 }}
+                        placeholder="Choose Airport for Pick up"
+                        onChange={this.handleAiport}>
+                        {
+                            this.props.AirportData.map((airport) => {
+                                return (
+                                    <Option key={airport.id} value={airport.name} style={{ width: 400 }}>{airport.name}</Option>
+                                )
+                            })
+                        }
+                    </Select>
+                    <hr />
+                    <Select
+                        style={{ width: 260 }}
+                        placeholder="Choose Airline"
+                        onChange={this.handleAirline}>
+                        {
+                            this.props.AirlineData.map((airline) => {
+                                return (
+                                    <Option key={airline.id} value={airline.name} style={{ width: 400 }}>{airline.name}</Option>
+                                )
+                            })
+                        }
+                    </Select>
+                    <hr />
+                    <Input
+                        style={{ width: 260 }}
+                        placeholder="Flight Number"
+                        onChange={e => this.setState({ FlightNumber: e.target.value })}
+                    />
+                    <hr />
+                    <DatePicker
+                        onChange={this.handlePickupDate}
+                        placeholder="Pick up Date"
+                        style={{ width: 260 }} />
+                    <hr />
+                    <TimePicker
+                        onChange={this.handleChangeTime}
+                        defaultOpenValue={moment()}
+                        style={{ width: '260px' }}
+                        placeholder="Time of Arrival"
+                        format="HH:mm" />
+                    {/**
                              * Hotel Section
                              */}
-                                <hr />
-
-                                <PlacesAutocomplete
-                                    inputProps={inputProps(this.state.Hotel, this.onChange, 'Search Hotel for Drop Off')}
-                                />
-
-                                <hr />
-                                <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-home" style={{ color: '#e6e600' }}></i>
-                                    <input
-                                        type='text'
-                                        onChange={event => this.setState({ HotelBookingRef: event.target.value })}
-                                        placeholder="Hotel Booking Reference"
-                                        className="form-control"
-                                        style={{ width: '260px' }}
-                                    />
-                                </div>
-                                <hr />
-                                <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-user" style={{ color: '#e6e600' }}></i>
-                                    <input
-                                        defaultValue={this.state.NameUnderHotelRsv}
-                                        type='text'
-                                        placeholder="Name under Hotel Reservation"
-                                        className="form-control"
-                                        onChange={event => this.setState({ NameUnderHotelRsv: event.target.value })}
-                                        style={{ width: '260px' }}
-                                    />
-                                </div>
-                                <hr />
-                                <div className="inner-addon left-addon">
-                                    <i className="glyphicon glyphicon-calendar" style={{ color: '#e6e600' }}></i>
-                                    <input
-                                        type={this.state.dateType}
-                                        className="form-control"
-                                        placeholder="Drop off Date"
-                                        onChange={event => this.setState({ DropoffDate: event.target.value })}
-                                        onFocus={() => this.setState({ dateType: 'date' })}
-                                        onBlur={() => this.setState({ dateType: 'text' })}
-                                        style={{ width: '260px' }}
-                                    />
-                                </div>
-                                {
-                                    this.buttonSubmit()
-                                }
-
-                            </form>
-                        </div>
-                    </div>
+                    <hr />
+                    <PlacesAutocomplete
+                        inputProps={inputProps(this.state.Hotel, this.onChange, 'Search Hotel for Drop Off')}
+                    />
+                    <hr />
+                    <Input
+                        style={{ width: 260 }}
+                        placeholder="Hotel Booking Reference"
+                        onChange={e => this.setState({ HotelBookingRef: e.target.value })}
+                    />
+                    <hr />
+                    <Input
+                        defaultValue={this.state.NameUnderHotelRsv}
+                        style={{ width: 260 }}
+                        placeholder="Name Under Hotel Reservation"
+                        onChange={e => this.setState({ NameUnderHotelRsv: e.target.value })}
+                    />
+                    <hr />
+                    <DatePicker
+                        onChange={this.handleDropoffDate}
+                        placeholder="Drop off Date"
+                        style={{ width: 260 }} />
+                    {
+                        this.buttonSubmit()
+                    }
                 </div>
             </div>
         )
