@@ -133,6 +133,9 @@ class AirportToHotel extends Component {
     }
 
     render() {
+        const cssClasses = {
+            input: 'ant-input'
+          }
         return (
             <div className="polaroid">
                 <div className="container">
@@ -190,6 +193,7 @@ class AirportToHotel extends Component {
                     <hr />
                     <PlacesAutocomplete
                         inputProps={inputProps(this.state.Hotel, this.onChange, 'Search Hotel for Drop Off')}
+                        classNames={cssClasses}
                     />
                     <hr />
                     <Input
