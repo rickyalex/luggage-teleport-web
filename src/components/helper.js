@@ -21,6 +21,15 @@ export function inputProps(StateHotel, functionOnChange, placeHolder) {
     }
 }
 
+//For Hotel Input Antd Styling
+export function cssClasses(){
+    const style = {
+        input: 'ant-input'
+    }
+
+    return style;
+}
+
 //Ordering data Ascending
 export function OrderASC(data, dataType) {
 

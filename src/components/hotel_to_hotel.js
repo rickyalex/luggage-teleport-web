@@ -5,7 +5,7 @@ import { PassBookData } from '../actions';
 import '../App.css';
 import axios from 'axios';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { defaultStyles, inputProps } from './helper';
+import { defaultStyles, inputProps, cssClasses } from './helper';
 import { DatePicker, Input } from 'antd';
 
 class HotelToHotel extends Component {
@@ -93,6 +93,7 @@ class HotelToHotel extends Component {
                                 */}
                     <PlacesAutocomplete
                         inputProps={inputProps(this.state.HotelPickup, this.onChangePickUpHotel, 'Hotel For Pick Up')}
+                        classNames={cssClasses()}
                     />
                     <hr />
                     <Input
@@ -118,6 +119,7 @@ class HotelToHotel extends Component {
                     <hr />
                     <PlacesAutocomplete
                         inputProps={inputProps(this.state.HotelDropoff, this.onChangeDropOffHotel, 'Hotel for Drop Off')}
+                        classNames={cssClasses()}
                     />
                     <hr />
                     <Input

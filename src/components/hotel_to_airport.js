@@ -6,7 +6,7 @@ import '../App.css';
 import axios from 'axios';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { inputProps, OrderASC } from './helper';
+import { inputProps, OrderASC, cssClasses } from './helper';
 import { TimePicker, DatePicker, Input, Select } from 'antd';
 
 const Option = Select.Option;
@@ -135,6 +135,7 @@ class HotelToAirport extends Component {
 
                     <PlacesAutocomplete
                         inputProps={inputProps(this.state.Hotel, this.onChange, 'Search Hotel for Pick Up')}
+                        classNames={cssClasses()}
                     />
                     <hr />
                     <Input
