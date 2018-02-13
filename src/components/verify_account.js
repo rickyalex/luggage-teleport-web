@@ -75,13 +75,6 @@ class VerifyAccount extends Component {
                 <div align="center" style={{ marginTop: '100px' }}>
                     <Form onSubmit={this.handleConfirmationSubmit}>
                         <h2 style={{ color: 'yellow', marginBottom: '2em' }}>Verify your Account</h2>
-                        {/* <div className="form-group">
-                            <input
-                                className="form-control"
-                                type="text"
-                                onChange={e => this.setState({ pin: e.target.value })}
-                                placeholder="Your Pin" required />
-                        </div> */}
                         <FormItem>
                             <Input
                                 type="text"
