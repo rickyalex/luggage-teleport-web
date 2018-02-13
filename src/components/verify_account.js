@@ -4,6 +4,9 @@ import { verifyUserAccount } from '../aws_cognito';
 import { userPool } from '../config';
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { withRouter } from 'react-router-dom';
+import { Input, Form } from 'antd';
+
+const FormItem = Form.Item;
 
 class VerifyAccount extends Component {
 
@@ -70,16 +73,23 @@ class VerifyAccount extends Component {
         return (
             <div className="bg-image">
                 <div align="center" style={{ marginTop: '100px' }}>
-
-                    <h1 style={{ color: 'yellow', marginBottom: '2em' }}>Verify your Account</h1>
-                    <form onSubmit={this.handleConfirmationSubmit}>
-                        <div className="form-group">
+                    <Form onSubmit={this.handleConfirmationSubmit}>
+                        <h2 style={{ color: 'yellow', marginBottom: '2em' }}>Verify your Account</h2>
+                        {/* <div className="form-group">
                             <input
                                 className="form-control"
                                 type="text"
                                 onChange={e => this.setState({ pin: e.target.value })}
                                 placeholder="Your Pin" required />
-                        </div>
+                        </div> */}
+                        <FormItem>
+                            <Input
+                                type="text"
+                                onChange={e => this.setState({ pin: e.target.value })}
+                                style={{width: 260}}
+                                placeholder="Your Pin"
+                            />
+                        </FormItem>
 
                         {
                             !isLoading ?
@@ -101,7 +111,7 @@ class VerifyAccount extends Component {
                                     <i className="fa fa-spinner fa-spin"></i> Verifying...
                                 </button>
                         }
-                    </form>
+                    </Form>
                 </div>
             </div>
         )
