@@ -97,8 +97,6 @@ class Register extends Component {
 
     }
 
-
-
     render() {
         const { isLoading } = this.state;
         return (
@@ -164,9 +162,6 @@ class Register extends Component {
                                     <i className="fa fa-spinner fa-spin"></i> Submitting...
                                 </button>
                         }
-
-
-
                         <div style={{ marginTop: '1em' }}>
                             <p><strong>Already Have an Account?</strong><Link to="/"> <a style={{ color: 'white' }}>Sign In</a></Link></p>
                         </div>
