@@ -15,6 +15,15 @@
   width: 35%;
 }
 
+.form-auth {
+    left: 50%;
+    top: 45%;
+    position: absolute;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    -moz-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+}
+
 .form-control{
   height: 40px;
   font-size: 0.9em;

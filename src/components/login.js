@@ -8,7 +8,10 @@ import {
     AuthenticationDetails,
     CognitoUser
 } from "amazon-cognito-identity-js";
+import { Input, Form, Icon } from 'antd';
 import '../App.css';
+
+const FormItem = Form.Item;
 
 class Login extends Component {
 
@@ -83,63 +86,56 @@ class Login extends Component {
         const { isLoading } = this.state;
         return (
             <div className="bg-image">
-                <div align="center" style={{ marginTop: '100px' }}>
-                    <img
-                        src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png"
-                        style={{ padding: '10px', margin: '20px' }}
-                    />
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="form-group">
-                            <input
-                                className="form-control"
-                                type="email"
-                                onChange={e => this.setState({ email: e.target.value })}
-                                placeholder="Email" required />
-                        </div>
-
-                        <div className="form-group">
-                            <input
-                                className="form-control"
-                                type="password"
-                                onChange={e => this.setState({ password: e.target.value })}
-                                placeholder="password"
-                                style={{ marginTop: '10px' }} required />
-                        </div>
-
+                <Form onSubmit={this.handleSubmit} className="login-form form-auth">
+                    <div>
+                        <img
+                            src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png"
+                            style={{ padding: '10px', margin: '10px' }}
+                        />
+                    </div>
+                    <FormItem style={{ width: '280px' }}>
+                        <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)', }} />} placeholder="Email"
+                            onChange={e => this.setState({ email: e.target.value })}
+                        />
+                    </FormItem>
+                    <FormItem style={{ width: '280px' }}>
+                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password"
+                            onChange={e => this.setState({ password: e.target.value })}
+                        />
+                        <Link to="/forgot">
+                            <a className="login-form-forgot" style={{ color: 'white' }}>
+                                Forgot your Password?
+                                </a>
+                        </Link>
+                    </FormItem>
+                    <FormItem>
                         {
                             !isLoading ?
                                 <button
                                     className="btn btn-lg"
                                     type="submit"
                                     disabled={!this.validateForm()}
-                                    style={{ color: '#00bfff', backgroundColor: 'white', width: '140px' }}
+                                    style={{ color: '#00bfff', backgroundColor: 'white', width: '280px', marginTop: '1px' }}
                                 >
                                     Login
-                            </button>
+                                    </button>
 
                                 :
                                 <button
                                     className="btn btn-lg"
                                     type="submit"
                                     disabled={true}
-                                    style={{ color: '#00bfff', backgroundColor: 'white', width: '140px' }}
+                                    style={{ color: '#00bfff', backgroundColor: 'white', width: '280px', marginTop: '1px' }}
                                 >
                                     <i className="fa fa-spinner fa-spin"></i> Loggedin...
-                            </button>
+                                    </button>
                         }
-
-
-
-                        <div style={{ marginTop: '3em' }}>
+                        <div style={{ marginTop: '1.2em' }}>
                             <p><strong>Do not have an Account yet?</strong>
                                 <Link to="/register"> <a style={{ color: 'white' }}>Let's Register!</a></Link></p>
-                            <p><strong>Or</strong></p>
-
-                            <p> <Link to="/forgot"> <a style={{ color: 'white' }}>Forgot your Password?</a></Link></p>
-
                         </div>
-                    </form>
-                </div>
+                    </FormItem>
+                </Form>
             </div>
         )
     }

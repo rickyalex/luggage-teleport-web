@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { signUpUser } from '../aws_cognito';
 import { USER_POOL_ID, CLIENT_ID } from '../config';
-
 import {
     CognitoUserPool,
     CognitoUserAttribute,
@@ -10,7 +9,10 @@ import {
     AuthenticationDetails,
     CognitoUser
 } from "amazon-cognito-identity-js";
+import { Input, Form } from 'antd';
 import '../App.css';
+
+const FormItem = Form.Item;
 
 class Register extends Component {
 
@@ -95,58 +97,42 @@ class Register extends Component {
 
     }
 
-
-
     render() {
         const { isLoading } = this.state;
         return (
-            <div className="bg-image">
-                <div align="center" style={{ marginTop: '100px' }}>
-                    <h1 style={{ color: 'yellow', marginBottom: '2em' }}>Register your Account</h1>
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="form-group">
-                            <input
-                                className="form-control"
+            <div className="bg-image" align="center">
+                    <Form onSubmit={this.handleSubmit} style={{marginTop: 70}}>
+                        <h3 style={{ color: 'yellow'}}>Register your Account</h3>
+                        <FormItem style={{ width: '280px' }}>
+                            <Input
                                 type="text"
                                 onChange={e => this.setState({ name: e.target.value })}
-                                placeholder="Full Name" required />
-                        </div>
-
-                        <div className="form-group">
-                            <input
-                                className="form-control"
+                                placeholder="Full Name" />
+                        </FormItem>
+                        <FormItem style={{ width: '280px' }}>
+                            <Input
                                 type="email"
                                 onChange={e => this.setState({ email: e.target.value })}
-                                placeholder="Email"
-                                style={{ marginTop: '10px' }} required />
-                        </div>
-
-                        <div className="form-group">
-                            <input
-                                className="form-control"
+                                placeholder="Email" />
+                        </FormItem>
+                        <FormItem style={{ width: '280px' }}>
+                            <Input
                                 type="text"
                                 onChange={e => this.setState({ phone_number: e.target.value })}
-                                style={{ marginTop: '10px' }}
-                                placeholder="Phone Number, ex: +1XXXXXXXX" required />
-                        </div>
-
-                        <div className="form-group">
-                            <input
-                                className="form-control"
+                                placeholder="Phone Number, ex: +1XXXXXXXX" />
+                        </FormItem>
+                        <FormItem style={{ width: '280px' }}>
+                            <Input
                                 type="password"
                                 onChange={e => this.setState({ password: e.target.value })}
-                                placeholder="Password"
-                                style={{ marginTop: '10px' }} required />
-                        </div>
-
-                        <div className="form-group">
-                            <input
-                                className="form-control"
+                                placeholder="Password" />
+                        </FormItem>
+                        <FormItem style={{ width: '280px' }}>
+                            <Input
                                 type="password"
                                 onChange={e => this.setState({ confirmPassword: e.target.value })}
-                                placeholder="Confirm Password"
-                                style={{ marginTop: '10px' }} required />
-                        </div>
+                                placeholder="Confirm Password" />
+                        </FormItem>
 
                         <div>
                             <p><strong>Notes! </strong>
@@ -176,14 +162,10 @@ class Register extends Component {
                                     <i className="fa fa-spinner fa-spin"></i> Submitting...
                                 </button>
                         }
-
-
-
-                        <div style={{ marginTop: '3em' }}>
+                        <div style={{ marginTop: '1em' }}>
                             <p><strong>Already Have an Account?</strong><Link to="/"> <a style={{ color: 'white' }}>Sign In</a></Link></p>
                         </div>
-                    </form>
-                </div>
+                    </Form>
             </div>
         )
     }

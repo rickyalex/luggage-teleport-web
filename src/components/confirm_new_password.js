@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { userPool } from '../config';
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { withRouter } from 'react-router-dom';
-
 import '../App.css';
+import { Form, Input } from 'antd';
+
+const FormItem = Form.Item;
 
 class ConfirmNewPassword extends Component {
 
@@ -22,7 +24,7 @@ class ConfirmNewPassword extends Component {
     }
 
     validateForm() {
-        return(
+        return (
             this.state.pin.length > 0 && this.state.newPassword.length > 0
         )
     }
@@ -71,24 +73,24 @@ class ConfirmNewPassword extends Component {
             <div>
                 <div className="bg-image">
                     <div align="center" style={{ marginTop: '100px' }}>
-
-                        <h1 style={{ color: 'yellow', marginBottom: '2em' }}>Change Password</h1>
-                        <form onSubmit={this.handleConfirmationSubmit}>
-                            <div className="form-group">
-                                <input
-                                    className="form-control"
-                                    type="text"
+                        <Form onSubmit={this.handleConfirmationSubmit}>
+                            <h3 style={{ color: 'yellow', marginBottom: '2em' }}>Change Password</h3>
+                            <FormItem>
+                                <Input
                                     onChange={e => this.setState({ pin: e.target.value })}
-                                    placeholder="Your Pin" required />
-                            </div>
-                            <div className="form-group">
-                                <input
-                                    className="form-control"
-                                    type="password"
+                                    placeholder="Your Pin"
+                                    type="text"
+                                    style={{ width: 280 }}
+                                />
+                            </FormItem>
+                            <FormItem>
+                                <Input
                                     onChange={e => this.setState({ newPassword: e.target.value })}
-                                    placeholder="Your New Password" required />
-                            </div>
-
+                                    placeholder="Your New Password"
+                                    type="password"
+                                    style={{ width: 280 }}
+                                />
+                            </FormItem>
                             {
                                 !isLoading ?
                                     <button
@@ -109,7 +111,6 @@ class ConfirmNewPassword extends Component {
                                         <i className="fa fa-spinner fa-spin"></i> Submitting...
                                 </button>
                             }
-
                             <div>
                                 <p><strong>Notes! </strong>
                                     <i className="registerNotes">
@@ -118,7 +119,7 @@ class ConfirmNewPassword extends Component {
                                     and minimum length of Password is 8 character</i>
                                 </p>
                             </div>
-                        </form>
+                        </Form>
                     </div>
                 </div>
             </div>
