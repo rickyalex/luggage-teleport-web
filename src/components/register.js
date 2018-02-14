@@ -103,7 +103,7 @@ class Register extends Component {
         const { isLoading } = this.state;
         return (
             <div className="bg-image" align="center">
-                    <Form onSubmit={this.handleSubmit} style={{marginTop: 20}}>
+                    <Form onSubmit={this.handleSubmit} style={{marginTop: 70}}>
                         <h3 style={{ color: 'yellow'}}>Register your Account</h3>
                         <FormItem style={{ width: '280px' }}>
                             <Input
@@ -167,7 +167,7 @@ class Register extends Component {
 
 
 
-                        <div style={{ marginTop: '3em' }}>
+                        <div style={{ marginTop: '1em' }}>
                             <p><strong>Already Have an Account?</strong><Link to="/"> <a style={{ color: 'white' }}>Sign In</a></Link></p>
                         </div>
                     </Form>
