@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FormGroup, InputGroup } from 'react-bootstrap';
 import { PassBookData, GetLuggageData } from '../actions';
+import { Steps, InputNumber, Button } from 'antd';
 
 
 class AddLuggage extends Component {
@@ -11,7 +12,7 @@ class AddLuggage extends Component {
 
         this.state = {
             TotalCost: 0,
-            Luggage: 0,
+            Luggage: 1,
             test: 0
         }
 
@@ -48,6 +49,7 @@ class AddLuggage extends Component {
 
     async handleLuggage() {
         const { TotalCost, Luggage } = this.state;
+        console.log(Luggage)
         if (Luggage > 0 && Luggage <= 2) {
             this.setState({ TotalCost: 35 })
         } else if (Luggage > 2) {
@@ -60,20 +62,18 @@ class AddLuggage extends Component {
     }
 
     render() {
+        const Step = Steps.Step;
         return (
-            <div>
-                <div className="containerProgressBar" style={{ marginTop: '1em' }}>
-                    <ul className="progressbar">
-                        <li className="active">Booking</li>
-                        <li>Add Luggage</li>
-                        <li>Booking/Payment Review &amp; Submit</li>
-                    </ul>
+            <div className="bg-image">
+                <div className="containerProgressBar" style={{ marginTop: '2em' }}>
+                    <Steps current={1}>
+                        <Step title="Booking Data"/>
+                        <Step title="Add Luggage"/>
+                        <Step title="Review & Payment"/>
+                      </Steps>
                     <div className="receipt" align="center" style={{ marginTop: '3em' }}>
-                        <input
-                            onChange={e => this.setState({ Luggage: e.target.value })}
-                            placeholder="your luggage quantity"
-                            type="number" />
-                        <button onClick={this.handleLuggage} style={{ backgroundColor: '#00bfff' }} disabled={!this.state.Luggage}>Add</button>
+                        <InputNumber size="large" min={1} defaultValue={1} onChange={e => this.setState({ Luggage: e })} style={{ marginRight: '3px'}} />
+                        <Button type="primary" onClick={this.handleLuggage}>Add</Button>
 
                         <p><strong>Total = ${this.state.TotalCost}</strong></p>
 

@@ -6,7 +6,8 @@ import * as moment from 'moment';
 import axios from 'axios';
 import SquarePaymentForm from './square_payment_form';
 import { SQUARE_APP_ID } from '../config';
-import { BookingId, GetPayment } from './helper'
+import { BookingId, GetPayment } from './helper';
+import { Steps } from 'antd';
 
 class ATHFinalReview extends Component {
     constructor(props) {
@@ -85,18 +86,20 @@ class ATHFinalReview extends Component {
     }
 
     render() {
+        console.log(this.props)
         const { Airline, Airport, ArrivalTime, DropoffDate, Email, FlightNumber, Hotel, HotelBookingRef,
             NameUnderHotelRsv, OvernightStorage, PhoneNumber, PickupDate } = this.props.BookData[0]
         const { TotalCost, Luggage } = this.props.LuggageData;
+        const Step = Steps.Step;
         return (
-            <div>
+            <div className="bg-image">
                 <div className="containerProgressBar" style={{ marginTop: '1em' }}>
-                    <ul className="progressbar">
-                        <li className="active">Booking</li>
-                        <li className="active">Add Luggage</li>
-                        <li>Booking/Payment Review &amp; Submit</li>
-                    </ul>
-                    <div className="receipt">
+                    <Steps current={2}>
+                        <Step title="Booking Data"/>
+                        <Step title="Add Luggage"/>
+                        <Step title="Review & Payment"/>
+                      </Steps>
+                    <div className="receipt" style={{ marginTop: '3em' }}>
                         <h3>Contact Info</h3>
                         <p><strong>Email</strong> = {Email}</p>
                         <p><strong>Phone Number</strong> = {PhoneNumber}</p>

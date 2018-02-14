@@ -188,9 +188,11 @@ hr{
 /** css for booking summary review*/
 
 .receipt {
-  border: 1px black dotted;
+  border: 1px #fff solid;
+  border-radius: 4px;
   padding: 20px;
   box-sizing: border-box;
+  background-color: #fff;
 }
 
 
