@@ -38,7 +38,7 @@ class Register extends Component {
     validateForm() {
         return (
             this.state.email.length > 0 &&
-            this.state.password.length > 8 &&
+            this.state.password.length >= 8 &&
             this.state.password === this.state.confirmPassword
         );
     }
@@ -137,9 +137,7 @@ class Register extends Component {
                         <div>
                             <p><strong>Notes! </strong>
                                 <i className="registerNotes">
-                                    Password <strong>must</strong> contain Lowercase, Uppercase,
-                                    and Special Character
-                                    and minimum length of Password is 8 character</i>
+                                    Password <strong>must</strong> have at least 8 characters</i>
                             </p>
                         </div>
                         {
