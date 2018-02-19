@@ -201,7 +201,7 @@ class HotelToAirport extends Component {
                         onChange={this.handleTime}
                         defaultOpenValue={moment()}
                         style={{ width: '260px' }}
-                        placeholder="Departure Time"
+                        placeholder="Drop Off Time"
                         format="HH:mm" />
                     {
                         this.buttonSubmit()

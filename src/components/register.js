@@ -164,7 +164,6 @@ class Register extends Component {
                             <p><strong>Already Have an Account?</strong><Link to="/"> <a style={{ color: 'white' }}>Sign In</a></Link></p>
                         </div>
                     </Form>
-                    <div>aaaaaaaaa</div>
             </div>
         )
     }

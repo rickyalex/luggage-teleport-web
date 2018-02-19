@@ -175,6 +175,7 @@ class AirportToHotel extends Component {
                     <hr />
                     <DatePicker
                         onChange={this.handlePickupDate}
+                        disabledDate={disabledDate}
                         placeholder="Pick up Date"
                         style={{ width: 260 }} />
                     <hr />
@@ -217,6 +218,11 @@ class AirportToHotel extends Component {
             </div>
         )
     }
+}
+
+function disabledDate(current) {
+  // Can not select days before today and today
+  return current && current < moment().startOf('day');
 }
 
 function mapsStateToProps(state) {

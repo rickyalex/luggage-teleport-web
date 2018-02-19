@@ -439,3 +439,25 @@ pointer-events: none;
 
 /* add padding  */
 .left-addon input  { padding-left:  30px; }
+
+/*override places autocomplete */
+@font-face {
+  font-family: "Monospaced Number";
+  src: local("Tahoma");
+  unicode-range: U+30-39;
+}
+@font-face {
+  font-family: "Chinese Quote";
+  src: local("PingFang SC"), local("SimSun");
+  unicode-range: U+2018, U+2019, U+201c, U+201d;
+}
+
+.places-autocomplete{
+  font-size:14px !important;
+  font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+.places-autocomplete-item{
+  font-size:14px !important;
+  font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
