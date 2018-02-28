@@ -54,6 +54,7 @@ class Login extends Component {
                     const { jwtToken } = result.idToken;
                     const { email, phone_number, name } = result.idToken.payload;
                     localStorage.setItem('CustName', `${name}`);
+                    localStorage.setItem('email', `${email}`);
                     dispatch(LogUser(email, phone_number));
                     localStorage.setItem('token', `"${jwtToken}"`)
                 },
@@ -71,7 +72,11 @@ class Login extends Component {
 
         try {
             await this.Login(this.state.email, this.state.password);
-            this.props.history.push('/home');
+            if(this.state.email=="rickyalex88@gmail.com") {
+                localStorage.setItem('admin', 'Y');
+                this.props.history.push('/admin');
+            }
+            else this.props.history.push('/home');
         } catch (e) {
             this.setState({
                 isLoading: false,

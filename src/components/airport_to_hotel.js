@@ -6,7 +6,7 @@ import '../App.css';
 import axios from 'axios';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { inputProps, OrderASC, cssClasses } from './helper';
+import { inputProps, OrderASC, cssClasses, disabledDate } from './helper';
 import { TimePicker, Input, Select, DatePicker } from 'antd';
 
 const Option = Select.Option;
@@ -23,8 +23,8 @@ class AirportToHotel extends Component {
             Hotel: '',
             FlightNumber: '',
             ArrivalTime: '',
-            PickupDate: '',
-            DropoffDate: '',
+            PickupDateTime: '',
+            DropoffDateTime: '',
             HotelBookingRef: '',
             NameUnderHotelRsv: localStorage.getItem('CustName'),
             OvernightStorage: false,
@@ -33,10 +33,10 @@ class AirportToHotel extends Component {
         }
 
         this.handleChangeTime = this.handleChangeTime.bind(this);
-        this.handleAiport = this.handleAiport.bind(this);
-        this.handlePickupDate = this.handlePickupDate.bind(this);
+        this.handleAirport = this.handleAirport.bind(this);
+        this.handlePickupDateTime = this.handlePickupDateTime.bind(this);
         this.handleAirline = this.handleAirline.bind(this);
-        this.handleDropoffDate = this.handleDropoffDate.bind(this);
+        this.handleDropoffDateTime = this.handleDropoffDateTime.bind(this);
         this.onChange = (Hotel) => this.setState({ Hotel });
     }
 
@@ -47,14 +47,14 @@ class AirportToHotel extends Component {
             Hotel,
             FlightNumber,
             ArrivalTime,
-            PickupDate,
-            DropoffDate,
+            PickupDateTime,
+            DropoffDateTime,
             HotelBookingRef,
             NameUnderHotelRsv,
         } = this.state;
 
         return (
-            Airport && Airline && Hotel && FlightNumber && PickupDate && HotelBookingRef && DropoffDate
+            Airport && Airline && Hotel && FlightNumber && PickupDateTime && HotelBookingRef && DropoffDateTime
         )
     }
 
@@ -114,18 +114,32 @@ class AirportToHotel extends Component {
         });
     }
 
-    handleAiport(airport) {
+    handleAirport(airport) {
         this.setState({
             Airport: airport
         })
     }
 
-    handlePickupDate(date) {
-        this.setState({ PickupDate: date })
+    handleAirline(airline) {
+        this.setState({ 
+            Airline: airline 
+        })
     }
 
-    handleAirline(airline) {
-        this.setState({ Airline: airline })
+    /*handlePickupDate(date) {
+        this.setState({ PickupDate: date })
+    }*/
+
+    handlePickupDateTime(dateTime) {
+        this.setState({
+            PickupDateTime: dateTime
+        });
+    }
+
+    handleDropoffDateTime(dateTime) {
+        this.setState({
+            DropoffDateTime: dateTime
+        });
     }
 
     handleDropoffDate(DropoffDate) {
@@ -144,7 +158,7 @@ class AirportToHotel extends Component {
                     <Select
                         style={{ width: 260 }}
                         placeholder="Choose Airport for Pick up"
-                        onChange={this.handleAiport}>
+                        onChange={this.handleAirport}>
                         {
                             this.props.AirportData.map((airport) => {
                                 return (
@@ -174,17 +188,19 @@ class AirportToHotel extends Component {
                     />
                     <hr />
                     <DatePicker
-                        onChange={this.handlePickupDate}
-                        disabledDate={disabledDate}
-                        placeholder="Pick up Date"
-                        style={{ width: 260 }} />
+                        format="YYYY-MM-DD HH:mm"
+                        disabledDate={disabledDate()}
+                        onChange={this.handlePickupDateTime}
+                        placeholder="Pick up Date and Time"
+                        style={{ width: '260px' }}
+                        showTime={{ defaultOpenValue: moment() }} />
                     <hr />
-                    <TimePicker
+                    {/*<TimePicker
                         onChange={this.handleChangeTime}
                         defaultOpenValue={moment()}
                         style={{ width: '260px' }}
                         placeholder="Time of Arrival"
-                        format="HH:mm" />
+                        format="HH:mm" />*/}
                     {/**
                              * Hotel Section
                              */}
@@ -208,9 +224,12 @@ class AirportToHotel extends Component {
                     />
                     <hr />
                     <DatePicker
-                        onChange={this.handleDropoffDate}
-                        placeholder="Drop off Date"
-                        style={{ width: 260 }} />
+                        format="YYYY-MM-DD HH:mm"
+                        disabledDate={disabledDate()}
+                        onChange={this.handleDropoffDateTime}
+                        placeholder="Drop Off Date and Time"
+                        style={{ width: '260px' }}
+                        showTime={{ defaultOpenValue: moment() }} />
                     {
                         this.buttonSubmit()
                     }
@@ -218,11 +237,6 @@ class AirportToHotel extends Component {
             </div>
         )
     }
-}
-
-function disabledDate(current) {
-  // Can not select days before today and today
-  return current && current < moment().startOf('day');
 }
 
 function mapsStateToProps(state) {

@@ -8,6 +8,7 @@ import ForgotPassword from './components/forgot_password';
 import ConfirmNewPassword from './components/confirm_new_password';
 import BookingForm from './components/booking_form';
 import History from './components/history';
+import Admin from './components/admin';
 import AddLuggage from './components/add_luggage';
 import ATHFinalReview from './components/ath_final_review';
 import HTAFinalReview from './components/hta_final_review';
@@ -34,6 +35,7 @@ class Routes extends Component {
                         <Route path="/register" component={Register} />
                         <Route path="/booking" component={BookingForm} />
                         <Route path="/history" component={History} />
+                        <Route path="/admin" component={Admin} />
                         <Route path="/athfinalreview" component={ATHFinalReview} />
                         <Route path="/htafinalreview" component={HTAFinalReview} />
                         <Route path="/hthfinalreview" component={HTHFinalReview} />

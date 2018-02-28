@@ -5,7 +5,7 @@ import { PassBookData } from '../actions';
 import '../App.css';
 import axios from 'axios';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { defaultStyles, inputProps, cssClasses } from './helper';
+import { inputProps, cssClasses, disabledDate } from './helper';
 import { DatePicker, Input } from 'antd';
 
 class HotelToHotel extends Component {
@@ -111,6 +111,7 @@ class HotelToHotel extends Component {
                     <hr />
                     <DatePicker
                         onChange={this.handlePickupDate}
+                        disabledDate={disabledDate()}
                         placeholder="Pick up Date"
                         style={{ width: 260 }} />
                     {/**
@@ -137,6 +138,7 @@ class HotelToHotel extends Component {
                     <hr />
                     <DatePicker
                         onChange={this.handleDropoffDate}
+                        disabledDate={disabledDate()}
                         placeholder="Drop off Date"
                         style={{ width: 260 }} />
                     {

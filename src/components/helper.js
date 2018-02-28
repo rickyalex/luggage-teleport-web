@@ -1,4 +1,5 @@
 import React from 'react';
+import * as moment from 'moment';
 
 //Random Booking Id
 export function BookingId() {
@@ -31,6 +32,12 @@ export function cssClasses(){
     return style;
 }
 
+//Date disabled state, only allowing today and further
+export function disabledDate(current) {
+  // Can not select days before today and today
+  return current && current < moment().startOf('day');
+}
+
 //Ordering data Ascending
 export function OrderASC(data, dataType) {
 
@@ -55,4 +62,24 @@ export function GetPayment() {
     ]
 
     return Payment;
+}
+
+//Status Update Option
+export function getStatus(){
+    const Status = [
+        {
+            id: 1,
+            name: "Order being processed"
+        },
+        {
+            id: 2,
+            name: "On transit"
+        },
+        {
+            id: 3,
+            name: "Arrived at destination"
+        }
+    ]
+
+    return Status;
 }

@@ -6,7 +6,7 @@ import '../App.css';
 import axios from 'axios';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { inputProps, OrderASC, cssClasses } from './helper';
+import { inputProps, OrderASC, cssClasses, disabledDate } from './helper';
 import { TimePicker, DatePicker, Input, Select } from 'antd';
 
 const Option = Select.Option;
@@ -33,7 +33,6 @@ class HotelToAirport extends Component {
         this.handleTime = this.handleTime.bind(this);
         this.handleAiport = this.handleAiport.bind(this);
         this.handleAirline = this.handleAirline.bind(this);
-        this.disabledDate = this.disabledDate.bind(this);
         this.onChange = (Hotel) => this.setState({ Hotel });
     }
 
@@ -57,10 +56,6 @@ class HotelToAirport extends Component {
 
     handleAirline(airline) {
         this.setState({ Airline: airline })
-    }
-
-    disabledDate(current) {
-        return current && current < moment().endOf('day');
     }
 
     ValidationForm() {
@@ -153,7 +148,7 @@ class HotelToAirport extends Component {
                     <hr />
                     <DatePicker
                         format="YYYY-MM-DD HH:mm"
-                        disabledDate={this.disabledDate}
+                        disabledDate={disabledDate()}
                         onChange={this.handleChangeDateTime}
                         placeholder="Pick up Date and Time"
                         style={{ width: '260px' }}

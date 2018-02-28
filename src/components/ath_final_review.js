@@ -37,8 +37,8 @@ class ATHFinalReview extends Component {
     }
 
     async handleNonce(nonce, cardData) {
-        const { Airline, Airport, ArrivalTime, DropoffDate, Email, FlightNumber, Hotel, HotelBookingRef,
-            NameUnderHotelRsv, OvernightStorage, PhoneNumber, PickupDate } = this.props.BookData[0]
+        const { Airline, Airport, ArrivalTime, DropoffDateTime, Email, FlightNumber, Hotel, HotelBookingRef,
+            NameUnderHotelRsv, OvernightStorage, PhoneNumber, PickupDateTime } = this.props.BookData[0]
         const { PaymentMethod } = this.state;
         const { TotalCost, Luggage } = this.props.LuggageData;
         const bookingId = BookingId();
@@ -46,14 +46,13 @@ class ATHFinalReview extends Component {
         let data = JSON.stringify({
             BookingId: `ATH${bookingId}`,
             flightNumber: FlightNumber,
-            status: 'Payment Complete',
             hotelReservationName: NameUnderHotelRsv,
             airport: Airport,
             hotel: Hotel,
-            pickupDate: PickupDate,
+            pickupDate: PickupDateTime,
             airline: Airline,
             estimatedArrival: moment(ArrivalTime, ["HH:mm"]).format("HH:mm"),
-            dropoffDate: DropoffDate,
+            dropoffDate: DropoffDateTime,
             hotelReference: HotelBookingRef,
             email: Email,
             phone: PhoneNumber,

@@ -85,6 +85,13 @@ class Navbar extends React.Component {
                     <Link to="/history">History</Link>
                 }
               </a>
+              <a id="admin" className="menu-item">
+                {
+                  !token ? <div></div>
+                    :
+                    <Link to="/admin">Admin</Link>
+                }
+              </a>
               <a target="_blank" id="home" className="menu-item" href="https://www.luggageteleport.com/"><Link to="/home">Home</Link></a>
               <a target="_blank" id="about" className="menu-item" href="https://www.luggageteleport.com/about-us/">About Us</a>
               <a target="_blank" id="service" className="menu-item" href="https://www.luggageteleport.com/our-services/">Our Services</a>
