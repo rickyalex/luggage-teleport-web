@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { PassBookData } from '../actions';
 import '../App.css';
 import axios from 'axios';
+import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { inputProps, cssClasses, disabledDate } from './helper';
 import { DatePicker, Input } from 'antd';
@@ -20,18 +21,18 @@ class HotelToHotel extends Component {
             HotelPickup: '',
             HotelPickupBookingRef: '',
             RsvpNameHotelPickup: localStorage.getItem('CustName'),
-            HotelPickupDate: '',
+            HotelPickupDateTime: '',
             HotelDropoff: '',
             HotelDropoffBookingRef: '',
             RsvpNameHotelDropoff: localStorage.getItem('CustName'),
             OvernightStorage: false,
-            HotelDropoffDate: '',
+            HotelDropoffDateTime: '',
             BookingType: 'HTH'
         }
         this.onChangePickUpHotel = (HotelPickup) => this.setState({ HotelPickup });
         this.onChangeDropOffHotel = (HotelDropoff) => this.setState({ HotelDropoff });
-        this.handleDropoffDate = this.handleDropoffDate.bind(this);
-        this.handlePickupDate = this.handlePickupDate.bind(this);
+        this.handleDropoffDateTime = this.handleDropoffDateTime.bind(this);
+        this.handlePickupDateTime = this.handlePickupDateTime.bind(this);
     }
 
     validationForm() {
@@ -39,14 +40,14 @@ class HotelToHotel extends Component {
             HotelPickup,
             HotelPickupBookingRef,
             RsvpNameHotelPickup,
-            HotelPickupDate,
+            HotelPickupDateTime,
             HotelDropoff,
             HotelDropoffBookingRef,
             RsvpNameHotelDropoff,
-            HotelDropoffDate } = this.state;
+            HotelDropoffDateTime } = this.state;
 
         return (
-            HotelPickup && HotelPickupBookingRef && HotelPickupDate && HotelDropoff && HotelDropoffBookingRef && HotelDropoffDate
+            HotelPickup && HotelPickupBookingRef && HotelPickupDateTime && HotelDropoff && HotelDropoffBookingRef && HotelDropoffDateTime
         )
     }
 
@@ -76,12 +77,12 @@ class HotelToHotel extends Component {
         this.setState({ Email, PhoneNumber })
     }
 
-    handlePickupDate(pickupDate) {
-        this.setState({ HotelPickupDate: pickupDate })
+    handlePickupDateTime(pickupDate) {
+        this.setState({ HotelPickupDateTime: pickupDate })
     }
 
-    handleDropoffDate(dropOff) {
-        this.setState({ HotelDropoffDate: dropOff })
+    handleDropoffDateTime(dropOff) {
+        this.setState({ HotelDropoffDateTime: dropOff })
     }
 
     render() {
@@ -110,10 +111,14 @@ class HotelToHotel extends Component {
                     />
                     <hr />
                     <DatePicker
-                        onChange={this.handlePickupDate}
-                        disabledDate={disabledDate()}
-                        placeholder="Pick up Date"
-                        style={{ width: 260 }} />
+                        format="YYYY-MM-DD HH:mm"
+                        disabledDate={disabledDate}
+                        onChange={this.handlePickupDateTime}
+                        placeholder="Pick up Date and Time"
+                        style={{ width: '260px' }}
+                        showTime={{ defaultOpenValue: moment() }}
+                    />
+                    <hr />
                     {/**
                                 * Hotel B Section
                                 */}
@@ -137,10 +142,14 @@ class HotelToHotel extends Component {
                     />
                     <hr />
                     <DatePicker
-                        onChange={this.handleDropoffDate}
-                        disabledDate={disabledDate()}
-                        placeholder="Drop off Date"
-                        style={{ width: 260 }} />
+                        format="YYYY-MM-DD HH:mm"
+                        disabledDate={disabledDate}
+                        onChange={this.handleDropoffDateTime}
+                        placeholder="Drop off Date and Time"
+                        style={{ width: '260px' }}
+                        showTime={{ defaultOpenValue: moment() }}
+                    />
+                    <hr />
                     {
                         this.buttonSubmit()
                     }

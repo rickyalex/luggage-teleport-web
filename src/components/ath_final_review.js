@@ -61,6 +61,8 @@ class ATHFinalReview extends Component {
             TotalCost: TotalCost,
             cardNonce: nonce,
         })
+        console.log(data)
+        return false
 
         let token = localStorage.getItem('token')
         let config = {
@@ -71,13 +73,13 @@ class ATHFinalReview extends Component {
         }
         this.setState({ isLoading: true })
 
-        axios.post('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-create', data, config)
-            .then((response) => {
-                alert('success booked!')
-                this.props.history.push('/home');
-            }, (err) => {
-                this.setState({ isLoading: false })
-            })
+        // axios.post('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-create', data, config)
+        //     .then((response) => {
+        //         alert('success booked!')
+        //         this.props.history.push('/home');
+        //     }, (err) => {
+        //         this.setState({ isLoading: false })
+        //     })
     }
     handleNonceError(errors) {
         console.log('handleNonceError', errors);

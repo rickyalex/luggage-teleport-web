@@ -22,34 +22,21 @@ class AirportToAirport extends Component {
             AirportPickup: '',
             AirlinePickup: '',
             PickupFlightNumber: '',
-            PickupDate: '',
+            PickupDateTime: '',
             ArrivalTime: '',
             AirportDropoff: '',
             AirlineDropoff: '',
             DropoffFlightNumber: '',
-            DepartureTime: '',
+            DropoffDateTime: '',
             BookingType: 'ATA'
         }
 
-        this.handleChangeArrivalTime = this.handleChangeArrivalTime.bind(this);
-        this.handleChangeDepartureTime = this.handleChangeDepartureTime.bind(this);
         this.handlePickupAirport = this.handlePickupAirport.bind(this);
         this.handlePickupAirline = this.handlePickupAirline.bind(this);
         this.handleDropoffAirport = this.handleDropoffAirport.bind(this);
         this.handleDropoffAirline = this.handleDropoffAirline.bind(this);
-        this.handlePickupDate = this.handlePickupDate.bind(this);
-    }
-
-    handleChangeArrivalTime(time) {
-        this.setState({
-            ArrivalTime: time
-        });
-    }
-
-    handleChangeDepartureTime(time) {
-        this.setState({
-            DepartureTime: time
-        });
+        this.handlePickupDateTime = this.handlePickupDateTime.bind(this);
+        this.handleDropoffDateTime = this.handleDropoffDateTime.bind(this);
     }
 
     validationForm() {
@@ -114,8 +101,20 @@ class AirportToAirport extends Component {
         this.setState({ Email, PhoneNumber })
     }
 
-    handlePickupDate(date) {
-        this.setState({ PickupDate: date })
+    handlePickupDateTime(dateTime, value) {
+        const { PickupDateTime, DropoffDateTime } = this.state;
+        this.setState({
+            PickupDateTime: value,
+            DropoffDateTime: value,
+        });
+        console.log(this.state)
+    }
+
+    handleDropoffDateTime(dateTime, value) {
+        this.setState({
+            DropoffDateTime: value
+        });
+        console.log(this.state)
     }
 
     handlePickupAirport(airportPickup) {
@@ -174,16 +173,19 @@ class AirportToAirport extends Component {
                     />
                     <hr />
                     <DatePicker
-                        onChange={this.handlePickupDate}
-                        placeholder="Pick up Date"
-                        style={{ width: 260 }} />
+                        format="YYYY-MM-DD HH:mm"
+                        disabledDate={disabledDate}
+                        onChange={this.handlePickupDateTime}
+                        placeholder="Pick up Date and Time"
+                        style={{ width: '260px' }}
+                        showTime={{ defaultOpenValue: moment() }} />
                     <hr />
-                    <TimePicker
+                    {/*<TimePicker
                         onChange={this.handleChangeArrivalTime}
                         defaultOpenValue={moment()}
                         style={{ width: '260px' }}
                         placeholder="Time of Arrival"
-                        format="HH:mm" />
+                        format="HH:mm" />*/ }
                     {/**
                          * Airport B Section
                     */}
@@ -220,12 +222,13 @@ class AirportToAirport extends Component {
                         onChange={e => this.setState({ DropoffFlightNumber: e.target.value })}
                     />
                     <hr />
-                    <TimePicker
-                        onChange={this.handleChangeDepartureTime}
-                        defaultOpenValue={moment()}
+                    <DatePicker
+                        format="YYYY-MM-DD HH:mm"
+                        disabledDate={disabledDate}
+                        onChange={this.handleDropoffDateTime}
+                        placeholder="Drop Off Date and Time"
                         style={{ width: '260px' }}
-                        placeholder="Departure Time"
-                        format="HH:mm" />
+                        showTime={{ defaultOpenValue: moment() }} />
                     {
                         this.buttonSubmit()
                     }

@@ -124,26 +124,22 @@ class AirportToHotel extends Component {
         this.setState({ 
             Airline: airline 
         })
+        console.log(this.state)
     }
 
-    /*handlePickupDate(date) {
-        this.setState({ PickupDate: date })
-    }*/
-
-    handlePickupDateTime(dateTime) {
+    handlePickupDateTime(dateTime, value) {
+        const { PickupDateTime, DropoffDateTime } = this.state;
         this.setState({
-            PickupDateTime: dateTime
+            PickupDateTime: value,
+            DropoffDateTime: value,
         });
+        console.log(this.state)
     }
 
     handleDropoffDateTime(dateTime) {
         this.setState({
             DropoffDateTime: dateTime
         });
-    }
-
-    handleDropoffDate(DropoffDate) {
-        this.setState({ DropoffDate: DropoffDate })
     }
 
     render() {
@@ -189,7 +185,7 @@ class AirportToHotel extends Component {
                     <hr />
                     <DatePicker
                         format="YYYY-MM-DD HH:mm"
-                        disabledDate={disabledDate()}
+                        disabledDate={disabledDate}
                         onChange={this.handlePickupDateTime}
                         placeholder="Pick up Date and Time"
                         style={{ width: '260px' }}
@@ -225,7 +221,7 @@ class AirportToHotel extends Component {
                     <hr />
                     <DatePicker
                         format="YYYY-MM-DD HH:mm"
-                        disabledDate={disabledDate()}
+                        disabledDate={disabledDate}
                         onChange={this.handleDropoffDateTime}
                         placeholder="Drop Off Date and Time"
                         style={{ width: '260px' }}

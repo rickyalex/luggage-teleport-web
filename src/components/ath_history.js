@@ -68,9 +68,9 @@ class ATHHistory extends Component {
         let token = localStorage.getItem('token')
         let config = {
             headers: {
-                'Authorization': `AWS4-HMAC-SHA256 Credential=AKIAJE6XVHDQZ2RWFHDA/20180228/us-west-1/execute-api/aws4_request, SignedHeaders=content-length;content-type;host;x-amz-date, Signature=72fb1b462d06ce362291e8ce23292f8eb902c9650d466c0e7361090b65335e22`,
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Amz-Date': '20180228T053921Z'
+                'Accept': '*/*'
             }
         }
         let id = row.original.id
