@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { withRouter } from 'react-router-dom';
 import Navbar from './components/navbar';
-import BookingForm from './components/booking_form';
+import CorporateBookingForm from './components/corporate_booking_form';
 import './App.css';
 
 
@@ -30,7 +30,7 @@ class App extends Component {
           < Navbar />
         </div>
         <div>
-          <BookingForm />
+          <CorporateBookingForm />
         </div>
       </div>
     );

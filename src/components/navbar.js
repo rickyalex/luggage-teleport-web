@@ -98,6 +98,7 @@ class Navbar extends React.Component {
               <a target="_blank" id="cnp" className="menu-item" href="https://www.luggageteleport.com/careers-partnerships/">Careers & Partnerships</a>
               <a target="_blank" id="contact" className="menu-item" href="https://www.luggageteleport.com/contact-us/">Contact Us </a>
               <a target="_blank" id="booking" className="menu-item SideBar" ><Link to="/booking">Booking</Link></a>
+              <a target="_blank" id="corporatebooking" className="menu-item SideBar" ><Link to="/booking">Corporate Booking</Link></a>
 
             </Menu>
           </div>

@@ -7,6 +7,8 @@ import VerifyAccount from './components/verify_account';
 import ForgotPassword from './components/forgot_password';
 import ConfirmNewPassword from './components/confirm_new_password';
 import BookingForm from './components/booking_form';
+import CorporateBookingForm from './components/corporate_booking_form';
+import EmailHandler from './components/email_handler';
 import History from './components/history';
 import Admin from './components/admin';
 import AddLuggage from './components/add_luggage';
@@ -34,6 +36,8 @@ class Routes extends Component {
                         <Route path="/home" component={App} />
                         <Route path="/register" component={Register} />
                         <Route path="/booking" component={BookingForm} />
+                        <Route path="/corporatebooking" component={CorporateBookingForm} />
+                        <Route path="/emailhandler" component={EmailHandler} />
                         <Route path="/history" component={History} />
                         <Route path="/admin" component={Admin} />
                         <Route path="/athfinalreview" component={ATHFinalReview} />
