@@ -1,5 +1,7 @@
 import React from 'react';
 import * as moment from 'moment';
+import axios from 'axios';
+import { SENDGRID_API_KEY } from '../config';
 
 //Random Booking Id
 export function BookingId() {
@@ -82,4 +84,26 @@ export function getStatus(){
     ]
 
     return Status;
+}
+
+export function sendEmail(param, param2){
+    const sgMail = require('@sendgrid/mail');
+        
+        let myParam1 = param;
+        let myParam2 = param2;
+        
+        let token = localStorage.getItem('token')
+        let config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }
+
+        axios.get(`https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Corporate-get/${myParam1}/${myParam2}`, config)
+            .then((res) => {
+                console.log(res);
+            }).catch((err) => {
+                console.log(err);
+            })
 }
