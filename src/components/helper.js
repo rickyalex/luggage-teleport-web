@@ -87,7 +87,6 @@ export function getStatus(){
 }
 
 export function sendEmail(param, param2){
-    const sgMail = require('@sendgrid/mail');
         
         let myParam1 = param;
         let myParam2 = param2;
@@ -101,6 +100,7 @@ export function sendEmail(param, param2){
         }
 
         axios.get(`https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Corporate-get/${myParam1}/${myParam2}`, config)
+        //axios.get(`https://83gcxj6xkj.execute-api.ap-southeast-1.amazonaws.com/dev/handler/Corporate-get/${myParam1}/${myParam2}`, config)        
             .then((res) => {
                 console.log(res);
             }).catch((err) => {
