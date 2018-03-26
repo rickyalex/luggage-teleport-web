@@ -20,7 +20,7 @@ class BookingForm extends Component {
 
     render() {
         return (
-            <div align="center">
+            <div className="containerBooking" align="center">
 
                 <div>
 

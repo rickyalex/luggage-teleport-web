@@ -15,6 +15,7 @@ import ATHFinalReview from './components/ath_final_review';
 import HTAFinalReview from './components/hta_final_review';
 import HTHFinalReview from './components/hth_final_review';
 import ATAFinalReview from './components/ata_final_review';
+import SuccessPage from './components/success_page';
 
 
 class Routes extends Component {
@@ -46,6 +47,7 @@ class Routes extends Component {
                         <Route path="/verify" component={VerifyAccount} />
                         <Route path="/forgot" component={ForgotPassword} />
                         <Route path="/confirmnewpassword" component={ConfirmNewPassword} />
+                        <Route path="/successpage" component={SuccessPage} />
                     </div>
                 </Router>
             </div>

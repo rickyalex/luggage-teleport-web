@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { PassBookData, GetAirlineData, GetAirportData } from '../actions';
+import { PassBookData, GetAirlineData, GetAirportData, GetLuggageData } from '../actions';
 import '../App.css';
 import axios from 'axios';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { inputProps, OrderASC, cssClasses, disabledDate } from './helper';
-import { TimePicker, Input, Select, Slider, Row, Col, InputNumber, DatePicker, Icon } from 'antd';
+import { TimePicker, Input, Button, Select, Slider, Row, Col, InputNumber, DatePicker, Icon } from 'antd';
 import { MdFlightTakeoff, MdPerson, MdHotel, MdLocalMall } from 'react-icons/lib/md';
 
 const Option = Select.Option;
@@ -23,28 +23,26 @@ class AirportToHotel extends Component {
             Airline: '',
             Hotel: '',
             FlightNumber: '',
-            ArrivalTime: '',
-            PickupDate: '',
-            DropoffDate: '',
             HotelBookingRef: '',
             NameUnderHotelRsv: localStorage.getItem('CustName'),
-            OvernightStorage: false,
-            showModal: false,
             BookingType: 'ATH',
             Luggage: 1,
             TotalCost: 0,
             PickupTime: 1,
             DropoffTime: 1,
+            PickupDate: '',
+            DropoffDate: '',
             PickupDisplayTime: '00:00',
             DropoffDisplayTime: '00:00'
         }
 
+        this.handleAirport = this.handleAirport.bind(this);
+        this.handleAirline = this.handleAirline.bind(this);
         this.handlePickupChangeTime = this.handlePickupChangeTime.bind(this);
         this.handleDropoffChangeTime = this.handleDropoffChangeTime.bind(this);
-        this.handleAirport = this.handleAirport.bind(this);
         this.handlePickupDate = this.handlePickupDate.bind(this);
-        this.handleAirline = this.handleAirline.bind(this);
         this.handleDropoffDate = this.handleDropoffDate.bind(this);
+        this.handleLuggage = this.handleLuggage.bind(this);
         this.onChange = (Hotel) => this.setState({ Hotel });
     }
 
@@ -54,7 +52,6 @@ class AirportToHotel extends Component {
             Airline,
             Hotel,
             FlightNumber,
-            ArrivalTime,
             PickupDate,
             DropoffDate,
             HotelBookingRef,
@@ -70,51 +67,52 @@ class AirportToHotel extends Component {
         )
     }
 
+    componentDidMount() {
+        const { Email, PhoneNumber } = this.props.user;
+        this.setState({
+            Email,
+            PhoneNumber
+        })
+    }
+
     buttonSubmit() {
-        //this.handleLuggage();
-
-        //this.SubmitHotelToAirportData();
-        //const { BookingType } = this.props.BookData[0];
-
         return (
             <Link to="/athfinalreview" style={{ color: 'black' }}>
-                <button
-                    className="btn btn-lg"
-                    disabled={!this.ValidationForm()}
-                    onClick={() => this.SubmitHotelToAirportData()}
-                    type="button"
-                    style={{ backgroundColor: 'yellow', width: '260px' }}>
+                <Button 
+                    onClick={() => this.SubmitAirportToHotelData()}
+                    type="primary">
                     Next
-            </button>
+                </Button>
             </Link>
         )
     }
 
-    async handleLuggage() {
-        const { TotalCost } = this.state.TotalCost;
-        const { Luggage } = this.state.Luggage;
-        console.log(Luggage)
+    handleLuggage() {
+        const { TotalCost, Luggage } = this.state;
+        let Total = 0;
         if (Luggage > 0 && Luggage <= 2) {
-            this.setState({ TotalCost: 35 })
+            Total = 35;
         } else if (Luggage > 2) {
-            const TotalWithAdditional = 35 + ((Luggage - 2) * 10);
-            this.setState({ TotalCost: TotalWithAdditional })
+            Total = 35 + ((Luggage - 2) * 10);
         } else {
-            this.setState({ TotalCost: 0 });
+            Total = 0;
         }
+        this.props.GetLuggageData(Total, Luggage);
 
+        return Total;
     }
 
-    SubmitHotelToAirportData() {
+    SubmitAirportToHotelData = () => {  
         let datas = [];
         datas.push(this.state);
-        this.props.PassBookData(datas);
+        this.props.PassBookData(datas);  
+        this.setState({ TotalCost: this.handleLuggage() });
     }
 
     componentWillMount() {
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airport-scan')
             .then((res) => {
-                // res.
+                // res. 
                 OrderASC(res.data.Myresult, 'string');
                 this.props.GetAirportData(res.data.Myresult);
             }).catch((err) => {
@@ -128,14 +126,6 @@ class AirportToHotel extends Component {
             }).catch((err) => {
                 console.log(err);
             })
-    }
-
-    componentDidMount() {
-        const { Email, PhoneNumber } = this.props.user;
-        this.setState({
-            Email,
-            PhoneNumber
-        })
     }
 
     handlePickupChangeTime(value) {
@@ -181,20 +171,19 @@ class AirportToHotel extends Component {
         this.setState({ 
             Airline: airline 
         })
-        console.log(this.state)
     }
 
     handlePickupDate(value) {
+        const { PickupDate, DropoffDate } = this.state;
         this.setState({
             PickupDate: value,
-            DropoffDate: value,
+            DropoffDate: value
         });
-        console.log(this.state)
     }
 
-    handleDropoffDate(dateTime) {
+    handleDropoffDate(value) {
         this.setState({
-            DropoffDate: dateTime
+            DropoffDate: value
         });
     }
 
@@ -313,7 +302,8 @@ class AirportToHotel extends Component {
                         min={1}  
                         placeholder="Luggage Quantity"
                         onChange={e => this.setState({ Luggage: e })} 
-                        style={{ marginRight: '3px', width: '260px'}} />
+                    />
+                    <hr />
                     {
                         this.buttonSubmit()
                     }
@@ -332,4 +322,4 @@ function mapsStateToProps(state) {
     }
 }
 
-export default connect(mapsStateToProps, { PassBookData, GetAirlineData, GetAirportData })(AirportToHotel);
+export default connect(mapsStateToProps, { PassBookData, GetAirlineData, GetAirportData, GetLuggageData })(AirportToHotel);

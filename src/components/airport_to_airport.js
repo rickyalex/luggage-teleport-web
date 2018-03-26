@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
-import { PassBookData, GetAirlineData, GetAirportData } from '../actions';
+import { PassBookData, GetAirlineData, GetAirportData, GetLuggageData } from '../actions';
 import '../App.css';
 import axios from 'axios';
-import { TimePicker, DatePicker, Input, Select } from 'antd';
-import { OrderASC, disabledDate } from './helper';
+import { inputProps, OrderASC, cssClasses, disabledDate } from './helper';
+import { TimePicker, Input, Button, Select, Slider, Row, Col, InputNumber, DatePicker, Icon } from 'antd';
+import { MdFlightTakeoff, MdPerson, MdHotel, MdLocalMall } from 'react-icons/lib/md';
 import * as moment from 'moment';
 
 const Option = Select.Option;
@@ -28,15 +29,24 @@ class AirportToAirport extends Component {
             AirlineDropoff: '',
             DropoffFlightNumber: '',
             DropoffDateTime: '',
-            BookingType: 'ATA'
+            BookingType: 'ATA',
+            Luggage: 1,
+            TotalCost: 0,
+            PickupTime: 1,
+            DropoffTime: 1,
+            PickupDisplayTime: '00:00',
+            DropoffDisplayTime: '00:00'
         }
 
         this.handlePickupAirport = this.handlePickupAirport.bind(this);
         this.handlePickupAirline = this.handlePickupAirline.bind(this);
         this.handleDropoffAirport = this.handleDropoffAirport.bind(this);
         this.handleDropoffAirline = this.handleDropoffAirline.bind(this);
-        this.handlePickupDateTime = this.handlePickupDateTime.bind(this);
-        this.handleDropoffDateTime = this.handleDropoffDateTime.bind(this);
+        this.handlePickupChangeTime = this.handlePickupChangeTime.bind(this);
+        this.handleDropoffChangeTime = this.handleDropoffChangeTime.bind(this);
+        this.handlePickupDate = this.handlePickupDate.bind(this);
+        this.handleDropoffDate = this.handleDropoffDate.bind(this);
+        this.handleLuggage = this.handleLuggage.bind(this);
     }
 
     validationForm() {
@@ -57,25 +67,38 @@ class AirportToAirport extends Component {
         )
     }
 
+    handleLuggage() {
+        const { TotalCost, Luggage } = this.state;
+        let Total = 0;
+        if (Luggage > 0 && Luggage <= 2) {
+            Total = 35;
+        } else if (Luggage > 2) {
+            Total = 35 + ((Luggage - 2) * 10);
+        } else {
+            Total = 0;
+        }
+        this.props.GetLuggageData(Total, Luggage);
+
+        return Total;
+    }
+
     buttonSubmit() {
         return (
-            <Link to="/addluggage" style={{ color: 'black' }}>
-                <button
-                    className="btn btn-lg"
+            <Link to="/atafinalreview" style={{ color: 'black' }}>
+                <Button 
                     onClick={() => this.SubmitAirportToAirportData()}
-                    type="button"
-                    disabled={!this.validationForm()}
-                    style={{ backgroundColor: 'yellow', width: '260px' }}>
+                    type="primary">
                     Next
-                 </button>
+                </Button>
             </Link>
         )
     }
 
-    SubmitAirportToAirportData() {
+    SubmitAirportToAirportData = () => {  
         let datas = [];
         datas.push(this.state);
-        this.props.PassBookData(datas);
+        this.props.PassBookData(datas);  
+        this.setState({ TotalCost: this.handleLuggage() });
     }
 
     componentWillMount() {
@@ -101,20 +124,51 @@ class AirportToAirport extends Component {
         this.setState({ Email, PhoneNumber })
     }
 
-    handlePickupDateTime(dateTime, value) {
-        const { PickupDateTime, DropoffDateTime } = this.state;
+    handlePickupChangeTime(value) {
+        let formattedPickupTime = '';
+        let formattedDropoffTime = '';
+        if(value%2==1) { 
+            formattedPickupTime = Math.floor((value/2)).toString()+':30';
+            formattedDropoffTime = ((value+8)>48) ? Math.floor(((value+8-48)/2)).toString()+':30' : Math.floor(((value+8)/2)).toString()+':30';  
+        }
+        else{ 
+            formattedPickupTime = (value/2).toString()+':00';
+            formattedDropoffTime = ((value+8)>48) ? ((value+8-48)/2).toString()+':00' : ((value+8)/2).toString()+':00' ;
+        }
         this.setState({
-            PickupDateTime: value,
-            DropoffDateTime: value,
+          PickupTime: value,
+          PickupDisplayTime: formattedPickupTime,
+          DropoffDisplayTime: formattedDropoffTime
         });
-        console.log(this.state)
     }
 
-    handleDropoffDateTime(dateTime, value) {
+    handleDropoffChangeTime(value) {
+
+        let formattedDropoffTime = '';
+        if(value%2==1) { 
+            formattedDropoffTime = Math.floor((value/2)).toString()+':30';
+        }
+        else{ 
+            formattedDropoffTime = (value/2).toString()+':00';
+        }
         this.setState({
-            DropoffDateTime: value
+          DropoffTime: value,
+          DropoffDisplayTime: formattedDropoffTime
         });
-        console.log(this.state)
+    }
+
+    handlePickupDate(value) {
+        const { PickupDate, DropoffDate } = this.state;
+        this.setState({
+            PickupDate: value,
+            DropoffDate: value
+        });
+    }
+
+    handleDropoffDate(value) {
+        this.setState({
+            DropoffDate: value
+        });
     }
 
     handlePickupAirport(airportPickup) {
@@ -141,7 +195,6 @@ class AirportToAirport extends Component {
                         * Airport A Section
                     */}
                     <Select
-                        style={{ width: 260 }}
                         placeholder="Choose Airport for Pick up"
                         onChange={this.handlePickupAirport}>
                         {
@@ -154,7 +207,6 @@ class AirportToAirport extends Component {
                     </Select>
                     <hr />
                     <Select
-                        style={{ width: 260 }}
                         placeholder="Choose Airline"
                         onChange={this.handlePickupAirline}>
                         {
@@ -167,31 +219,34 @@ class AirportToAirport extends Component {
                     </Select>
                     <hr />
                     <Input
-                        style={{ width: 260 }}
+                        prefix={<MdFlightTakeoff style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
                         placeholder="Flight Number"
                         onChange={e => this.setState({ PickupFlightNumber: e.target.value })}
                     />
                     <hr />
-                    <DatePicker
-                        format="YYYY-MM-DD HH:mm"
-                        disabledDate={disabledDate}
-                        onChange={this.handlePickupDateTime}
-                        placeholder="Pick up Date and Time"
-                        style={{ width: '260px' }}
-                        showTime={{ defaultOpenValue: moment() }} />
-                    <hr />
-                    {/*<TimePicker
-                        onChange={this.handleChangeArrivalTime}
-                        defaultOpenValue={moment()}
-                        style={{ width: '260px' }}
-                        placeholder="Time of Arrival"
-                        format="HH:mm" />*/ }
-                    {/**
-                         * Airport B Section
-                    */}
+                    <Row gutter={12}>
+                        <Col span={12}>
+                            <DatePicker
+                                className="dp"
+                                format="YYYY-MM-DD"
+                                disabledDate={disabledDate}
+                                onChange={this.handlePickupDate}
+                                placeholder="Pick up Date"/>
+                        </Col>
+                        <Col span={12} className="timeInput">
+                          <Input
+                            className="TimeDisplayer"
+                            value={this.state.PickupDisplayTime}
+                            onChange={this.handlePickupChangeTime}
+                          />
+                        </Col>
+                        <Col span={12} className="timeInput">
+                            <Slider step={1} max={48} onChange={this.handlePickupChangeTime} value={this.state.PickupTime} tipFormatter={null} />
+                        </Col>
+                        
+                    </Row>
                     <hr />
                     <Select
-                        style={{ width: 260 }}
                         placeholder="Choose Airport for Drop off"
                         onChange={this.handleDropoffAirport}>
                         {
@@ -204,7 +259,6 @@ class AirportToAirport extends Component {
                     </Select>
                     <hr />
                     <Select
-                        style={{ width: 260 }}
                         placeholder="Choose Airline"
                         onChange={this.handleDropoffAirline}>
                         {
@@ -217,18 +271,40 @@ class AirportToAirport extends Component {
                     </Select>
                     <hr />
                     <Input
-                        style={{ width: 260 }}
+                        prefix={<MdFlightTakeoff style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
                         placeholder="Flight Number"
                         onChange={e => this.setState({ DropoffFlightNumber: e.target.value })}
                     />
                     <hr />
-                    <DatePicker
-                        format="YYYY-MM-DD HH:mm"
-                        disabledDate={disabledDate}
-                        onChange={this.handleDropoffDateTime}
-                        placeholder="Drop Off Date and Time"
-                        style={{ width: '260px' }}
-                        showTime={{ defaultOpenValue: moment() }} />
+                    <Row gutter={12}>
+                        <Col span={12}>
+                            <DatePicker
+                                className="dp"
+                                format="YYYY-MM-DD"
+                                disabledDate={disabledDate}
+                                onChange={this.handleDropoffDate}
+                                placeholder="Drop Off Date" />
+                        </Col>
+                        <Col span={12} className="timeInput">
+                          <Input
+                            className="TimeDisplayer"
+                            value={this.state.DropoffDisplayTime}
+                            onChange={this.handleDropoffChangeTime}
+                          />
+                        </Col>
+                        <Col span={12} className="timeInput">
+                            <Slider step={1} min={1} max={48} onChange={this.handleDropoffChangeTime} value={this.state.DropoffTime} tipFormatter={null} />
+                        </Col>
+                        
+                    </Row>
+                    <hr />
+                    <InputNumber 
+                        size="medium" 
+                        min={1}  
+                        placeholder="Luggage Quantity"
+                        onChange={e => this.setState({ Luggage: e })} 
+                    />
+                    <hr />
                     {
                         this.buttonSubmit()
                     }

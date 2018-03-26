@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 import ReactTooltip from 'react-tooltip';
 import { withRouter } from 'react-router-dom';
-import Navbar from './components/navbar';
+//import Navbar from './components/navbar';
+import FixedNavbar from './components/fixed_navbar';
 import BookingForm from './components/booking_form';
 import './App.css';
 
@@ -26,11 +27,16 @@ class App extends Component {
     return (
       <div className="history-bg-image">
         <ReactTooltip place="bottom" type="info" effect="solid"/>
-        <div>
-          < Navbar />
-        </div>
-        <div>
-          <BookingForm />
+        <div className="site-container">
+          <div className="site-pusher">
+            < FixedNavbar />
+          </div>
+          <div className="site-content">
+            <div className="container">
+              <BookingForm />
+            </div>
+          </div>
+          <div className="site-cache" id="site-cache"></div>
         </div>
       </div>
     );

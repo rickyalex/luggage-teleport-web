@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PassBookData } from '../actions';
+import Navbar from './navbar';
 import '../App.css';
 import * as moment from 'moment';
 import axios from 'axios';
 import SquarePaymentForm from './square_payment_form';
 import { SQUARE_APP_ID } from '../config';
 import { BookingId, GetPayment } from './helper';
+        
 
 class HTHFInalReview extends Component {
 
@@ -29,16 +31,15 @@ class HTHFInalReview extends Component {
     }
     async backToAddLuggage() {
         this.PushData()
-        this.props.history.push('/addluggage');
+        this.props.history.push('/');
     }
     async Submit() {
         this.paymentForm.generateNonce();
     }
 
     async handleNonce(nonce, cardData) {
-        const { HotelDropoff, HotelDropoffBookingRef, HotelDropoffDate, Email, HotelPickup, HotelPickupBookingRef,
-            HotelPickupDate, OvernightStorage, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup } = this.props.BookData[0];
-        const { PaymentMethod } = this.state;
+        const { HotelDropoff, HotelDropoffBookingRef, DropoffDate, Email, HotelPickup, HotelPickupBookingRef,
+            PickupDate, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup, PickupDisplayTime, DropoffDisplayTime } = this.props.BookData[0];
         const { Luggage, TotalCost } = this.props.LuggageData;
         const bookingId = BookingId();
 
@@ -46,15 +47,15 @@ class HTHFInalReview extends Component {
             BookingId: `HTH${bookingId}`,
             HotelDropoff: HotelDropoff,
             HotelDropoffBookingRef: HotelDropoffBookingRef,
-            HotelDropoffDate: HotelDropoffDate,
+            DropoffDate: moment(DropoffDate).format('Do MMMM YYYY')+' '+DropoffDisplayTime,
             email: Email,
             HotelPickup: HotelPickup,
             HotelPickupBookingRef: HotelPickupBookingRef,
-            HotelPickupDate: HotelPickupDate,
+            PickupDate: moment(PickupDate).format('Do MMMM YYYY')+' '+PickupDisplayTime,
             PhoneNumber: PhoneNumber,
             RsvpNameHotelDropoff: RsvpNameHotelDropoff,
             RsvpNameHotelPickup: RsvpNameHotelPickup,
-            PaymentWith: PaymentMethod,
+            PaymentWith: 'Credit Card',
             LuggageQuantity: Luggage,
             TotalCost: TotalCost,
             cardNonce: nonce,
@@ -83,62 +84,72 @@ class HTHFInalReview extends Component {
     }
 
     render() {
-        const { HotelDropoff, HotelDropoffBookingRef, HotelDropoffDate, Email, HotelPickup, HotelPickupBookingRef,
-            HotelPickupDate, OvernightStorage, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup } = this.props.BookData[0];
+        const { HotelDropoff, HotelDropoffBookingRef, DropoffDate, Email, HotelPickup, HotelPickupBookingRef,
+            PickupDate, OvernightStorage, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup, PickupDisplayTime, DropoffDisplayTime } = this.props.BookData[0];
         const { Luggage, TotalCost } = this.props.LuggageData;
         return (
-            <div>
+            <div className="bg-image">
+                <div>
+                  < Navbar />
+                </div>
+                <div className="review_header">
+                    <h3 style={{ color: 'white' }}>Booking Summary</h3>
+                    <hr style={{ border: '1px solid #fff' }} />
+                </div>
                 <div className="containerProgressBar" style={{ marginTop: '1em' }}>
-                    <ul className="progressbar">
-                        <li className="active">Booking</li>
-                        <li className="active">Add Luggage</li>
-                        <li>Booking/Payment Review &amp; Submit</li>
-                    </ul>
-                    <div className="receipt" style={{ marginTop: '30px' }}>
-                        <h3>Contact Info</h3>
-                        <p><strong>Email</strong> = {Email}</p>
-                        <p><strong>Phone Number</strong> = {PhoneNumber}</p>
-                        <hr />
-
-                        <h3>Your Booking</h3>
-                        <p><strong>Hotel for Pickup</strong> = {HotelPickup}</p>
-                        <p><strong>Hotel Booking Reference</strong> = {HotelPickupBookingRef}</p>
-                        <p><strong>Name under Hotel Reservation</strong> = {RsvpNameHotelPickup}</p>
-                        <p><strong>Pick up Date</strong> = {moment(HotelPickupDate).format('Do MMMM YYYY')}</p>
-                        <hr />
-
-                        <p><strong>Hotel for Dropoff</strong> = {HotelDropoff}</p>
-                        <p><strong>Hotel Booking Reference</strong> = {HotelDropoffBookingRef}</p>
-                        <p><strong>Name under Hotel Reservation</strong> = {RsvpNameHotelDropoff}</p>
-                        <p><strong>Drop off Date</strong> = {moment(HotelDropoffDate).format('Do MMMM YYYY')}</p>
-                        <hr />
-
-                        <h3>Total Payment</h3>
-                        <p><strong>Luggage = </strong> {Luggage} item(s)</p>
-                        <p><strong>Total =</strong> ${TotalCost}</p>
-                        <hr />
-                        <h3>Payment Method</h3>
-                        <select
-                            className="form-control"
-                            style={{ width: '200px', height: '30px' }}
-                            onChange={event => this.setState({ PaymentMethod: event.target.value })}>
-                            <option value="" selected disabled>Choose Your Payment</option>
-                            {
-                                GetPayment().map((payment) => {
-                                    return <option key={payment.id} value={payment.name}>{payment.name}</option>
-                                })
-                            }
-                        </select>
-
-                        {
-                            this.state.PaymentMethod ?
+                    <div className="receipt">
+                        <div className="row" style={{ lineHeight: '3em' }}>
+                            <div className="col-lg-1">
+                                <img src="origin_destination_icon.jpg" style={{ paddingTop: '0.5em' }} />
+                            </div>
+                            <div className="col-lg-11 origin_destination" >
+                                {HotelPickup}<br />
+                                {HotelDropoff}
+                            </div>
+                            
+                            <br />
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-12" style={{ lineHeight: '2em' }}>
                                 <div>
-                                    <hr style={{ marginTop: '10px' }} />
-                                    <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
+                                    <table className="review_details">
+                                        <tr>
+                                            <td>
+                                                <b>Pick up Date</b>
+                                            </td>
+                                            <td>
+                                                {moment(PickupDate).format('Do MMMM YYYY')} {PickupDisplayTime} 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <b>Drop off Date</b>
+                                            </td>
+                                            <td>
+                                                {moment(DropoffDate).format('Do MMMM YYYY')} {DropoffDisplayTime}
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
-                                :
-                                <div></div>
-                        }
+                            </div>
+                        </div>
+                        <br />
+                        <table className="table table-sm review_luggage">
+                            <thead>
+                                <tr style={{ textAlign: 'center' }}>
+                                    <th colspan="8">Luggage</th><th colspan="4">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style={{ textAlign: 'center' }}>
+                                    <td colspan="8">{Luggage}</td><td colspan="4"><b>${TotalCost}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div className="review_payment">
+                            <SquarePaymentForm appId={SQUARE_APP_ID} onNonceGenerated={this.handleNonce} onNonceError={this.handleNonceError} onRef={ref => (this.paymentForm = ref)} />
+                        </div>
+
                     </div>
 
                     <div align="center">
@@ -154,7 +165,6 @@ class HTHFInalReview extends Component {
                                     type="button"
                                     className="btn btn-primary btn-lg"
                                     onClick={this.Submit}
-                                    disabled={!this.state.PaymentMethod}
                                     style={{ width: '160px', marginLeft: '1em' }}
                                 >Submit Data
                                  </button>

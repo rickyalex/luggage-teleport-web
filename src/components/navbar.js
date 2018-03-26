@@ -82,7 +82,7 @@ class Navbar extends React.Component {
                 {
                   !token ? <div></div>
                     :
-                    <Link to="/history">History</Link>
+                    <Link to="/history">My Bookings</Link>
                 }
               </a>
               <a id="admin" className="menu-item">
@@ -104,10 +104,7 @@ class Navbar extends React.Component {
           </div>
           <div className="container">
             <a className="navbar-brand" href="https://www.luggageteleport.com" target="_blank">
-              <img
-                src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png"
-                alt
-              />
+              <img src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png" width="200" height="auto" alt/>
             </a>
           </div>
         </nav>
