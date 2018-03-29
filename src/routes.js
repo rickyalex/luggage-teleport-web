@@ -9,6 +9,7 @@ import ConfirmNewPassword from './components/confirm_new_password';
 import BookingForm from './components/booking_form';
 import EmailHandler from './components/email_handler';
 import History from './components/history';
+import Profile from './components/profile';
 import Admin from './components/admin';
 import AddLuggage from './components/add_luggage';
 import ATHFinalReview from './components/ath_final_review';
@@ -38,6 +39,7 @@ class Routes extends Component {
                         <Route path="/booking" component={BookingForm} />
                         <Route path="/emailhandler" component={EmailHandler} />
                         <Route path="/history" component={History} />
+                        <Route path="/profile" component={Profile} />
                         <Route path="/admin" component={Admin} />
                         <Route path="/athfinalreview" component={ATHFinalReview} />
                         <Route path="/htafinalreview" component={HTAFinalReview} />

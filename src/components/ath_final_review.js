@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PassBookData } from '../actions';
-import Navbar from './navbar';
+import FixedNavbar from './fixed_navbar';
 import '../App.css';
 import * as moment from 'moment';
 import axios from 'axios';
@@ -102,9 +102,9 @@ class ATHFinalReview extends Component {
             DropoffDisplayTime} = this.props.BookData[0];
         const { TotalCost, Luggage } = this.props.LuggageData;
         return (
-            <div className="bg-image">
+            <div>
                 <div>
-                  < Navbar />
+                  < FixedNavbar />
                 </div>
                 <div className="review_header">
                     <h3 style={{ color: 'white' }}>Booking Summary</h3>

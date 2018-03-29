@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from 'react-router-dom';
-import { LogUser } from '../actions';
+import { LogUser, ToggleSB } from '../actions';
 import { connect } from 'react-redux';
 import { USER_POOL_ID, CLIENT_ID } from '../config';
 import { CognitoUserPool } from "amazon-cognito-identity-js";
@@ -15,6 +15,11 @@ import { getCurrentUser, getUserToken } from '../aws_cognito';
 class FixedNavbar extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      sbState: 'menu'
+    }
+
   }
 
   signOutUser() {
@@ -38,6 +43,13 @@ class FixedNavbar extends React.Component {
     console.log('click ', e);
     if(e.key==1){ this.props.history.push('/') }
     else if(e.key==2){ this.props.history.push('/history') }
+  }
+
+  toggleSidebar(e){
+    e.preventDefault();
+    const { sbState } = this.state;
+    var css = (this.state.sbState === "menu") ? "menu show" : "menu";
+    this.setState({"sbState":css});
   }
 
   RenderLoginButton() {
@@ -74,14 +86,14 @@ class FixedNavbar extends React.Component {
         <a href="https://www.luggageteleport.com" target="_blank" className="header__logo">
           <img src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png" width="200" height="auto" alt/>
         </a>
-        <a href="#" class="header__icon" id="header__icon"></a>
+        <a href="#" onClick={this.toggleSidebar.bind(this)} class="header__icon" id="header__icon"></a>
         
-        <nav class="menu">
-          <a href="#">Book</a>|
-          <a href="#">My Bookings</a>|
-          <a href="#">LuggageTeleport.com</a>|
+        <nav className={this.state.sbState}>
+          <a href="#"><Link to="/">Book</Link></a>
+          <a href="#"><Link to="/history">My Bookings</Link></a>
+          <a href="https://www.luggageteleport.com">LuggageTeleport.com</a>
           <a href="#">Contact Us</a>
-          <a href="#" className="profile_link">Hi {currentUser.pool.storage.CustName}</a>
+          <a href="#" className="profile_link"><Link to="/profile">Hi {currentUser.pool.storage.CustName}</Link></a>
         </nav>
         
       </header>
@@ -96,4 +108,4 @@ function mapsStateToProps(state) {
   }
 }
 
-export default withRouter(connect(mapsStateToProps, null)(FixedNavbar));
+export default connect(mapsStateToProps, { ToggleSB })(FixedNavbar);

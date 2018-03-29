@@ -4,7 +4,8 @@ import {
     GET_AIRLINE_DATA,
     GET_AIRPORT_DATA,
     GET_HOTEL_DATA,
-    GET_LUGGAGE_DATA
+    GET_LUGGAGE_DATA,
+    TOGGLE_SB
 } from '../constants';
 
 export function LogUser(Email, PhoneNumber) {
@@ -57,6 +58,14 @@ export function GetLuggageData(TotalCost, Luggage) {
         type: GET_LUGGAGE_DATA,
         TotalCost,
         Luggage
+    }
+    return action;
+}
+
+export function ToggleSB(sbState) {
+    const action = {
+        type: TOGGLE_SB,
+        sbState
     }
     return action;
 }

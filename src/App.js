@@ -26,18 +26,18 @@ class App extends Component {
   render() {
     return (
       <div className="history-bg-image">
-        <ReactTooltip place="bottom" type="info" effect="solid"/>
-        <div className="site-container">
-          <div className="site-pusher">
-            < FixedNavbar />
-          </div>
-          <div className="site-content">
-            <div className="container">
-              <BookingForm />
+          <ReactTooltip place="bottom" type="info" effect="solid"/>
+          <div className="site-container">
+            <div className="site-pusher">
+              < FixedNavbar />
             </div>
+            <div className="site-content">
+              <div className="container">
+                <BookingForm />
+              </div>
+            </div>
+            <div className="site-cache" id="site-cache"></div>
           </div>
-          <div className="site-cache" id="site-cache"></div>
-        </div>
       </div>
     );
   }

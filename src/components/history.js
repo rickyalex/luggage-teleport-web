@@ -21,7 +21,7 @@ class History extends Component {
 
     render() {
         return (
-            <div className="bg-image">
+            <div>
                 < FixedNavbar />
                 <div className="review_header">
                     <h3 style={{ color: 'white' }}>My Bookings</h3>
