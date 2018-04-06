@@ -28,15 +28,14 @@ class App extends Component {
       <div className="history-bg-image">
           <ReactTooltip place="bottom" type="info" effect="solid"/>
           <div className="site-container">
-            <div className="site-pusher">
+            <div>
               < FixedNavbar />
             </div>
-            <div className="site-content">
+            <div>
               <div className="container">
                 <BookingForm />
               </div>
             </div>
-            <div className="site-cache" id="site-cache"></div>
           </div>
       </div>
     );

@@ -26,14 +26,12 @@ class AirportToHotel extends Component {
             HotelBookingRef: '',
             NameUnderHotelRsv: localStorage.getItem('CustName'),
             BookingType: 'ATH',
-            Luggage: 1,
+            Luggage: null,
             TotalCost: 0,
-            PickupTime: 1,
-            DropoffTime: 1,
-            PickupDate: '',
-            DropoffDate: '',
+            PickupDate: null,
+            DropoffDate: null,
             PickupDisplayTime: '00:00',
-            DropoffDisplayTime: '00:00'
+            DropoffDisplayTime: '04:00'
         }
 
         this.handleAirport = this.handleAirport.bind(this);
@@ -50,20 +48,19 @@ class AirportToHotel extends Component {
         const {
             Airport,
             Airline,
-            Hotel,
             FlightNumber,
             PickupDate,
-            DropoffDate,
-            HotelBookingRef,
+            Hotel,
             NameUnderHotelRsv,
+            HotelBookingRef,
+            DropoffDate,
             Luggage,
-            TotalCost,
             PickupDisplayTime,
             DropoffDisplayTime
         } = this.state;
 
         return (
-            Airport && Airline && Hotel && FlightNumber && PickupDate && PickupDisplayTime && HotelBookingRef && DropoffDate && DropoffDisplayTime && Luggage && TotalCost
+            Airport && Airline && Hotel && FlightNumber && PickupDate && PickupDisplayTime && HotelBookingRef && DropoffDate && DropoffDisplayTime && Luggage
         )
     }
 
@@ -77,8 +74,9 @@ class AirportToHotel extends Component {
 
     buttonSubmit() {
         return (
-            <Link to="/athfinalreview" style={{ color: 'black' }}>
+            <Link to="/finalreview" style={{ color: 'black' }}>
                 <Button 
+                    disabled={!this.ValidationForm()}
                     onClick={() => this.SubmitAirportToHotelData()}
                     type="primary">
                     Next

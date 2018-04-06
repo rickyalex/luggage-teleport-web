@@ -12,6 +12,7 @@ import History from './components/history';
 import Profile from './components/profile';
 import Admin from './components/admin';
 import AddLuggage from './components/add_luggage';
+import FinalReview from './components/final_review';
 import ATHFinalReview from './components/ath_final_review';
 import HTAFinalReview from './components/hta_final_review';
 import HTHFinalReview from './components/hth_final_review';
@@ -41,6 +42,7 @@ class Routes extends Component {
                         <Route path="/history" component={History} />
                         <Route path="/profile" component={Profile} />
                         <Route path="/admin" component={Admin} />
+                        <Route path="/finalreview" component={FinalReview} />
                         <Route path="/athfinalreview" component={ATHFinalReview} />
                         <Route path="/htafinalreview" component={HTAFinalReview} />
                         <Route path="/hthfinalreview" component={HTHFinalReview} />

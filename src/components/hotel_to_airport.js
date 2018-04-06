@@ -28,12 +28,12 @@ class HotelToAirport extends Component {
             FlightNumber: '',
             DropoffDate: '',
             BookingType: 'HTA',
-            Luggage: 1,
+            Luggage: null,
             TotalCost: 0,
-            PickupTime: 1,
-            DropoffTime: 1,
+            PickupDate: null,
+            DropoffDate: null,
             PickupDisplayTime: '00:00',
-            DropoffDisplayTime: '00:00'
+            DropoffDisplayTime: '04:00'
         }
 
         this.handleAirport = this.handleAirport.bind(this);
@@ -44,6 +44,24 @@ class HotelToAirport extends Component {
         this.handleDropoffDate = this.handleDropoffDate.bind(this);
         this.handleLuggage = this.handleLuggage.bind(this);
         this.onChange = (Hotel) => this.setState({ Hotel });
+    }
+
+    ValidationForm() {
+        const {
+            Hotel,
+            HotelBookingRef,
+            NameUnderHotelRsv,
+            PickupDate,
+            Airport,
+            Airline,
+            FlightNumber,
+            DropoffDate,
+            Luggage
+        } = this.state;
+
+        return (
+            Hotel && HotelBookingRef && NameUnderHotelRsv && PickupDate && Airport && Airline && FlightNumber && DropoffDate && Luggage
+        )
     }
 
     handleLuggage() {
@@ -63,8 +81,9 @@ class HotelToAirport extends Component {
 
     buttonSubmit() {
         return (
-            <Link to="/htafinalreview" style={{ color: 'black' }}>
+            <Link to="/finalreview" style={{ color: 'black' }}>
                 <Button 
+                    disabled={!this.ValidationForm()} 
                     onClick={() => this.SubmitHotelToAirportData()}
                     type="primary">
                     Next
@@ -135,41 +154,6 @@ class HotelToAirport extends Component {
 
     handleAirline(airline) {
         this.setState({ Airline: airline })
-    }
-
-    ValidationForm() {
-        const {
-            Hotel,
-            Airport,
-            Airline,
-            HotelBookingRef,
-            NameUnderHotelRsv,
-            PickupDatetime,
-            FlightNumber,
-            DropoffDateTime,
-        } = this.state
-
-        return (
-            Hotel && Airport && Airline && HotelBookingRef && FlightNumber && DropoffDateTime && NameUnderHotelRsv && PickupDatetime
-        )
-    }
-
-    buttonSubmit() {
-        return (
-            <Link to="/htafinalreview" style={{ color: 'black' }}>
-                <Button 
-                    onClick={() => this.SubmitAirportToHotelData()}
-                    type="primary">
-                    Next
-                </Button>
-            </Link>
-        )
-    }
-
-    SubmitHotelToAirportData() {
-        let datas = [];
-        datas.push(this.state);
-        this.props.PassBookData(datas);
     }
 
     componentWillMount() {

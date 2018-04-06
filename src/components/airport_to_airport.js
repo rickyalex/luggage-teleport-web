@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetAirportData, GetLuggageData } from '../actions';
 import '../App.css';
 import axios from 'axios';
+import * as moment from 'moment';
 import { inputProps, OrderASC, cssClasses, disabledDate } from './helper';
 import { TimePicker, Input, Button, Select, Slider, Row, Col, InputNumber, DatePicker, Icon } from 'antd';
 import { MdFlightTakeoff, MdPerson, MdHotel, MdLocalMall } from 'react-icons/lib/md';
-import * as moment from 'moment';
 
 const Option = Select.Option;
 
@@ -30,12 +30,12 @@ class AirportToAirport extends Component {
             DropoffFlightNumber: '',
             DropoffDateTime: '',
             BookingType: 'ATA',
-            Luggage: 1,
+            Luggage: null,
             TotalCost: 0,
-            PickupTime: 1,
-            DropoffTime: 1,
+            PickupDate: null,
+            DropoffDate: null,
             PickupDisplayTime: '00:00',
-            DropoffDisplayTime: '00:00'
+            DropoffDisplayTime: '04:00'
         }
 
         this.handlePickupAirport = this.handlePickupAirport.bind(this);
@@ -49,7 +49,7 @@ class AirportToAirport extends Component {
         this.handleLuggage = this.handleLuggage.bind(this);
     }
 
-    validationForm() {
+    ValidationForm() {
         const {
             AirportPickup,
             AirlinePickup,
@@ -59,11 +59,12 @@ class AirportToAirport extends Component {
             AirportDropoff,
             AirlineDropoff,
             DropoffFlightNumber,
-            DepartureTime
+            DepartureTime,
+            Luggage
         } = this.state;
 
         return (
-            AirportPickup && AirlinePickup && PickupFlightNumber && PickupDate && AirportDropoff && AirlineDropoff && DropoffFlightNumber
+            AirportPickup && AirlinePickup && PickupFlightNumber && PickupDate && AirportDropoff && AirlineDropoff && DropoffFlightNumber && Luggage
         )
     }
 
@@ -84,8 +85,9 @@ class AirportToAirport extends Component {
 
     buttonSubmit() {
         return (
-            <Link to="/atafinalreview" style={{ color: 'black' }}>
-                <Button 
+            <Link to="/finalreview" style={{ color: 'black' }}>
+                <Button
+                    disabled={!this.ValidationForm()} 
                     onClick={() => this.SubmitAirportToAirportData()}
                     type="primary">
                     Next
@@ -323,5 +325,5 @@ function mapsStateToProps(state) {
     }
 }
 
-export default connect(mapsStateToProps, { PassBookData, GetAirportData, GetAirlineData })(AirportToAirport);
+export default connect(mapsStateToProps, { PassBookData, GetAirportData, GetAirlineData, GetLuggageData })(AirportToAirport);
 

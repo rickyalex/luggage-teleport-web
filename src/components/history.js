@@ -5,6 +5,7 @@ import '../App.css';
 // import Navbar from './navbar';
 import FixedNavbar from './fixed_navbar';
 import CurrentBooking from './current_booking';
+import PastBooking from './past_booking';
 import HTAHistory from './hta_history';
 import HTHHistory from './hth_history';
 import ATAHistory from './ata_history';
@@ -42,8 +43,8 @@ class History extends Component {
                                 <TabPanel className="currentBookings">
                                     <CurrentBooking />
                                 </TabPanel>
-                                <TabPanel>
-                                    <HTAHistory />
+                                <TabPanel className="currentBookings">
+                                    <PastBooking />
                                 </TabPanel>
                             </div>
                         </Tabs>

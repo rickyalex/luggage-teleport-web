@@ -24,14 +24,12 @@ class HotelToHotel extends Component {
             HotelDropoffBookingRef: '',
             RsvpNameHotelDropoff: localStorage.getItem('CustName'),
             BookingType: 'HTH',
-            Luggage: 1,
+            Luggage: null,
             TotalCost: 0,
-            PickupTime: 1,
-            DropoffTime: 1,
-            PickupDate: '',
-            DropoffDate: '',
+            PickupDate: null,
+            DropoffDate: null,
             PickupDisplayTime: '00:00',
-            DropoffDisplayTime: '00:00'
+            DropoffDisplayTime: '04:00'
         }
         this.onChangePickUpHotel = (HotelPickup) => this.setState({ HotelPickup });
         this.onChangeDropOffHotel = (HotelDropoff) => this.setState({ HotelDropoff });
@@ -42,7 +40,7 @@ class HotelToHotel extends Component {
         this.handleLuggage = this.handleLuggage.bind(this);
     }
 
-    validationForm() {
+    ValidationForm() {
         const {
             HotelPickup,
             HotelPickupBookingRef,
@@ -51,17 +49,19 @@ class HotelToHotel extends Component {
             HotelDropoff,
             HotelDropoffBookingRef,
             RsvpNameHotelDropoff,
-            DropoffDate } = this.state;
+            DropoffDate,
+            Luggage } = this.state;
 
         return (
-            HotelPickup && HotelPickupBookingRef && PickupDate && HotelDropoff && HotelDropoffBookingRef && DropoffDate
+            HotelPickup && HotelPickupBookingRef && PickupDate && HotelDropoff && HotelDropoffBookingRef && DropoffDate && Luggage
         )
     }
 
     buttonSubmit() {
         return (
-            <Link to="/hthfinalreview" style={{ color: 'black' }}>
+            <Link to="/finalreview" style={{ color: 'black' }}>
                 <Button 
+                    disabled={!this.ValidationForm()} 
                     onClick={() => this.SubmitHotelToHotelData()}
                     type="primary">
                     Next

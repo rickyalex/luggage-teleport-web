@@ -5,6 +5,11 @@ import '../App.css';
 import axios from 'axios';
 import FixedNavbar from './fixed_navbar';
 import { Button, Icon, Input, Row, Col } from 'antd';
+import {
+    CognitoUserPool,
+    AuthenticationDetails,
+    CognitoUser
+} from "amazon-cognito-identity-js";
 import { MdPerson } from 'react-icons/lib/md';
 import { getCurrentUser } from '../aws_cognito';
 
@@ -20,6 +25,20 @@ class Profile extends Component {
             email: '',
             password: ''
         }
+    }
+
+    changePassword(){
+        // const user = new CognitoUser({ Username: email, Pool: userPool });
+        // const authenticationData = { Username: email, Password: password };
+        // const authenticationDetails = new AuthenticationDetails(authenticationData);
+        // const oldPassword = 
+        // user.changePassword(oldPassword, newPassword, function(err, result) {
+        //     if (err) {
+        //         alert(err);
+        //         return;
+        //     }
+        //     console.log('call result: ' + result);
+        // });
     }
 
     componentWillMount() {

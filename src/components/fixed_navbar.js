@@ -17,8 +17,11 @@ class FixedNavbar extends React.Component {
     super(props);
 
     this.state = {
-      sbState: 'menu'
+      sbState: 'menu',
+      navState: 'home'
     }
+
+    //this.setNavState = this.setNavState.bind(this);
 
   }
 
@@ -43,6 +46,10 @@ class FixedNavbar extends React.Component {
     console.log('click ', e);
     if(e.key==1){ this.props.history.push('/') }
     else if(e.key==2){ this.props.history.push('/history') }
+  }
+
+  setNavState(value){
+    console.log(value)
   }
 
   toggleSidebar(e){
@@ -81,22 +88,36 @@ class FixedNavbar extends React.Component {
     const currentUser = getCurrentUser();
     const {Header} = Layout;
     return (
-      <header className="header">
-         
-        <a href="https://www.luggageteleport.com" target="_blank" className="header__logo">
-          <img src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png" width="200" height="auto" alt/>
-        </a>
-        <a href="#" onClick={this.toggleSidebar.bind(this)} class="header__icon" id="header__icon"></a>
-        
-        <nav className={this.state.sbState}>
-          <a href="#"><Link to="/">Book</Link></a>
-          <a href="#"><Link to="/history">My Bookings</Link></a>
-          <a href="https://www.luggageteleport.com">LuggageTeleport.com</a>
-          <a href="#">Contact Us</a>
-          <a href="#" className="profile_link"><Link to="/profile">Hi {currentUser.pool.storage.CustName}</Link></a>
+<nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+          <a className="navbar-brand" href="https://www.luggageteleport.com" target="_blank">
+            <img src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png" width="200" height="auto" alt/>
+          </a>
+          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav mr-auto ml-auto">
+              <li className="nav-item" >
+                <Link className="nav-link" to="/">Home</Link>
+              </li>
+              <li className="nav-item" >
+                <Link className="nav-link" to="/history">My Bookings</Link>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="https://www.luggageteleport.com">LuggageTeleport.com</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#">Contact Us</a>
+              </li>
+            </ul>
+            <div className="form-inline " style={{ width: '100px', marginLeft: '100px' }}>
+              <Link style={{ color: 'rgba(255,255,255,.5)' }} to="/profile">Hi {currentUser.pool.storage.CustName}</Link>
+            </div>
+          </div>
         </nav>
         
-      </header>
+      
     );
   }
 }

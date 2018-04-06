@@ -9,7 +9,7 @@ import { OrderASC, getStatus } from './helper';
 import 'react-table/react-table.css';
 
 
-class CurrentBooking extends Component {
+class PastBooking extends Component {
 
     constructor(props) {
         super(props);
@@ -36,71 +36,65 @@ class CurrentBooking extends Component {
             let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-get/${Email}`;
             axios.get(url)
                 .then((res) => {
-                    if(res.data.result.length > 0){
-                        for(var key in res.data.result){
-                            if(key !== 'completed'){
-                                res.data.result.splice(key,1)
+                    let data = res.data.result
+                    if(data.length > 0){
+                        for(var i = 0; i < data.length; i++){
+                            if(String(data[i].status).toLowerCase() == "completed"){
+                                OrderASC(data, 'date');
+                                this.setState({ data: [...this.state.data, data[i]] })    
                             }
-                        }
-                        OrderASC(res.data.result, 'date');
-                        this.setState({ data: res.data.result, isLoading: true })   
+                        } 
                     }
                 }).catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 })
 
             url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToAirport-get/${Email}`;
             axios.get(url)
                 .then((res2) => {
-                    if(res2.data.result.length > 0){
-                        for(var key in res2.data.result){
-                            if(key !== 'completed'){
-                                res2.data.result.splice(key,1)
+                    let data = res2.data.result
+                    if(data.length > 0){
+                        for(var i = 0; i < data.length; i++){
+                            if(String(data[i].status).toLowerCase() == "completed"){
+                                OrderASC(data, 'date');
+                                this.setState({ data: [...this.state.data, data[i]] })    
                             }
-                        }
-                        OrderASC(res2.data.result, 'date');
-                        for(var i=0;i<res2.data.result.length;i++){
-                            this.setState({ data: [...this.state.data, res2.data.result[i]] })    
                         }
                     }      
                 }).catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 })
             
             url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/HotelToAirport-get/${Email}`;
             axios.get(url)
                 .then((res3) => {
-                    if(res3.data.result.length > 0){
-                        for(var key in res3.data.result){
-                            if(key !== 'completed'){
-                                res3.data.result.splice(key,1)
+                    let data = res3.data.result
+                    if(data.length > 0){
+                        for(var i = 0; i < data.length; i++){
+                            if(String(data[i].status).toLowerCase() == "completed"){
+                                OrderASC(data, 'date');
+                                this.setState({ data: [...this.state.data, data[i]] })    
                             }
-                        }
-                        OrderASC(res3.data.result, 'date');
-                        for(var i=0;i<res3.data.result.length;i++){
-                            this.setState({ data: [...this.state.data, res3.data.result[i]] })    
                         }
                     }      
                 }).catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 })
 
             url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/HotelToHotel-get/${Email}`;
             axios.get(url)
                 .then((res4) => {
-                    if(res4.data.result.length > 0){
-                        for(var key in res4.data.result){
-                            if(key !== 'completed'){
-                                res4.data.result.splice(key,1)
+                    let data = res4.data.result
+                    if(data.length > 0){
+                        for(var i = 0; i < data.length; i++){
+                            if(String(data[i].status).toLowerCase() == "completed"){
+                                OrderASC(data, 'date');
+                                this.setState({ data: [...this.state.data, data[i]] })    
                             }
-                        }
-                        OrderASC(res4.data.result, 'date');
-                        for(var i=0;i<res4.data.result.length;i++){
-                            this.setState({ data: [...this.state.data, res4.data.result[i]] })    
                         }
                     }    
                 }).catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 })
     }
 
@@ -108,10 +102,11 @@ class CurrentBooking extends Component {
     render() {
         const { data, isLoading } = this.state;
         let r = '';
+        console.log({data})
         return(
                 <div>
                     {
-                        data.map((datas, i) =>  
+                        (data.length > 0) ? data.map((datas, i) =>  
                             <div style={{ padding: '10px', margin: '0', height: '130px' }} className={i%2==0 ? "row odd" : "row even"}>
                                 <div className="col-lg-9">
                                     <div className="row">
@@ -169,7 +164,7 @@ class CurrentBooking extends Component {
                                     </span>
                                 </div>
                             </div>
-                        )}
+                        ) : ''
                     }
                 </div>
         )
@@ -183,4 +178,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, null)(CurrentBooking);
+export default connect(mapStateToProps, null)(PastBooking);
