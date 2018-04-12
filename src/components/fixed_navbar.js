@@ -108,7 +108,7 @@ class FixedNavbar extends React.Component {
                 <a className="nav-link" href="https://www.luggageteleport.com">LuggageTeleport.com</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">Contact Us</a>
+                <a className="nav-link" href="https://www.luggageteleport.com/contact-us/">Contact Us</a>
               </li>
             </ul>
             <div className="form-inline " style={{ width: '100px', marginLeft: '100px' }}>

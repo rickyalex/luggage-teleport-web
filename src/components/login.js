@@ -90,7 +90,7 @@ class Login extends Component {
     render() {
         const { isLoading } = this.state;
         return (
-            <div className="bg-image">
+            <div>
                 <Form onSubmit={this.handleSubmit} className="login-form form-auth">
                     <div>
                         <img

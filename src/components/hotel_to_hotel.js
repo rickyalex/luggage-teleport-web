@@ -15,21 +15,23 @@ class HotelToHotel extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            Email: '',
-            PhoneNumber: '',
-            HotelPickup: '',
-            HotelPickupBookingRef: '',
+            Email: this.props.user.Email || '',
+            PhoneNumber: this.props.user.PhoneNumber || '',
+            HotelPickup: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].HotelPickup : '' || '',
+            HotelPickupBookingRef: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].HotelPickupBookingRef : '' || '',
             RsvpNameHotelPickup: localStorage.getItem('CustName'),
-            HotelDropoff: '',
-            HotelDropoffBookingRef: '',
+            HotelDropoff: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].HotelDropoff : '' || '',
+            HotelDropoffBookingRef: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].HotelDropoffBookingRef : '' || '',
             RsvpNameHotelDropoff: localStorage.getItem('CustName'),
             BookingType: 'HTH',
-            Luggage: null,
-            TotalCost: 0,
-            PickupDate: null,
-            DropoffDate: null,
-            PickupDisplayTime: '00:00',
-            DropoffDisplayTime: '04:00'
+            Luggage: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].Luggage : null || null,
+            TotalCost: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].TotalCost : 0 || 0,
+            PickupTime: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].PickupTime : 1 || 1,
+            DropoffTime: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].DropoffTime : 9 || 9,
+            PickupDate: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].PickupDate.split('T')[0] : null || null,
+            DropoffDate: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].DropoffDate.split('T')[0] : null || null,
+            PickupDisplayTime: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].PickupDisplayTime : '00:00' || '00:00',
+            DropoffDisplayTime: (this.props.BookData[0].BookingType == 'HTH') ? this.props.BookData[0].DropoffDisplayTime : '04:00' || '04:00',
         }
         this.onChangePickUpHotel = (HotelPickup) => this.setState({ HotelPickup });
         this.onChangeDropOffHotel = (HotelDropoff) => this.setState({ HotelDropoff });
@@ -114,6 +116,7 @@ class HotelToHotel extends Component {
     handlePickupChangeTime(value) {
         let formattedPickupTime = '';
         let formattedDropoffTime = '';
+        let dropoffvalue = value+8;
         if(value%2==1) { 
             formattedPickupTime = Math.floor((value/2)).toString()+':30';
             formattedDropoffTime = ((value+8)>48) ? Math.floor(((value+8-48)/2)).toString()+':30' : Math.floor(((value+8)/2)).toString()+':30';  
@@ -124,6 +127,7 @@ class HotelToHotel extends Component {
         }
         this.setState({
           PickupTime: value,
+          DropoffTime: dropoffvalue,
           PickupDisplayTime: formattedPickupTime,
           DropoffDisplayTime: formattedDropoffTime
         });
@@ -145,6 +149,7 @@ class HotelToHotel extends Component {
     }
 
     render() {
+        const dateFormat = 'YYYY-MM-DD';
         return (
             <div className="polaroid">
                 <div className="container">
@@ -157,6 +162,7 @@ class HotelToHotel extends Component {
                     />
                     <hr />
                     <Input
+                        defaultValue={this.state.HotelPickupBookingRef}
                         prefix={<MdHotel style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
                         placeholder="Hotel Pick up Booking Reference"
                         onChange={e => this.setState({ HotelPickupBookingRef: e.target.value })}
@@ -175,6 +181,7 @@ class HotelToHotel extends Component {
                                 className="dp"
                                 format="YYYY-MM-DD"
                                 disabledDate={disabledDate}
+                                defaultValue={(this.state.PickupDate != null) ? moment(this.state.PickupDate, dateFormat) : null} format={dateFormat}
                                 onChange={this.handlePickupDate}
                                 placeholder="Pick up Date"/>
                         </Col>
@@ -186,7 +193,9 @@ class HotelToHotel extends Component {
                           />
                         </Col>
                         <Col span={12} className="timeInput">
-                            <Slider step={1} max={48} onChange={this.handlePickupChangeTime} value={this.state.PickupTime} tipFormatter={null} />
+                            {
+                                (this.props.BookData[0].BookingType == 'HTH') ? <Slider step={1} max={48} defaultValue={this.state.PickupTime} onChange={this.handlePickupChangeTime} value={this.state.PickupTime} tipFormatter={null} /> : <Slider step={1} max={48} onChange={this.handlePickupChangeTime} value={this.state.PickupTime} tipFormatter={null} />
+                            }
                         </Col>
                         
                     </Row>
@@ -197,6 +206,7 @@ class HotelToHotel extends Component {
                     />
                     <hr />
                     <Input
+                        defaultValue={this.state.HotelDropoffBookingRef}
                         prefix={<MdHotel style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
                         placeholder="Hotel Drop off Booking Reference"
                         onChange={e => this.setState({ HotelDropoffBookingRef: e.target.value })}
@@ -215,6 +225,7 @@ class HotelToHotel extends Component {
                                 className="dp"
                                 format="YYYY-MM-DD"
                                 disabledDate={disabledDate}
+                                defaultValue={(this.state.DropoffDate != null) ? moment(this.state.DropoffDate, dateFormat) : null} format={dateFormat}
                                 onChange={this.handleDropoffDate}
                                 placeholder="Drop Off Date" />
                         </Col>
@@ -226,7 +237,9 @@ class HotelToHotel extends Component {
                           />
                         </Col>
                         <Col span={12} className="timeInput">
-                            <Slider step={1} min={1} max={48} onChange={this.handleDropoffChangeTime} value={this.state.DropoffTime} tipFormatter={null} />
+                            {
+                                (this.props.BookData[0].BookingType == 'HTH') ? <Slider step={1} min={1} max={48} defaultValue={this.state.DropoffTime} onChange={this.handleDropoffChangeTime} value={this.state.DropoffTime} tipFormatter={null} /> : <Slider step={1} min={1} max={48} onChange={this.handleDropoffChangeTime} value={this.state.DropoffTime} tipFormatter={null} />
+                            }
                         </Col>
                         
                     </Row>
@@ -235,6 +248,7 @@ class HotelToHotel extends Component {
                         size="medium" 
                         min={1}  
                         placeholder="Luggage Quantity"
+                        defaultValue={this.state.Luggage}
                         onChange={e => this.setState({ Luggage: e })} 
                     />
                     <hr />
@@ -248,9 +262,10 @@ class HotelToHotel extends Component {
 }
 
 function mapsStateToProps(state) {
-    const { user } = state;
+    const { user, BookData } = state;
     return {
-        user
+        user,
+        BookData
     }
 }
 

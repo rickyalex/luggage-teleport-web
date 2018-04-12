@@ -25,6 +25,8 @@ class Profile extends Component {
             email: '',
             password: ''
         }
+
+        this.SubmitProfileData = this.SubmitProfileData.bind(this);
     }
 
     changePassword(){
@@ -43,6 +45,7 @@ class Profile extends Component {
 
     componentWillMount() {
         //this.GetUserData()
+        
     }
 
     // async GetUserData() {
@@ -58,8 +61,15 @@ class Profile extends Component {
     //             })
     // }
 
-    SubmitProfileData(){
+    readFile(file){
 
+        console.log(file);
+    }
+
+    SubmitProfileData(e){
+        e.preventDefault();
+        const file = this.fileUpload.files[0];
+        console.log(file);
     }
 
 
@@ -76,7 +86,14 @@ class Profile extends Component {
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="profilePicture">
-                                    <img src="img/founder.png" />
+                                    <input 
+                                        id="myInput" 
+                                        type="file" 
+                                        accept="image/*"
+                                        onChange={ this.readFile } 
+                                        ref={(ref) => this.fileUpload = ref} 
+                                        style={{ display: 'none' }} />
+                                    <img src="img/founder.png" onClick={(e) => this.fileUpload.click() } style={{ cursor: 'pointer'}}/>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +133,7 @@ class Profile extends Component {
                                     </Row>
                                     <Link to="/" style={{ color: 'black' }}>
                                         <Button 
-                                            onClick={() => this.SubmitProfileData()}
+                                            onClick={(e) => this.SubmitProfileData(e)}
                                             type="primary" style={{ margin: '20px auto', display: 'block' }}>
                                             Save Profile
                                         </Button>

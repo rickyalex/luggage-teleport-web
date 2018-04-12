@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { PassBookData } from '../actions';
+import { PassBookData, GetLuggageData } from '../actions';
 import FixedNavbar from './fixed_navbar';
 import '../App.css';
 import * as moment from 'moment';
@@ -12,6 +12,8 @@ import { BookingId, GetPayment } from './helper';
 class FinalReview extends Component {
     constructor(props) {
         super(props);
+
+        console.log(this.props);
 
         this.state = {
             isLoading: false,
@@ -29,8 +31,10 @@ class FinalReview extends Component {
 
 
     PushData() {
-        const { dispatch } = this.props;
-        dispatch(PassBookData(this.props.BookData));
+        //const { dispatch } = this.props;
+        //dispatch(PassBookData(this.props.BookData));
+        this.props.PassBookData(this.props.BookData);
+        this.props.GetLuggageData(this.props.LuggageData);
     }
     async backToAddLuggage() {
         this.PushData()
@@ -280,4 +284,4 @@ function mapStateToProps(state) {
         LuggageData
     }
 }
-export default connect(mapStateToProps, null)(FinalReview);
+export default connect(mapStateToProps, {PassBookData, GetLuggageData})(FinalReview);
