@@ -595,6 +595,17 @@ table.review_luggage thead th,
    display:block;
 }
 
+.luggage-blue{
+  background-color: #2a6fb3;
+  color: #2a6fb3;
+}
+
+.luggage-yellow{
+  background-color: #f1cf46;
+  color: black;
+}
+
+
 /* end header styles */
 
 /* profile styles */

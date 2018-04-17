@@ -88,7 +88,7 @@ class FixedNavbar extends React.Component {
     const currentUser = getCurrentUser();
     const {Header} = Layout;
     return (
-<nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav className="navbar navbar-expand-lg navbar-dark luggage-blue">
           <a className="navbar-brand" href="https://www.luggageteleport.com" target="_blank">
             <img src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png" width="200" height="auto" alt/>
           </a>
