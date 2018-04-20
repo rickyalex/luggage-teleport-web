@@ -5,7 +5,7 @@ import { PassBookData, GetAirlineData, GetAirportData, GetLuggageData } from '..
 import '../App.css';
 import axios from 'axios';
 import * as moment from 'moment';
-import { inputProps, OrderASC, cssClasses, disabledDate } from './helper';
+import { inputProps, OrderASC, cssClasses, disabledDate, disabledHours, disabledDropoffHours } from './helper';
 import { TimePicker, Input, Button, Select, Slider, Row, Col, InputNumber, DatePicker, Icon } from 'antd';
 import { MdFlightTakeoff, MdPerson, MdHotel, MdLocalMall } from 'react-icons/lib/md';
 
@@ -18,23 +18,20 @@ class AirportToAirport extends Component {
         this.state = {
             Email: this.props.user.Email || '',
             PhoneNumber: this.props.user.PhoneNumber || '',
-            dateType: 'text',
-            timeType: 'text',
-            AirportPickup: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].AirportPickup : '' || '',
-            AirlinePickup: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].AirlinePickup : '' || '',
-            PickupFlightNumber: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].PickupFlightNumber : '' || '',
-            AirportDropoff: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].AirportDropoff : '' || '',
-            AirlineDropoff: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].AirlineDropoff : ''  || '',
-            DropoffFlightNumber: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].DropoffFlightNumber : ''  || '',
+            AirportPickup: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? props.BookData[0].AirportPickup : '' : '' || '',
+            AirlinePickup: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? props.BookData[0].AirlinePickup : '' : '' || '',
+            PickupFlightNumber: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? props.BookData[0].PickupFlightNumber : '' : '' || '',
+            AirportDropoff: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? props.BookData[0].AirportDropoff : '' : '' || '',
+            AirlineDropoff: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? props.BookData[0].AirlineDropoff : '' : '' || '',
+            DropoffFlightNumber: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? props.BookData[0].DropoffFlightNumber : '' : '' || '',
             BookingType: 'ATA',
-            Luggage: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].Luggage : null || null,
-            TotalCost: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].TotalCost : 0 || 0,
-            PickupTime: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].PickupTime : 1 || 1,
-            DropoffTime: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].DropoffTime : 9 || 9,
-            PickupDate: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].PickupDate.split('T')[0] : null || null,
-            DropoffDate: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].DropoffDate.split('T')[0] : '' || null,
-            PickupDisplayTime: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].PickupDisplayTime : '00:00' || '00:00',
-            DropoffDisplayTime: (this.props.BookData[0].BookingType == 'ATA') ? this.props.BookData[0].DropoffDisplayTime : '04:00' || '04:00',
+            Luggage: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? props.BookData[0].Luggage : null : null || null,
+            TotalCost: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? props.BookData[0].TotalCost : 0 : 0 || 0,
+            PickupTime: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? moment(props.BookData[0].PickupTime) : '' : '' || '',
+            DropoffTime: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? moment(props.BookData[0].DropoffTime) : '' : '' || '',
+            PickupDate: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? moment(props.BookData[0].PickupDate) : null : null || null,
+            DropoffDate: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATA') ? moment(props.BookData[0].DropoffDate) : null : null || null,
+            PickupTimeOpen: false
         }
 
         this.handlePickupAirport = this.handlePickupAirport.bind(this);
@@ -125,41 +122,6 @@ class AirportToAirport extends Component {
         this.setState({ Email, PhoneNumber })
     }
 
-    handlePickupChangeTime(value) {
-        let formattedPickupTime = '';
-        let formattedDropoffTime = '';
-        let dropoffvalue = value+8;
-        if(value%2==1) { 
-            formattedPickupTime = Math.floor((value/2)).toString()+':30';
-            formattedDropoffTime = ((value+8)>48) ? Math.floor(((value+8-48)/2)).toString()+':30' : Math.floor(((value+8)/2)).toString()+':30';  
-        }
-        else{ 
-            formattedPickupTime = (value/2).toString()+':00';
-            formattedDropoffTime = ((value+8)>48) ? ((value+8-48)/2).toString()+':00' : ((value+8)/2).toString()+':00' ;
-        }
-        this.setState({
-          PickupTime: value,
-          DropoffTime: dropoffvalue,
-          PickupDisplayTime: formattedPickupTime,
-          DropoffDisplayTime: formattedDropoffTime
-        });
-    }
-
-    handleDropoffChangeTime(value) {
-
-        let formattedDropoffTime = '';
-        if(value%2==1) { 
-            formattedDropoffTime = Math.floor((value/2)).toString()+':30';
-        }
-        else{ 
-            formattedDropoffTime = (value/2).toString()+':00';
-        }
-        this.setState({
-          DropoffTime: value,
-          DropoffDisplayTime: formattedDropoffTime
-        });
-    }
-
     handlePickupDate(value) {
         const { PickupDate, DropoffDate } = this.state;
         this.setState({
@@ -190,6 +152,45 @@ class AirportToAirport extends Component {
         this.setState({ AirlineDropoff: airlineDropoff })
     }
 
+    handlePickupChangeTime(value) {
+        let dropoff = moment(value).add(4, 'hours');
+
+        this.setState({
+          PickupTime: value,
+          DropoffTime: dropoff
+        });
+    }
+
+    handleDropoffChangeTime(value) {
+        this.setState({
+          DropoffTime: value
+        });
+    }
+
+    handlePickupTimeOpenChange = (open) => {
+        this.setState({ 
+            PickupTimeOpen: open 
+        });
+    }
+
+    handlePickupClose = () => this.setState({ 
+        PickupTimeOpen: false,
+        DropoffTime: moment(this.state.PickupTime).add(4,'hours')
+    })
+
+    handleDropoffTimeOpenChange = (open) => {
+        this.setState({ 
+            DropoffTimeOpen: open 
+        });
+    }
+
+    handleDropoffClose = () => this.setState({ 
+        // if(moment(this.state.PickupTime).isBefore(moment(this.state.DropoffTime))){
+
+        // }
+        DropoffTimeOpen: false
+    })
+
     render() {
         const dateFormat = 'YYYY-MM-DD';
         return (
@@ -199,8 +200,8 @@ class AirportToAirport extends Component {
                         * Airport A Section
                     */}
                     {
-                        (this.props.BookData[0].BookingType == 'ATA') ? <Select
-                        placeholder="Choose Airport for Pickup"
+                        (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATA') ? <Select
+                        placeholder="Airport of pick up"
                         onChange={this.handlePickupAirport}
                         defaultValue={this.state.AirportPickup}>
                         {
@@ -211,7 +212,17 @@ class AirportToAirport extends Component {
                             })
                         }
                     </Select> : <Select
-                        placeholder="Choose Airport for Pickup"
+                        placeholder="Airport of pick up"
+                        onChange={this.handlePickupAirport}>
+                        {
+                            this.props.AirportData.map((airport) => {
+                                return (
+                                    <Option key={airport.id} value={airport.name} style={{ width: 400 }}>{airport.name}</Option>
+                                )
+                            })
+                        }
+                    </Select> : <Select
+                        placeholder="Airport of pick up"
                         onChange={this.handlePickupAirport}>
                         {
                             this.props.AirportData.map((airport) => {
@@ -224,8 +235,8 @@ class AirportToAirport extends Component {
                     }
                     <hr />
                     {
-                        (this.props.BookData[0].BookingType == 'ATA') ? <Select
-                        placeholder="Choose Airline"
+                        (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATA') ? <Select
+                        placeholder="Airline"
                         onChange={this.handlePickupAirline}
                         defaultValue={this.state.AirlinePickup}>
                         {
@@ -236,7 +247,17 @@ class AirportToAirport extends Component {
                             })
                         }
                     </Select> : <Select
-                        placeholder="Choose Airline"
+                        placeholder="Airline"
+                        onChange={this.handlePickupAirline}>
+                        {
+                            this.props.AirlineData.map((airline) => {
+                                return (
+                                    <Option key={airline.id} value={airline.name} style={{ width: 400 }}>{airline.name}</Option>
+                                )
+                            })
+                        }
+                    </Select> : <Select
+                        placeholder="Airline"
                         onChange={this.handlePickupAirline}>
                         {
                             this.props.AirlineData.map((airline) => {
@@ -265,25 +286,27 @@ class AirportToAirport extends Component {
                                 defaultValue={(this.state.PickupDate != null) ? moment(this.state.PickupDate, dateFormat) : null} format={dateFormat}
                                 placeholder="Pick up Date"/>
                         </Col>
-                        <Col span={12} className="timeInput">
-                          <Input
-                            className="TimeDisplayer"
-                            value={this.state.PickupDisplayTime}
-                            onChange={this.handlePickupChangeTime}
-                          />
+                        <Col span={12}>
+                            <TimePicker 
+                                use12Hours 
+                                disabledHours={disabledHours} 
+                                defaultValue={this.state.PickupTime} 
+                                format="h:mm A" 
+                                minuteStep={15} 
+                                onChange={this.handlePickupChangeTime}
+                                open={this.state.PickupTimeOpen}
+                                onOpenChange={this.handlePickupTimeOpenChange}
+                                addon={() => (
+                                  <Button type="primary timePickerButton" onClick={this.handlePickupClose}>
+                                    Ok
+                                  </Button>
+                                )}/>
                         </Col>
-                        <Col span={12} className="timeInput">
-                            {
-                                (this.props.BookData[0].BookingType == 'ATA') ? <Slider step={1} max={48} defaultValue={this.state.PickupTime} onChange={this.handlePickupChangeTime} value={this.state.PickupTime} tipFormatter={null} /> : <Slider step={1} max={48} onChange={this.handlePickupChangeTime} value={this.state.PickupTime} tipFormatter={null} />
-                            }
-                            
-                        </Col>
-                        
                     </Row>
                     <hr />
                     {
-                        (this.props.BookData[0].BookingType == 'ATA') ? <Select
-                        placeholder="Choose Airport for Drop off"
+                        (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATA') ? <Select
+                        placeholder="Airport of delivery"
                         onChange={this.handleDropoffAirport}
                         defaultValue={this.state.AirportDropoff}>
                         {
@@ -294,7 +317,17 @@ class AirportToAirport extends Component {
                             })
                         }
                     </Select> : <Select
-                        placeholder="Choose Airport for Drop off"
+                        placeholder="Airport of delivery"
+                        onChange={this.handleDropoffAirport}>
+                        {
+                            this.props.AirportData.map((airport) => {
+                                return (
+                                    <Option key={airport.id} value={airport.name} style={{ width: 400 }}>{airport.name}</Option>
+                                )
+                            })
+                        }
+                    </Select> : <Select
+                        placeholder="Airport of delivery"
                         onChange={this.handleDropoffAirport}>
                         {
                             this.props.AirportData.map((airport) => {
@@ -307,8 +340,8 @@ class AirportToAirport extends Component {
                     }
                     <hr />
                     {
-                        (this.props.BookData[0].BookingType == 'ATA') ? <Select
-                        placeholder="Choose Airline"
+                        (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATA') ? <Select
+                        placeholder="Airline"
                         onChange={this.handleDropoffAirline}
                         defaultValue={this.state.AirlineDropoff}>
                         {
@@ -319,7 +352,17 @@ class AirportToAirport extends Component {
                             })
                         }
                     </Select> : <Select
-                        placeholder="Choose Airline"
+                        placeholder="Airline"
+                        onChange={this.handleDropoffAirline}>
+                        {
+                            this.props.AirlineData.map((airline) => {
+                                return (
+                                    <Option key={airline.id} value={airline.name} style={{ width: 400 }}>{airline.name}</Option>
+                                )
+                            })
+                        }
+                    </Select> : <Select
+                        placeholder="Airline"
                         onChange={this.handleDropoffAirline}>
                         {
                             this.props.AirlineData.map((airline) => {
@@ -347,19 +390,23 @@ class AirportToAirport extends Component {
                                 disabledDate={disabledDate}
                                 onChange={this.handleDropoffDate}
                                 defaultValue={(this.state.DropoffDate != null) ? moment(this.state.DropoffDate, dateFormat) : null} format={dateFormat}
-                                placeholder="Drop Off Date" />
+                                placeholder="Delivery Date" />
                         </Col>
-                        <Col span={12} className="timeInput">
-                          <Input
-                            className="TimeDisplayer"
-                            value={this.state.DropoffDisplayTime}
-                            onChange={this.handleDropoffChangeTime}
-                          />
-                        </Col>
-                        <Col span={12} className="timeInput">
-                            {
-                                (this.props.BookData[0].BookingType == 'ATA') ? <Slider step={1} min={1} max={48} defaultValue={this.state.DropoffTime} onChange={this.handleDropoffChangeTime} value={this.state.DropoffTime} tipFormatter={null} /> : <Slider step={1} min={1} max={48} onChange={this.handleDropoffChangeTime} value={this.state.DropoffTime} tipFormatter={null} />
-                            }
+                        <Col span={12}>
+                            <TimePicker 
+                                use12Hours 
+                                disabledHours={disabledDropoffHours} 
+                                defaultValue={this.state.DropoffTime} 
+                                format="h:mm A" 
+                                minuteStep={15} 
+                                onChange={this.handleDropoffChangeTime}
+                                open={this.state.DropoffTimeOpen}
+                                onOpenChange={this.handleDropoffTimeOpenChange}
+                                addon={() => (
+                                  <Button type="primary timePickerButton" onClick={this.handleDropoffClose}>
+                                    Ok
+                                  </Button>
+                                )}/>
                         </Col>
                         
                     </Row>
@@ -367,7 +414,7 @@ class AirportToAirport extends Component {
                     <InputNumber 
                         size="medium" 
                         min={1}  
-                        placeholder="Luggage Quantity"
+                        placeholder="Number of luggage"
                         defaultValue={this.state.Luggage}
                         onChange={e => this.setState({ Luggage: e })} 
                     />

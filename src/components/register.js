@@ -9,7 +9,7 @@ import {
     AuthenticationDetails,
     CognitoUser
 } from "amazon-cognito-identity-js";
-import { Input, Form } from 'antd';
+import { Input, Form, Row, Col, Button } from 'antd';
 import '../App.css';
 
 const FormItem = Form.Item;
@@ -29,7 +29,10 @@ class Register extends Component {
             error: {
                 message: ''
             },
-            isLoading: false
+            isLoading: false,
+            FirstName: '',
+            LastName: '',
+            countryCode: ''
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -83,8 +86,10 @@ class Register extends Component {
         this.setState({ isLoading: true })
         const phoneNumber = this.state.phone_number.replace(/\s/g, '')
         localStorage.setItem('EmailRegist', `${this.state.email}`);
+        let name = this.state.FirstName+' '+this.state.LastName;
+        let phone = this.state.countryCode+phoneNumber;
         try {
-            const newUser = await this.signup(this.state.name, this.state.email, phoneNumber, this.state.password);
+            const newUser = await this.signup(name, this.state.email, phone, this.state.password);
             alert('Thank you for the registration. We have sent a verification email to your email address')
             this.props.history.push('/verify');
         } catch (e) {
@@ -101,13 +106,19 @@ class Register extends Component {
         const { isLoading } = this.state;
         return (
             <div align="center">
-                    <Form onSubmit={this.handleSubmit} style={{marginTop: "100px"}}>
+                    <Form onSubmit={this.handleSubmit} style={{position: 'relative', top: "100px", margin: 'auto'}}>
                         <h3 style={{ color: 'yellow'}}>Register your Account</h3>
                         <FormItem style={{ width: '280px' }}>
                             <Input
                                 type="text"
-                                onChange={e => this.setState({ name: e.target.value })}
-                                placeholder="Full Name" />
+                                onChange={e => this.setState({ FirstName: e.target.value })}
+                                placeholder="First Name" />
+                        </FormItem>
+                        <FormItem style={{ width: '280px' }}>
+                            <Input
+                                type="text"
+                                onChange={e => this.setState({ LastName: e.target.value })}
+                                placeholder="Last Name" />
                         </FormItem>
                         <FormItem style={{ width: '280px' }}>
                             <Input
@@ -115,12 +126,19 @@ class Register extends Component {
                                 onChange={e => this.setState({ email: e.target.value })}
                                 placeholder="Email" />
                         </FormItem>
-                        <FormItem style={{ width: '280px' }}>
-                            <Input
-                                type="text"
-                                onChange={e => this.setState({ phone_number: e.target.value })}
-                                placeholder="Phone Number, ex: +1XXXXXXXX" />
-                        </FormItem>
+                                <FormItem style={{ display: 'inline-block', width: '50px', marginRight: '5px' }}>
+                                    <Input
+                                        type="text"
+                                        onChange={e => this.setState({ countryCode: e.target.value })}
+                                        placeholder="+1" />
+                                </FormItem>
+                                <FormItem style={{ display: 'inline-block', width: '225px' }}>
+                                    <Input
+                                        type="text"
+                                        onChange={e => this.setState({ phone_number: e.target.value })}
+                                        placeholder="Phone Number" />
+                                </FormItem>
+                        
                         <FormItem style={{ width: '280px' }}>
                             <Input
                                 type="password"
@@ -133,32 +151,22 @@ class Register extends Component {
                                 onChange={e => this.setState({ confirmPassword: e.target.value })}
                                 placeholder="Confirm Password" />
                         </FormItem>
-
-                        <div>
-                            <p><strong>Notes! </strong>
-                                <i className="registerNotes">
-                                    Password <strong>must</strong> have at least 8 characters</i>
-                            </p>
-                        </div>
                         {
                             !isLoading ?
-                                <button
-                                    className="btn btn-lg btn-primary"
-                                    type="submit"
-                                    style={{ width: '160px' }}
+                                <Button
+                                    type="primary"
                                     disabled={!this.validateForm()}
+                                    htmlType="submit"
                                 >
                                     Register
-                                </button>
+                                </Button>
                                 :
-                                <button
-                                    className="btn btn-lg btn-primary"
-                                    type="submit"
-                                    style={{ width: '160px' }}
+                                <Button
+                                    type="primary"
                                     disabled={true}
                                 >
-                                    <i className="fa fa-spinner fa-spin"></i> Submitting...
-                                </button>
+                                    <i className="fa fa-spinner fa-spin" style={{ textAlign: 'center' }}></i>
+                                </Button>
                         }
                         <div style={{ marginTop: '1em' }}>
                             <p><strong>Already Have an Account?</strong><Link to="/"> <a style={{ color: 'white' }}>Sign In</a></Link></p>

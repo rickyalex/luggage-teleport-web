@@ -8,7 +8,7 @@ import {
     AuthenticationDetails,
     CognitoUser
 } from "amazon-cognito-identity-js";
-import { Input, Form, Icon } from 'antd';
+import { Input, Form, Icon, Button } from 'antd';
 import '../App.css';
 
 const FormItem = Form.Item;
@@ -90,8 +90,8 @@ class Login extends Component {
     render() {
         const { isLoading } = this.state;
         return (
-            <div>
-                <Form onSubmit={this.handleSubmit} className="login-form form-auth">
+            <div align="center">
+                <Form onSubmit={this.handleSubmit} style={{position: 'relative', top: '100px', margin: 'auto'}}>
                     <div>
                         <img
                             src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png"
@@ -107,39 +107,34 @@ class Login extends Component {
                         <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password"
                             onChange={e => this.setState({ password: e.target.value })}
                         />
+                    </FormItem>
+                    {
+                            !isLoading ?
+                                <Button
+                                    type="primary"
+                                    disabled={!this.validateForm()}
+                                    htmlType="submit"
+                                    style={{  }}
+                                >
+                                    Login
+                                </Button>
+
+                                :
+                                <Button
+                                    type="primary"
+                                    disabled={true}
+                                >
+                                    <i className="fa fa-spinner fa-spin" style={{ textAlign: 'center' }}></i>
+                                </Button>
+                        }
+                        <div style={{ marginTop: '1.2em' }}>
+                            <Link to="/register"> <a style={{ color: 'white' }}>Register</a></Link>
+                        </div>
                         <Link to="/forgot">
                             <a className="login-form-forgot" style={{ color: 'white' }}>
                                 Forgot your Password?
                                 </a>
                         </Link>
-                    </FormItem>
-                    <FormItem>
-                        {
-                            !isLoading ?
-                                <button
-                                    className="btn btn-lg"
-                                    type="submit"
-                                    disabled={!this.validateForm()}
-                                    style={{ color: '#00bfff', backgroundColor: 'white', width: '280px', marginTop: '1px' }}
-                                >
-                                    Login
-                                    </button>
-
-                                :
-                                <button
-                                    className="btn btn-lg"
-                                    type="submit"
-                                    disabled={true}
-                                    style={{ color: '#00bfff', backgroundColor: 'white', width: '280px', marginTop: '1px' }}
-                                >
-                                    <i className="fa fa-spinner fa-spin"></i> Loggedin...
-                                    </button>
-                        }
-                        <div style={{ marginTop: '1.2em' }}>
-                            <p><strong>Do not have an Account yet?</strong>
-                                <Link to="/register"> <a style={{ color: 'white' }}>Let's Register!</a></Link></p>
-                        </div>
-                    </FormItem>
                 </Form>
             </div>
         )

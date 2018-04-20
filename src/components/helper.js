@@ -40,6 +40,18 @@ export function disabledDate(current) {
   return current && current < moment().startOf('day');
 }
 
+//Date disabled state, only allowing today and further
+export function disabledHours(current) {
+  // Can not select days before today and today
+  return current && current < moment().startOf('day');
+}
+
+//Date disabled state, only allowing today and further
+export function disabledDropoffHours(current, pickuptime) {
+  // Can not select days before today and today
+  return current && current < moment(current).add(4, 'hours');
+}
+
 //Ordering data Ascending
 export function OrderASC(data, dataType) {
 

@@ -5,6 +5,7 @@ import FixedNavbar from './fixed_navbar';
 import '../App.css';
 import * as moment from 'moment';
 import axios from 'axios';
+import { Row, Col, Input, Button, Alert } from 'antd';
 import SquarePaymentForm from './square_payment_form';
 import { SQUARE_APP_ID } from '../config';
 import { BookingId, GetPayment } from './helper';
@@ -17,16 +18,24 @@ class FinalReview extends Component {
 
         this.state = {
             isLoading: false,
-            PaymentMethod: ''
+            PaymentMethod: '',
+            PromoCode: '',
+            PromoCodeSuccess: 'hidden',
+            PromoCodeFailed: 'hidden',
+            PromoCodeApplied: false,
+            TotalCost: props.LuggageData.TotalCost,
+            data: [],
+            BookingId: ''
         }
 
         this.backToAddLuggage = this.backToAddLuggage.bind(this);
         this.Submit = this.Submit.bind(this);
         this.handleNonce = this.handleNonce.bind(this);
+        this.applyPromoCode = this.applyPromoCode.bind(this);
 
         this.BookingType = this.props.BookData[0].BookingType;
-        this.TotalCost = this.props.LuggageData.TotalCost;
         this.Luggage = this.props.LuggageData.Luggage;
+
     }
 
 
@@ -42,6 +51,95 @@ class FinalReview extends Component {
     }
     async Submit() {
         this.paymentForm.generateNonce();
+    }
+
+    GenerateBookingID(){
+        let text = "";
+        let sf = "san fransisco";
+        let lv = "las vegas";
+        let sfcounter = 0;
+        let lvcounter = 0;
+        let total = 0;
+        let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-scan/`;
+        axios.get(url)
+            .then((res) => {
+                this.setState({ data: res.data.result, isLoading: true }, () =>{
+                    url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToAirport-scan/`;
+                    axios.get(url)
+                        .then((res2) => {
+                            for(var i=0;i<res2.data.result.length;i++){
+                                this.setState({ data: [...this.state.data, res2.data.result[i]] }, () =>{
+                                            url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/HotelToAirport-scan/`;
+                                            axios.get(url)
+                                                .then((res3) => {
+                                                    for(var i=0;i<res3.data.result.length;i++){
+                                                        this.setState({ data: [...this.state.data, res3.data.result[i]] }, ()=>{
+                                                            this.state.data.map((item)=>{
+                                                                if(String(item.Airport).toLowerCase().includes(sf)){
+                                                                    sfcounter++;
+                                                                }
+                                                                else if(String(item.Airport).toLowerCase().includes(lv)){
+                                                                    lvcounter++;
+                                                                }
+                                                                total++;
+                                                            })
+
+                                                            this.setState({ BookingId: (String(this.props.BookData[0].Airport).toLowerCase().includes(sf)) ? "SF"+" "+("0000" + sfcounter).slice(-4)+" "+("00000" + total).slice(-5) : "LV"+" "+("0000" + lvcounter).slice(-4)+" "+("00000" + total).slice(-5) });
+                                                            console.log(this.state);
+                                                        })    
+                                                    }   
+                                                }).catch((err) => {
+                                                    console.log(err);
+                                                })
+                                })    
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                        })
+                })   
+            }).catch((err) => {
+                console.log(err);
+            })
+        
+    }
+
+    applyPromoCode(){
+        console.log(this.state);
+        axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/PromoCode-get/'+String(this.state.PromoCode).toUpperCase())
+            .then((res) => {               
+                if(typeof res.data.result != "undefined"){
+                    if(String(this.state.PromoCode).toUpperCase() == String(res.data.result.id).toUpperCase()){
+                        let percentage = parseInt(res.data.result.PercentageOff);
+                        let dollar = parseInt(res.data.result.DollarsOff);
+                        let total = parseInt(this.state.TotalCost);
+                        let priceCut = (percentage > 0 && dollar <= 0) ? (percentage/100)*total : dollar;
+
+                        this.setState({
+                            PromoCodeSuccess: 'show',
+                            PromoCodeFailed: 'hidden',
+                            TotalCost: total-priceCut,
+                            PromoCodeApplied: true
+                        }, () => {
+                            console.log(this.state);
+                        })
+                    }
+                    else{
+                        this.setState({
+                            PromoCodeSuccess: 'hidden',
+                            PromoCodeFailed: 'show',
+                        })
+                    }    
+                }
+                else{
+                    this.setState({
+                        PromoCodeSuccess: 'hidden',
+                        PromoCodeFailed: 'show',
+                    })
+                }
+                
+            }).catch((err) => {
+                console.log(err)
+            })
     }
 
     async handleNonce(nonce, cardData) {
@@ -61,6 +159,7 @@ class FinalReview extends Component {
             apiUrl = "AirportToHotel-create"
             let { Airline, Airport, DropoffDate, DropoffDisplayTime, Email, FlightNumber, Hotel, HotelBookingRef,
                 NameUnderHotelRsv, PhoneNumber, PickupDate, PickupDisplayTime } = this.props.BookData[0]
+            
 
             data = JSON.stringify({
                 BookingId: `ATH${bookingId}`,
@@ -76,7 +175,7 @@ class FinalReview extends Component {
                 phone: PhoneNumber,
                 PaymentWith: 'Credit Card',
                 LuggageQuantity: this.Luggage,
-                TotalCost: this.TotalCost,
+                TotalCost: this.state.TotalCost,
                 cardNonce: nonce,
             })
 
@@ -100,7 +199,7 @@ class FinalReview extends Component {
                 phone: PhoneNumber,
                 PaymentWith: 'Credit Card',
                 LuggageQuantity: this.Luggage,
-                TotalCost: this.TotalCost,
+                TotalCost: this.state.TotalCost,
                 cardNonce: nonce,
             })
         }
@@ -123,7 +222,7 @@ class FinalReview extends Component {
                 phone: PhoneNumber,
                 PaymentWith: 'Credit Card',
                 LuggageQuantity: this.Luggage,
-                TotalCost: this.TotalCost,
+                TotalCost: this.state.TotalCost,
                 cardNonce: nonce,
             })
         }
@@ -146,7 +245,7 @@ class FinalReview extends Component {
                 RsvpNameHotelPickup: RsvpNameHotelPickup,
                 PaymentWith: 'Credit Card',
                 LuggageQuantity: this.Luggage,
-                TotalCost: this.TotalCost,
+                TotalCost: this.state.TotalCost,
                 cardNonce: nonce,
             })
         }
@@ -157,6 +256,9 @@ class FinalReview extends Component {
             }, (err) => {
                 this.setState({ isLoading: false })
             })
+
+        // console.log(data);
+        // console.log(this.state.data);
         
     }
     handleNonceError(errors) {
@@ -165,7 +267,7 @@ class FinalReview extends Component {
     }
 
     render() {
-        console.log(this.props.BookData[0])
+        //console.log(this.props.BookData[0])
         let token = localStorage.getItem('token')
         const data = this.props.BookData[0]
         return (
@@ -202,7 +304,7 @@ class FinalReview extends Component {
                                                 {moment(data.PickupDate).format('Do MMMM YYYY')} {data.PickupDisplayTime} 
                                             </td>
                                         </tr>
-                                        { (this.BookingType == 'ATH') ? 
+                                        { /* (this.BookingType == 'ATH') ? 
                                         <tr>
                                             <td>
                                                 <b>Airline</b>
@@ -211,7 +313,7 @@ class FinalReview extends Component {
                                                 {data.Airline}
                                             </td>
                                         </tr>
-                                        : '' }
+                                        : '' */ }
                                         <tr>
                                             <td>
                                                 <b>Drop off Date</b>
@@ -224,7 +326,22 @@ class FinalReview extends Component {
                                 </div>
                             </div>
                         </div>
+                        <hr />
+                        <Row gutter={12}>
+                            <Col span={16}>
+                                <Input
+                                    placeholder="Promotional Code"
+                                    onChange={e => this.setState({ PromoCode: e.target.value })}
+                                />
+                            </Col>
+                            <Col span={6}>
+                                <Button disabled={this.state.PromoCodeApplied} type="primary" style={{ margin: 0 }} onClick={this.applyPromoCode}>Apply</Button>
+                            </Col>
+                        </Row>
                         <br />
+                        <Alert closable className={this.state.PromoCodeSuccess} message="Promo Code Successfully Applied" type="success" showIcon />
+                        <Alert closable className={this.state.PromoCodeFailed} message="Sorry that Promo Code doesn't exist" type="error" showIcon />
+                        <div style={{ clear: 'both' }}></div>
                         <table className="table table-sm review_luggage">
                             <thead>
                                 <tr style={{ textAlign: 'center' }}>
@@ -233,7 +350,7 @@ class FinalReview extends Component {
                             </thead>
                             <tbody>
                                 <tr style={{ textAlign: 'center' }}>
-                                    <td colspan="8">{this.Luggage}</td><td colspan="4"><b>${this.TotalCost}</b></td>
+                                    <td colspan="8">{this.Luggage}</td><td colspan="4"><b>${this.state.TotalCost}</b></td>
                                 </tr>
                             </tbody>
                         </table>
