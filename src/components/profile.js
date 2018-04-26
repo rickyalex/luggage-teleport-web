@@ -117,11 +117,11 @@ class Profile extends Component {
                             <div className="col-lg-12">
                                 
                                 <input type="hidden" name="Content-Type" value="image/png" />
-                                  <input type="hidden" name="AWSAccessKeyId" value="AKIAJE6XVHDQZ2RWFHDA" />
+                                  <input type="hidden" name="AWSAccessKeyId" value="" />
                                   <input type="hidden" name="acl" value="public-read" />
                                   <input type="hidden" name="success_action_status" value="201" />
-                                  <input type="hidden" name="policy" value="eyJleHBpcmF0aW9uIjoiMjAxOC0wNC0yNlQwMTo1ODoxMC42OThaIiwiY29uZGl0aW9ucyI6W1sic3RhcnRzLXdpdGgiLCIka2V5IiwidXBsb2Fkcy8iXSx7ImJ1Y2tldCI6Imx1Z2dhZ2V0ZWxlcG9ydC5uZXQifSx7ImFjbCI6InB1YmxpYy1yZWFkIn0sWyJzdGFydHMtd2l0aCIsIiRDb250ZW50LVR5cGUiLCJpbWFnZS9wbmciXSx7InN1Y2Nlc3NfYWN0aW9uX3N0YXR1cyI6IjIwMSJ9XX0=" />
-                                  <input type="hidden" name="signature" value="04SjpUJXKaXDdL6NrRxGAtLG/vE=" />
+                                  <input type="hidden" name="policy" value="" />
+                                  <input type="hidden" name="signature" value="" />
                                 <div className="profilePicture">
                                     <input 
                                         id="myInput"
