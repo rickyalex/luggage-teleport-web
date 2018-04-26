@@ -20,8 +20,8 @@ class FinalReview extends Component {
             isLoading: false,
             PaymentMethod: '',
             PromoCode: '',
-            PromoCodeSuccess: 'hidden',
-            PromoCodeFailed: 'hidden',
+            PromoCodeSuccess: 'promostatus hidden',
+            PromoCodeFailed: 'promostatus hidden',
             PromoCodeApplied: false,
             TotalCost: props.LuggageData.TotalCost,
             data: [],
@@ -32,9 +32,18 @@ class FinalReview extends Component {
         this.Submit = this.Submit.bind(this);
         this.handleNonce = this.handleNonce.bind(this);
         this.applyPromoCode = this.applyPromoCode.bind(this);
+        this.loadATH = this.loadATH.bind(this);
+        this.loadATA = this.loadATA.bind(this);
+        this.loadHTA = this.loadHTA.bind(this);
 
-        this.BookingType = this.props.BookData[0].BookingType;
-        this.Luggage = this.props.LuggageData.Luggage;
+        if(props.BookData.length > 0){
+            this.BookingType = props.BookData[0].BookingType;
+            this.Luggage = props.LuggageData.Luggage;    
+        }
+        else{
+            props.history.push('/');
+        }
+        
 
     }
 
@@ -53,54 +62,38 @@ class FinalReview extends Component {
         this.paymentForm.generateNonce();
     }
 
-    GenerateBookingID(){
-        let text = "";
-        let sf = "san fransisco";
-        let lv = "las vegas";
-        let sfcounter = 0;
-        let lvcounter = 0;
-        let total = 0;
+    loadATH(){
         let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-scan/`;
         axios.get(url)
             .then((res) => {
-                this.setState({ data: res.data.result, isLoading: true }, () =>{
-                    url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToAirport-scan/`;
-                    axios.get(url)
-                        .then((res2) => {
-                            for(var i=0;i<res2.data.result.length;i++){
-                                this.setState({ data: [...this.state.data, res2.data.result[i]] }, () =>{
-                                            url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/HotelToAirport-scan/`;
-                                            axios.get(url)
-                                                .then((res3) => {
-                                                    for(var i=0;i<res3.data.result.length;i++){
-                                                        this.setState({ data: [...this.state.data, res3.data.result[i]] }, ()=>{
-                                                            this.state.data.map((item)=>{
-                                                                if(String(item.Airport).toLowerCase().includes(sf)){
-                                                                    sfcounter++;
-                                                                }
-                                                                else if(String(item.Airport).toLowerCase().includes(lv)){
-                                                                    lvcounter++;
-                                                                }
-                                                                total++;
-                                                            })
-
-                                                            this.setState({ BookingId: (String(this.props.BookData[0].Airport).toLowerCase().includes(sf)) ? "SF"+" "+("0000" + sfcounter).slice(-4)+" "+("00000" + total).slice(-5) : "LV"+" "+("0000" + lvcounter).slice(-4)+" "+("00000" + total).slice(-5) });
-                                                            console.log(this.state);
-                                                        })    
-                                                    }   
-                                                }).catch((err) => {
-                                                    console.log(err);
-                                                })
-                                })    
-                            }
-                        }).catch((err) => {
-                            console.log(err);
-                        })
-                })   
+                this.setState({ data: res.data.result, isLoading: true })   
             }).catch((err) => {
                 console.log(err);
             })
-        
+    }
+
+    loadATA(){
+        let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToAirport-scan/`;
+        axios.get(url)
+            .then((res2) => {
+                for(var i=0;i<res2.data.result.length;i++){
+                    this.setState({ data: [...this.state.data, res2.data.result[i]] })    
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
+
+    loadHTA(){
+        let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/HotelToAirport-scan/`;
+        axios.get(url)
+            .then((res3) => {
+                for(var i=0;i<res3.data.result.length;i++){
+                    this.setState({ data: [...this.state.data, res3.data.result[i]]})    
+                }   
+            }).catch((err) => {
+                console.log(err);
+            })
     }
 
     applyPromoCode(){
@@ -115,8 +108,8 @@ class FinalReview extends Component {
                         let priceCut = (percentage > 0 && dollar <= 0) ? (percentage/100)*total : dollar;
 
                         this.setState({
-                            PromoCodeSuccess: 'show',
-                            PromoCodeFailed: 'hidden',
+                            PromoCodeSuccess: 'promostatus show',
+                            PromoCodeFailed: 'promostatus hidden',
                             TotalCost: total-priceCut,
                             PromoCodeApplied: true
                         }, () => {
@@ -125,15 +118,15 @@ class FinalReview extends Component {
                     }
                     else{
                         this.setState({
-                            PromoCodeSuccess: 'hidden',
-                            PromoCodeFailed: 'show',
+                            PromoCodeSuccess: 'promostatus hidden',
+                            PromoCodeFailed: 'promostatus show',
                         })
                     }    
                 }
                 else{
                     this.setState({
-                        PromoCodeSuccess: 'hidden',
-                        PromoCodeFailed: 'show',
+                        PromoCodeSuccess: 'promostatus hidden',
+                        PromoCodeFailed: 'promostatus show',
                     })
                 }
                 
@@ -159,7 +152,6 @@ class FinalReview extends Component {
             apiUrl = "AirportToHotel-create"
             let { Airline, Airport, DropoffDate, DropoffDisplayTime, Email, FlightNumber, Hotel, HotelBookingRef,
                 NameUnderHotelRsv, PhoneNumber, PickupDate, PickupDisplayTime } = this.props.BookData[0]
-            
 
             data = JSON.stringify({
                 BookingId: `ATH${bookingId}`,
@@ -256,9 +248,6 @@ class FinalReview extends Component {
             }, (err) => {
                 this.setState({ isLoading: false })
             })
-
-        // console.log(data);
-        // console.log(this.state.data);
         
     }
     handleNonceError(errors) {
@@ -282,12 +271,12 @@ class FinalReview extends Component {
                 <div className="containerProgressBar" style={{ marginTop: '1em' }}>
                     <div className="receipt">
                         <div className="row" style={{ lineHeight: '3em' }}>
-                            <div className="col-lg-1">
+                            <div className="col-lg-1 col-md-1 col-sm-1">
                                 <img src="origin_destination_icon.jpg" style={{ paddingTop: '0.5em' }} />
                             </div>
-                            <div className="col-lg-11 origin_destination" >
-                                { (this.BookingType == 'ATH') ? data.Airport : (this.BookingType == 'ATA') ? data.AirportPickup : (this.BookingType == 'HTA') ? data.Hotel : (this.BookingType == 'HTH') ? data.HotelPickup : '' }<br />
-                                { (this.BookingType == 'ATH') ? data.Hotel : (this.BookingType == 'ATA') ? data.AirportDropoff : (this.BookingType == 'HTA') ? data.Airport : (this.BookingType == 'HTH') ? data.HotelDropoff : '' }<br />
+                            <div className="col-lg-10 col-md-10 col-sm-10 origin_destination" >
+                                <span style={{ display: 'block' }}>{ (this.BookingType == 'ATH') ? data.Airport : (this.BookingType == 'ATA') ? data.AirportPickup : (this.BookingType == 'HTA') ? data.Hotel : (this.BookingType == 'HTH') ? data.HotelPickup : '' }</span>
+                                <span style={{ display: 'block' }}>{ (this.BookingType == 'ATH') ? data.Hotel : (this.BookingType == 'ATA') ? data.AirportDropoff : (this.BookingType == 'HTA') ? data.Airport : (this.BookingType == 'HTH') ? data.HotelDropoff : '' }</span>
                             </div>
                             
                             <br />
@@ -338,9 +327,8 @@ class FinalReview extends Component {
                                 <Button disabled={this.state.PromoCodeApplied} type="primary" style={{ margin: 0 }} onClick={this.applyPromoCode}>Apply</Button>
                             </Col>
                         </Row>
-                        <br />
-                        <Alert closable className={this.state.PromoCodeSuccess} message="Promo Code Successfully Applied" type="success" showIcon />
-                        <Alert closable className={this.state.PromoCodeFailed} message="Sorry that Promo Code doesn't exist" type="error" showIcon />
+                        <span className={this.state.PromoCodeSuccess}>Your promo code has been successfully applied</span>
+                        <span className={this.state.PromoCodeFailed} style={{ color: 'red' }}>Your promo code is invalid</span>
                         <div style={{ clear: 'both' }}></div>
                         <table className="table table-sm review_luggage">
                             <thead>

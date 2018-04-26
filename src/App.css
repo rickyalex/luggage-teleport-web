@@ -533,16 +533,22 @@ table.review_details td{
   font-size: 16px !important;
 }
 
-.origin_destination,
+.origin_destination span,
 table.review_details td, 
 table.review_details td b, 
 table.review_luggage td, 
 table.review_luggage td b, 
 table.review_luggage thead th,
 .sq-input-wrapper label,
-.ant-alert-message{
+.ant-alert-message,
+.promostatus{
   font-size: 14px;
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+span.ant-input-group-addon{
+  background-color: #2a6fb3;
+  border: 1px #2a6fb3;
 }
 
 .ant-alert-icon{
@@ -648,6 +654,10 @@ table.review_luggage thead th,
   border-radius: 50%;
   display: block;
   margin: auto;
+}
+
+.profilePicture img:hover{
+  opacity: 0.8;
 }
 
 /* end profile styles */

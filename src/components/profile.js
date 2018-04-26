@@ -19,14 +19,18 @@ class Profile extends Component {
         super(props);
 
         this.state = {
-            firstname: getCurrentUser().pool.storage.CustName,
-            lastname: '',
-            phone: '',
-            email: '',
-            password: ''
+            firstname: localStorage.getItem('CustName').split(' ')[0],
+            lastname: localStorage.getItem('CustName').split(' ')[1],
+            phone: localStorage.getItem('PhoneNumber'),
+            email: localStorage.getItem('email'),
+            password: '',
+            img: 'https://s3-us-west-1.amazonaws.com/luggageteleport.net/img/default_picture.png',
+            isLoading: false
         }
 
         this.SubmitProfileData = this.SubmitProfileData.bind(this);
+        this.readFile = this.readFile.bind(this);
+        console.log(this.state)
     }
 
     changePassword(){
@@ -61,9 +65,21 @@ class Profile extends Component {
     //             })
     // }
 
-    readFile(file){
+    readFile(e){
+        this.setState({ isLoading: true })
 
-        console.log(file);
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+          this.setState({
+            file: e,
+            img: reader.result,
+            isLoading: false
+          });
+        }
+
+        reader.readAsDataURL(file)
     }
 
     SubmitProfileData(e){
@@ -72,6 +88,19 @@ class Profile extends Component {
         console.log(file);
     }
 
+    onSubmit(e) {
+        e.preventDefault();
+
+        fetch("https://luggageteleport.net.s3.amazonaws.com", {
+            headers: {
+                'Accept': 'application/text',
+                'Content-Type': 'application/text'
+            },
+            body: JSON.stringify({description: this.state.description})
+        });
+
+        this.setState({description: ''});
+    }
 
     render() {
         //const currentUser = getCurrentUser();
@@ -83,18 +112,28 @@ class Profile extends Component {
                         <hr style={{ border: '1px solid #fff' }} />
                     </div>
                     <div className="containerProfile">
+                        <form action="https://luggageteleport.net.s3.amazonaws.com" method="post" enctype="multipart/form-data">
                         <div className="row">
                             <div className="col-lg-12">
+                                
+                                <input type="hidden" name="Content-Type" value="image/png" />
+                                  <input type="hidden" name="AWSAccessKeyId" value="AKIAJE6XVHDQZ2RWFHDA" />
+                                  <input type="hidden" name="acl" value="public-read" />
+                                  <input type="hidden" name="success_action_status" value="201" />
+                                  <input type="hidden" name="policy" value="eyJleHBpcmF0aW9uIjoiMjAxOC0wNC0yNlQwMTo1ODoxMC42OThaIiwiY29uZGl0aW9ucyI6W1sic3RhcnRzLXdpdGgiLCIka2V5IiwidXBsb2Fkcy8iXSx7ImJ1Y2tldCI6Imx1Z2dhZ2V0ZWxlcG9ydC5uZXQifSx7ImFjbCI6InB1YmxpYy1yZWFkIn0sWyJzdGFydHMtd2l0aCIsIiRDb250ZW50LVR5cGUiLCJpbWFnZS9wbmciXSx7InN1Y2Nlc3NfYWN0aW9uX3N0YXR1cyI6IjIwMSJ9XX0=" />
+                                  <input type="hidden" name="signature" value="04SjpUJXKaXDdL6NrRxGAtLG/vE=" />
                                 <div className="profilePicture">
                                     <input 
-                                        id="myInput" 
+                                        id="myInput"
+                                        name="file" 
                                         type="file" 
                                         accept="image/*"
                                         onChange={ this.readFile } 
                                         ref={(ref) => this.fileUpload = ref} 
                                         style={{ display: 'none' }} />
-                                    <img src="img/founder.png" onClick={(e) => this.fileUpload.click() } style={{ cursor: 'pointer'}}/>
+                                    <img src={this.state.img} onClick={(e) => this.fileUpload.click() } style={{ cursor: 'pointer' }}/>
                                 </div>
+                                
                             </div>
                         </div>
                         <div className="row">
@@ -102,45 +141,69 @@ class Profile extends Component {
                                     <Row gutter={12} style={{ padding: '0.5em 2em' }}>
                                         <Col span={12}>
                                           <Input
-                                            prefix={<MdPerson style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
+                                            disabled={true}
+                                            addonBefore={<Icon type="user" style={{ color: 'white', }} /> }
                                             value={this.state.firstname} />
                                         </Col>
                                         <Col span={12}>
                                             <Input
+                                            disabled={true}
                                             value={this.state.lastname} />
                                         </Col>
                                     </Row>
                                     <Row gutter={12} style={{ padding: '0.5em 2em' }}>
                                         <Col span={24}>
                                           <Input
-                                            prefix={<Icon type="phone" style={{ color: '#1a1aff', }} /> }
-                                            value={this.state.phone} />
+                                            disabled={true}
+                                            addonBefore={<Icon type="phone" style={{ color: 'white', }} /> }
+                                            value={this.state.phone} 
+                                            suffix={<Icon type="edit" style={{ color: '#1a1aff', }} /> }
+                                            />
                                         </Col>
                                     </Row>
                                     <Row gutter={12} style={{ padding: '0.5em 2em' }}>
                                         <Col span={24}>
                                           <Input
-                                            prefix={<Icon type="mail" style={{ color: '#1a1aff', }} /> }
-                                            value={this.state.email} />
+                                            disabled={true}
+                                            addonBefore={<Icon type="mail" style={{ color: 'white', }} /> }
+                                            value={this.state.email} 
+                                            suffix={<Icon type="edit" style={{ color: '#1a1aff', }} /> }
+                                            />
                                         </Col>
                                     </Row>
                                     <Row gutter={12} style={{ padding: '0.5em 2em' }}>
                                         <Col span={24}>
                                           <Input
-                                            prefix={<Icon type="lock" style={{ color: '#1a1aff', }} /> }
-                                            value={this.state.password} />
+                                            disabled={true}
+                                            addonBefore={<Icon type="lock" style={{ color: 'white', }} /> }
+                                            value={this.state.password} 
+                                            type="password"
+                                            value="wedus"
+                                            suffix={<Icon type="edit" style={{ color: '#1a1aff', }} /> }
+                                            />
                                         </Col>
                                     </Row>
-                                    <Link to="/" style={{ color: 'black' }}>
-                                        <Button 
-                                            onClick={(e) => this.SubmitProfileData(e)}
-                                            type="primary" style={{ margin: '20px auto', display: 'block' }}>
-                                            Save Profile
-                                        </Button>
-                                    </Link>
                                     
+                                        {
+                                            !this.state.isLoading ?
+                                                <Button 
+                                                    type="primary" style={{ margin: '20px auto', display: 'block' }}>
+                                                    Save Profile
+                                                </Button>
+
+                                                :
+                                                <Button 
+                                                    type="primary" style={{ margin: '20px auto', display: 'block' }}
+                                                    disabled={true}
+                                                >
+                                                    <i className="fa fa-spinner fa-spin" style={{ textAlign: 'center' }}></i>
+                                                </Button>
+                                        }
+                                    
+                                
                             </div>
                         </div>
+                        </form>
                     </div>
                 </div>
         )

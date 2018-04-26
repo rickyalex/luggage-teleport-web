@@ -22,7 +22,7 @@ class FixedNavbar extends React.Component {
     }
 
     //this.setNavState = this.setNavState.bind(this);
-
+    this.RenderLogoutButton = this.RenderLogoutButton.bind(this);
   }
 
   signOutUser() {

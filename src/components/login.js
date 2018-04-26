@@ -55,6 +55,7 @@ class Login extends Component {
                     const { email, phone_number, name } = result.idToken.payload;
                     localStorage.setItem('CustName', `${name}`);
                     localStorage.setItem('email', `${email}`);
+                    localStorage.setItem('PhoneNumber', `${phone_number}`);
                     dispatch(LogUser(email, phone_number));
                     localStorage.setItem('token', `"${jwtToken}"`)
                 },
