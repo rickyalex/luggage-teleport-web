@@ -1,9 +1,9 @@
 const crypto = require('crypto');
 const fs = require('fs');
 
-const awsAccessKeyId = 'AKIAJE6XVHDQZ2RWFHDA';
-const awsSecretAccessKey = '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';
-const bucketName = 'luggageteleport.net';
+const awsAccessKeyId = '';
+const awsSecretAccessKey = '';
+const bucketName = '';
 
 const msPerDay = 24 * 60 * 60 * 1000;
 const expiration = new Date(Date.now() + msPerDay).toISOString();
