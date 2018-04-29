@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { LogUser } from '../actions';
-import { USER_POOL_ID, CLIENT_ID } from '../config';
+import { cognito } from '../config';
 import {
     CognitoUserPool,
     AuthenticationDetails,
     CognitoUser
 } from "amazon-cognito-identity-js";
 import { Input, Form, Icon, Button } from 'antd';
+import axios from 'axios';
 import '../App.css';
 
 const FormItem = Form.Item;
@@ -40,8 +41,8 @@ class Login extends Component {
     Login(email, password) {
         let { dispatch } = this.props
         const userPool = new CognitoUserPool({
-            UserPoolId: USER_POOL_ID,
-            ClientId: CLIENT_ID
+            UserPoolId: cognito.USER_POOL_ID,
+            ClientId: cognito.CLIENT_ID
         });
         const user = new CognitoUser({ Username: email, Pool: userPool });
         const authenticationData = { Username: email, Password: password };
@@ -58,6 +59,14 @@ class Login extends Component {
                     localStorage.setItem('PhoneNumber', `${phone_number}`);
                     dispatch(LogUser(email, phone_number));
                     localStorage.setItem('token', `"${jwtToken}"`)
+
+                    axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Users-get/'+email)
+                    .then((res) => {
+                        //console.log(res.data.result[0].img);
+                        localStorage.setItem('img', res.data.result[0].img);
+                    }).catch((err) => {
+                        console.log(err)
+                    })
                 },
                 onFailure: err => {
                     reject(err)

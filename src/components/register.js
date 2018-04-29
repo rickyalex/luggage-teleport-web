@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { signUpUser } from '../aws_cognito';
-import { USER_POOL_ID, CLIENT_ID } from '../config';
+import { cognito } from '../config';
 import {
     CognitoUserPool,
     CognitoUserAttribute,
@@ -48,8 +48,8 @@ class Register extends Component {
 
     signup(name, email, phone_number, password) {
         const userPool = new CognitoUserPool({
-            UserPoolId: USER_POOL_ID,
-            ClientId: CLIENT_ID
+            UserPoolId: cognito.USER_POOL_ID,
+            ClientId: cognito.CLIENT_ID
         });
         const attributeList = []
         const dataEmail = {

@@ -6,6 +6,7 @@
   "dependencies": {
     "amazon-cognito-identity-js": "^1.28.0",
     "antd": "^3.2.0",
+    "aws-amplify": "^0.3.3",
     "aws-sdk": "2.176.0",
     "axios": "^0.17.1",
     "babel-core": "^6.26.0",
@@ -35,6 +36,7 @@
     "react-redux": "^5.0.6",
     "react-responsive": "^4.0.3",
     "react-router-dom": "^4.2.2",
+    "react-s3": "^1.2.4",
     "react-scripts": "1.0.17",
     "react-table": "^6.7.6",
     "react-tabs": "^2.1.1",

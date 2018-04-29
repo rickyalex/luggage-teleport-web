@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import '../App.css';
 import axios from 'axios';
 import FixedNavbar from './fixed_navbar';
-import { Button, Icon, Input, Row, Col } from 'antd';
+import { Button, Icon, Input, Row, Col, Form } from 'antd';
 import {
     CognitoUserPool,
     AuthenticationDetails,
@@ -12,6 +12,11 @@ import {
 } from "amazon-cognito-identity-js";
 import { MdPerson } from 'react-icons/lib/md';
 import { getCurrentUser } from '../aws_cognito';
+import { s3 } from '../config';
+//import ReactS3 from 'react-s3';
+import { Storage } from "aws-amplify";
+
+const FormItem = Form.Item;
 
 class Profile extends Component {
 
@@ -24,12 +29,15 @@ class Profile extends Component {
             phone: localStorage.getItem('PhoneNumber'),
             email: localStorage.getItem('email'),
             password: '',
-            img: 'https://s3-us-west-1.amazonaws.com/luggageteleport.net/img/default_picture.png',
-            isLoading: false
+            img: localStorage.getItem('img') || 'https://s3-us-west-1.amazonaws.com/luggageteleport.net/img/default_img.png',
+            tempFile: '',
+            isLoading: false,
+            isPreview: false
         }
 
         this.SubmitProfileData = this.SubmitProfileData.bind(this);
         this.readFile = this.readFile.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
         console.log(this.state)
     }
 
@@ -48,7 +56,16 @@ class Profile extends Component {
     }
 
     componentWillMount() {
-        //this.GetUserData()
+        // axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Users-get/'+this.state.email)
+        //             .then((res) => {
+        //                 //console.log(res.data.result[0].img);
+        //                 //localStorage.setItem('img', res.data.result[0].img);
+        //                 this.setState({
+        //                     img: res.data.result[0].img
+        //                 })
+        //             }).catch((err) => {
+        //                 console.log(err)
+        //             })
         
     }
 
@@ -73,8 +90,9 @@ class Profile extends Component {
 
         reader.onloadend = () => {
           this.setState({
-            file: e,
-            img: reader.result,
+            tempFile: reader.result,
+            img: file,
+            isPreview: true,
             isLoading: false
           });
         }
@@ -88,18 +106,57 @@ class Profile extends Component {
         console.log(file);
     }
 
-    onSubmit(e) {
+    onSubmit(e){
         e.preventDefault();
+        this.setState({ isLoading: true })
 
-        fetch("https://luggageteleport.net.s3.amazonaws.com", {
-            headers: {
-                'Accept': 'application/text',
-                'Content-Type': 'application/text'
-            },
-            body: JSON.stringify({description: this.state.description})
-        });
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var filename = "";
+        var publicPath = "";
 
-        this.setState({description: ''});
+        for (var i = 0; i < 16; i++)
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        const file = this.state.img;
+        filename = text+'.jpeg';
+        publicPath = s3.LINK+filename;
+
+        try{
+            Storage.put(filename, file, {
+                contentType: 'image/jpeg'
+            })
+            .then (result => {
+                let token = localStorage.getItem('token');
+                let email = localStorage.getItem('email');
+                let data = {
+                    Item: {
+                        img: publicPath,
+                        email: email
+                    }
+                };
+
+                let config = {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+
+                axios.post('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Users-create', JSON.stringify(data.Item), config)
+                .then((res) => {
+                    localStorage.setItem('img', publicPath);
+                    this.setState({ isLoading: false })
+                }).catch((err) => {
+                    console.log(err)
+                })
+            })
+            .catch(err => console.log(err));
+        }
+        catch(e){
+            console.log(e); 
+        }
+        
     }
 
     render() {
@@ -112,26 +169,21 @@ class Profile extends Component {
                         <hr style={{ border: '1px solid #fff' }} />
                     </div>
                     <div className="containerProfile">
-                        <form action="https://luggageteleport.net.s3.amazonaws.com" method="post" enctype="multipart/form-data">
+                        <Form onSubmit={(e) => this.onSubmit(e)}>
                         <div className="row">
                             <div className="col-lg-12">
-                                
-                                <input type="hidden" name="Content-Type" value="image/png" />
-                                  <input type="hidden" name="AWSAccessKeyId" value="" />
-                                  <input type="hidden" name="acl" value="public-read" />
-                                  <input type="hidden" name="success_action_status" value="201" />
-                                  <input type="hidden" name="policy" value="" />
-                                  <input type="hidden" name="signature" value="" />
                                 <div className="profilePicture">
-                                    <input 
+                                    <FormItem>
+                                        <input 
                                         id="myInput"
                                         name="file" 
                                         type="file" 
-                                        accept="image/*"
+                                        accept="image/jpeg"
                                         onChange={ this.readFile } 
                                         ref={(ref) => this.fileUpload = ref} 
                                         style={{ display: 'none' }} />
-                                    <img src={this.state.img} onClick={(e) => this.fileUpload.click() } style={{ cursor: 'pointer' }}/>
+                                    </FormItem>
+                                    <img src={(this.state.isPreview) ? this.state.tempFile : this.state.img} onClick={(e) => this.fileUpload.click() } style={{ cursor: 'pointer' }}/>
                                 </div>
                                 
                             </div>
@@ -165,6 +217,7 @@ class Profile extends Component {
                                         <Col span={24}>
                                           <Input
                                             disabled={true}
+
                                             addonBefore={<Icon type="mail" style={{ color: 'white', }} /> }
                                             value={this.state.email} 
                                             suffix={<Icon type="edit" style={{ color: '#1a1aff', }} /> }
@@ -187,6 +240,7 @@ class Profile extends Component {
                                         {
                                             !this.state.isLoading ?
                                                 <Button 
+                                                    htmlType="submit"
                                                     type="primary" style={{ margin: '20px auto', display: 'block' }}>
                                                     Save Profile
                                                 </Button>
@@ -203,7 +257,7 @@ class Profile extends Component {
                                 
                             </div>
                         </div>
-                        </form>
+                        </Form>
                     </div>
                 </div>
         )
