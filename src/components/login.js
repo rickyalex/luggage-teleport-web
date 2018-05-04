@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { LogUser } from '../actions';
 import { cognito } from '../config';
+import { OrderASC } from './helper';
 import {
     CognitoUserPool,
     AuthenticationDetails,
@@ -62,7 +63,7 @@ class Login extends Component {
 
                     axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Users-get/'+email)
                     .then((res) => {
-                        //console.log(res.data.result[0].img);
+                        OrderASC(res.data.result, 'date');
                         localStorage.setItem('img', res.data.result[0].img);
                     }).catch((err) => {
                         console.log(err)

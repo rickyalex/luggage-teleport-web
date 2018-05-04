@@ -112,7 +112,9 @@ class FixedNavbar extends React.Component {
               </li>
             </ul>
             <div className="form-inline " style={{ width: '100px', marginLeft: '100px' }}>
-              <Link style={{ color: 'rgba(255,255,255,.5)' }} to="/profile">Hi {currentUser.pool.storage.CustName}</Link>
+            {
+              (!token) ? <Link style={{ color: 'rgba(255,255,255,.5)' }} to="/login">Login</Link> : <Link style={{ color: 'rgba(255,255,255,.5)' }} to="/profile">Hi {currentUser.pool.storage.CustName}</Link>
+            }
             </div>
           </div>
         </nav>

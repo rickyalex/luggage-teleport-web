@@ -13,6 +13,7 @@ import {
 import { MdPerson } from 'react-icons/lib/md';
 import { getCurrentUser } from '../aws_cognito';
 import { s3 } from '../config';
+import { OrderASC } from './helper';
 //import ReactS3 from 'react-s3';
 import { Storage } from "aws-amplify";
 
@@ -32,7 +33,9 @@ class Profile extends Component {
             img: localStorage.getItem('img') || 'https://s3-us-west-1.amazonaws.com/luggageteleport.net/img/default_img.png',
             tempFile: '',
             isLoading: false,
-            isPreview: false
+            isPreview: false,
+            statusShow: "updateStatus hidden",
+            Users: []
         }
 
         this.SubmitProfileData = this.SubmitProfileData.bind(this);
@@ -58,10 +61,9 @@ class Profile extends Component {
     componentWillMount() {
         // axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Users-get/'+this.state.email)
         //             .then((res) => {
-        //                 //console.log(res.data.result[0].img);
-        //                 //localStorage.setItem('img', res.data.result[0].img);
+        //                 OrderASC(res.data.result, 'date');
         //                 this.setState({
-        //                     img: res.data.result[0].img
+        //                     Users: res.data.result
         //                 })
         //             }).catch((err) => {
         //                 console.log(err)
@@ -146,7 +148,7 @@ class Profile extends Component {
                 axios.post('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Users-create', JSON.stringify(data.Item), config)
                 .then((res) => {
                     localStorage.setItem('img', publicPath);
-                    this.setState({ isLoading: false })
+                    this.setState({ isLoading: false, statusShow: "updateStatus show" })
                 }).catch((err) => {
                     console.log(err)
                 })
@@ -160,7 +162,6 @@ class Profile extends Component {
     }
 
     render() {
-        //const currentUser = getCurrentUser();
         return(
                 <div>
                     < FixedNavbar />
@@ -183,7 +184,7 @@ class Profile extends Component {
                                         ref={(ref) => this.fileUpload = ref} 
                                         style={{ display: 'none' }} />
                                     </FormItem>
-                                    <img src={(this.state.isPreview) ? this.state.tempFile : this.state.img} onClick={(e) => this.fileUpload.click() } style={{ cursor: 'pointer' }}/>
+                                    <div className="pic" style={{ cursor: 'pointer', backgroundImage: (this.state.isPreview) ? `url(${this.state.tempFile})` : `url(${this.state.img})` }} onClick={(e) => this.fileUpload.click() }></div>
                                 </div>
                                 
                             </div>
@@ -253,7 +254,7 @@ class Profile extends Component {
                                                     <i className="fa fa-spinner fa-spin" style={{ textAlign: 'center' }}></i>
                                                 </Button>
                                         }
-                                    
+                                    <span className={this.state.statusShow}>Changes Saved</span>
                                 
                             </div>
                         </div>

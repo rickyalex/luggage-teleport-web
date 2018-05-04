@@ -7,7 +7,7 @@ import axios from 'axios';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { inputProps, OrderASC, cssClasses, disabledDate, disabledHours, disabledDropoffHours } from './helper';
-import { TimePicker, Input, Button, Select, Slider, Row, Col, InputNumber, DatePicker, Icon } from 'antd';
+import { TimePicker, Input, Button, Select, Slider, Row, Col, InputNumber, DatePicker, Icon, Switch } from 'antd';
 import { MdFlightTakeoff, MdPerson, MdHotel, MdLocalMall } from 'react-icons/lib/md';
 
 const Option = Select.Option;
@@ -31,38 +31,39 @@ class AirportToHotel extends Component {
             BookingType: 'ATH',
             Luggage: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? props.BookData[0].Luggage : null : null || null,
             TotalCost: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? props.BookData[0].TotalCost : 0 : 0 || 0,
-            PickupTime: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? moment(props.BookData[0].PickupTime) : '' : '' || '',
-            DropoffTime: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? moment(props.BookData[0].DropoffTime) : '' : '' || '',
             PickupDate: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? moment(props.BookData[0].PickupDate) : null : null || null,
             DropoffDate: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? moment(props.BookData[0].DropoffDate) : null : null || null,
             PickupHour: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? props.BookData[0].PickupHour : 10 : 10 || 10,
             PickupMinute: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? props.BookData[0].PickupMinute : '00' : '00' || '00',
-            DropoffHour: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? props.BookData[0].DropoffHour : 14 : 14 || 14,
-            DropoffMinute: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? props.BookData[0].DropoffMinute : '00' : '00' || '00',
+            DropoffHour: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? props.BookData[0].DropoffHour : null : null || null,
+            DropoffMinute: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? props.BookData[0].DropoffMinute : null : null || null,
+            PickupFormat: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? props.BookData[0].PickupFormat : "AM" : "AM" || "AM",
+            DropoffFormat: (props.BookData.length > 0) ? (props.BookData[0].BookingType == 'ATH') ? props.BookData[0].DropoffFormat : null : null || null,
+            restrictMessage: "callout right hidden",
+            restrict: true
         }
 
-        console.log(this.state);
-
         this.hourArray = [];
-        this.hourDropoffArray = [];
         this.minuteArray = [];
-        this.minuteDropoffArray = [];
 
         this.handleAirport = this.handleAirport.bind(this);
         this.handleAirline = this.handleAirline.bind(this);
-        this.handlePickupChangeTime = this.handlePickupChangeTime.bind(this);
-        this.handleDropoffChangeTime = this.handleDropoffChangeTime.bind(this);
         this.handlePickupDate = this.handlePickupDate.bind(this);
         this.handleDropoffDate = this.handleDropoffDate.bind(this);
         this.handlePickupHours = this.handlePickupHours.bind(this);
         this.handlePickupMinutes = this.handlePickupMinutes.bind(this);
         this.handleDropoffHours = this.handleDropoffHours.bind(this);
         this.handleDropoffMinutes = this.handleDropoffMinutes.bind(this);
+        this.handlePickupFormat = this.handlePickupFormat.bind(this);
+        this.handleDropoffFormat = this.handleDropoffFormat.bind(this);
+        this.checkRestriction = this.checkRestriction.bind(this);
         this.handleLuggage = this.handleLuggage.bind(this);
         this.onChange = (Hotel) => this.setState({ Hotel });
     }
 
     ValidationForm() {
+        console.log(this.state);
+
         const {
             Airport,
             Airline,
@@ -73,12 +74,16 @@ class AirportToHotel extends Component {
             HotelBookingRef,
             DropoffDate,
             Luggage,
-            PickupDisplayTime,
-            DropoffDisplayTime
+            PickupHour,
+            PickupMinute,
+            PickupFormat,
+            DropoffHour,
+            DropoffMinute,
+            DropoffFormat
         } = this.state;
 
         return (
-            Airport && Airline && Hotel && FlightNumber && PickupDate && PickupDisplayTime && HotelBookingRef && DropoffDate && DropoffDisplayTime && Luggage
+            Airport && Airline && Hotel && FlightNumber && PickupDate && PickupHour && PickupMinute && PickupFormat && HotelBookingRef && DropoffDate && DropoffHour && DropoffMinute && DropoffFormat && Luggage
         )
     }
 
@@ -95,7 +100,7 @@ class AirportToHotel extends Component {
             <Link to="/finalreview" style={{ color: 'black' }}>
                 <Button 
                     disabled={!this.ValidationForm()}
-                    onClick={() => this.SubmitAirportToHotelData()}
+                    onClick={(e) => this.SubmitAirportToHotelData(e)}
                     type="primary luggage-yellow">
                     Next
                 </Button>
@@ -104,6 +109,7 @@ class AirportToHotel extends Component {
     }
 
     handleLuggage() {
+        //The minimum cost is $35, after more than 2 luggages, each are costed $10
         const { TotalCost, Luggage } = this.state;
         let Total = 0;
         if (Luggage > 0 && Luggage <= 2) {
@@ -118,23 +124,34 @@ class AirportToHotel extends Component {
         return Total;
     }
 
-    SubmitAirportToHotelData = () => {  
-        let datas = [];
-        datas.push(this.state);
-        this.props.PassBookData(datas);  
-        this.setState({ TotalCost: this.handleLuggage() });
+    SubmitAirportToHotelData(e){  
+        var check = this.checkRestriction();
+
+        if(!check){
+            this.setState({ restrictMessage: "callout right hidden", restrict: false });    
+            let datas = [];
+            datas.push(this.state);
+            this.props.PassBookData(datas);  
+            this.setState({ TotalCost: this.handleLuggage() }); 
+        }
+        else{
+            e.preventDefault();
+            this.setState({ restrictMessage: "callout right show", restrict: true });    
+            return false;
+        }
     }
 
     componentWillMount() {
+        //load airport data
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airport-scan')
             .then((res) => {
-                // res. 
+                console.log(res.data.Myresult)
                 OrderASC(res.data.Myresult, 'string');
                 this.props.GetAirportData(res.data.Myresult);
             }).catch((err) => {
                 console.log(err)
             })
-
+        //load airline data
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Airline-scan')
             .then((res) => {
                 OrderASC(res.data.Myresult, 'string');
@@ -142,8 +159,8 @@ class AirportToHotel extends Component {
             }).catch((err) => {
                 console.log(err);
             })
-
-        for(var x=0;x<24;x++){
+        //load hour and minute array dropdown
+        for(var x=1;x<13;x++){
             this.hourArray.push({
                     id: x,
                     value: x
@@ -152,30 +169,11 @@ class AirportToHotel extends Component {
 
         for(var y=0;y<12;y++){
             this.minuteArray.push({
-                    id: y,
-                    value: (y == 0) ? '00' : ("00" + (y*5)).slice(-2)
-                });
-
-            this.minuteDropoffArray.push({
-                    id: y,
-                    value: (y == 0) ? '00' : ("00" + (y*5)).slice(-2)
-                });
+                id: y,
+                value: (y == 0) ? '00' : ("00" + (y*5)).slice(-2)
+            });
         }
-    }
 
-    handlePickupChangeTime(value) {
-        let dropoff = moment(value).add(4, 'hours');
-
-        this.setState({
-          PickupTime: value,
-          DropoffTime: dropoff
-        });
-    }
-
-    handleDropoffChangeTime(value) {
-        this.setState({
-          DropoffTime: value
-        });
     }
 
     handleAirport(airport) {
@@ -206,58 +204,15 @@ class AirportToHotel extends Component {
         });
     }
 
-    handlePickupHours = (value) =>{
-        this.hourDropoffArray = [];
-
-        for(var x=0;x<24;x++){
-            this.hourDropoffArray.push({
-                id: x,
-                value: x,
-                disabled: (x<value+4) ? true : false
-            });
-        }
-
-        //if the dropoff is above 24 hour
-        if(value+4 < 24){
-            this.setState({
-                PickupHour: value,
-                DropoffHour: value+4,
-            })    
-        }
-        else{
-            this.setState({
-                PickupHour: value,
-                DropoffHour: (value+4)-24,
-                DropoffDate: moment(this.state.PickupDate).add(1, 'days')
-            })
-        }
-        
+    handlePickupHours(value){
+        this.setState({
+            PickupHour: value
+        }) 
     }
 
     handlePickupMinutes(value){
-        this.minuteDropoffArray = [];
-
-        if((this.state.DropoffHour - this.state.PickupHour) <= 4){
-            for(var y=0;y<12;y++){
-                this.minuteDropoffArray.push({
-                    id: y,
-                    value: (y == 0) ? '00' : ("00" + (y*5)).slice(-2),
-                    disabled: (y<parseInt(value/5)) ? true : false
-                });
-            }    
-        }
-        else{
-            for(var y=0;y<12;y++){
-                this.minuteDropoffArray.push({
-                    id: y,
-                    value: (y == 0) ? '00' : ("00" + (y*5)).slice(-2)
-                });
-            }
-        }       
-
         this.setState({
-            PickupMinute: value,
-            DropoffMinute: value
+            PickupMinute: value
         })
     }
 
@@ -273,8 +228,34 @@ class AirportToHotel extends Component {
         })
     }
 
+    handlePickupFormat(value){
+        this.setState({
+            PickupFormat: value
+        })
+    }
+
+    handleDropoffFormat(value){
+        this.setState({
+            DropoffFormat: value
+        })
+    }
+
+    checkRestriction(){
+        //returns true (restrict) if the minimum range is unmet
+
+        var minimumRange = 4; //in hours
+
+        var pickupMoment = moment(moment(this.state.PickupDate).format("YYYY-MM-DD")+" "+this.state.PickupHour+":"+this.state.PickupMinute+this.state.PickupFormat,"YYYY-MM-DD hh:mma");
+        var dropoffMoment = moment(moment(this.state.DropoffDate).format("YYYY-MM-DD")+" "+this.state.DropoffHour+":"+this.state.DropoffMinute+this.state.DropoffFormat,"YYYY-MM-DD hh:mma");
+        var expectedDropoff = pickupMoment.add(minimumRange, 'hours');
+
+        if(dropoffMoment.isSameOrAfter(expectedDropoff)){
+            return false;
+        }
+        else return true;
+    }
+
     render() {
-        const dateFormat = 'YYYY-MM-DD';
         return (
             <div className="polaroid">
                 <div className="container">
@@ -361,60 +342,57 @@ class AirportToHotel extends Component {
                         defaultValue={this.state.FlightNumber}
                     />
                     <hr />
-                    <Row gutter={12}>
-                        <Col span={12}>
                             <DatePicker
                                 className="dp"
                                 format="YYYY-MM-DD"
                                 disabledDate={disabledDate}
                                 onChange={this.handlePickupDate}
                                 value={this.state.PickupDate}
-                                defaultValue={(this.state.PickupDate != null) ? moment(this.state.PickupDate, dateFormat) : null} format={dateFormat}
+                                defaultValue={(this.state.PickupDate != null) ? this.state.PickupDate : null} 
                                 placeholder="Pickup date" />
+                    <hr />
+                    <Row gutter={12}>
+                        <Col span={8} style={{ padding: "0 0 0 6px" }}>
+                            {
+                                (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATH') ? <Select
+                                placeholder="Hours"
+                                onChange={this.handlePickupHours}
+                                defaultValue={this.state.PickupHour}
+                                >
+                                {
+                                    this.hourArray.map((hours)=>{
+                                        return <Option key={hours.id} value={hours.value}>{hours.value}</Option>
+                                    })
+                                }
+                            </Select> : <Select
+                                placeholder="Hours"
+                                onChange={this.handlePickupHours}
+                                defaultValue={this.state.PickupHour}
+                                >
+                                {
+                                    this.hourArray.map((hours)=>{
+                                        return <Option key={hours.id} value={hours.value}>{hours.value}</Option>
+                                    })
+                                }
+                            </Select> : <Select
+                                placeholder="Hours"
+                                onChange={this.handlePickupHours}
+                                defaultValue={this.state.PickupHour}
+                                >
+                                {
+                                    this.hourArray.map((hours)=>{
+                                        return <Option key={hours.id} value={hours.value}>{hours.value}</Option>
+                                    })
+                                }
+                            </Select>
+                            }
                         </Col>
-                        <Col span={12}>
-                            {
-                                (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATH') ? <Select
-                                placeholder="Hours"
-                                onChange={this.handlePickupHours}
-                                defaultValue={this.state.PickupHour}
-                                style={{ width: '50%' }}
-                                >
-                                {
-                                    this.hourArray.map((hours)=>{
-                                        return <Option key={hours.id} value={hours.value}>{hours.value}</Option>
-                                    })
-                                }
-                            </Select> : <Select
-                                placeholder="Hours"
-                                onChange={this.handlePickupHours}
-                                defaultValue={this.state.PickupHour}
-                                style={{ width: '50%' }}
-                                >
-                                {
-                                    this.hourArray.map((hours)=>{
-                                        return <Option key={hours.id} value={hours.value}>{hours.value}</Option>
-                                    })
-                                }
-                            </Select> : <Select
-                                placeholder="Hours"
-                                onChange={this.handlePickupHours}
-                                defaultValue={this.state.PickupHour}
-                                style={{ width: '50%' }}
-                                >
-                                {
-                                    this.hourArray.map((hours)=>{
-                                        return <Option key={hours.id} value={hours.value}>{hours.value}</Option>
-                                    })
-                                }
-                            </Select>
-                            }
+                        <Col span={8} style={{ padding: "0 0 0 3px" }}>
                             {
                                 (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATH') ? <Select
                                 placeholder="Minutes"
                                 onChange={this.handlePickupMinutes}
                                 defaultValue={this.state.PickupMinute}
-                                style={{ width: '50%' }}
                                 >
                                 {
                                     this.minuteArray.map((minutes)=>{
@@ -425,7 +403,6 @@ class AirportToHotel extends Component {
                                 placeholder="Minutes"
                                 onChange={this.handlePickupMinutes}
                                 defaultValue={this.state.PickupMinute}
-                                style={{ width: '50%' }}
                                 >
                                 {
                                     this.minuteArray.map((minutes)=>{
@@ -436,7 +413,6 @@ class AirportToHotel extends Component {
                                 placeholder="Minutes"
                                 onChange={this.handlePickupMinutes}
                                 defaultValue={this.state.PickupMinute}
-                                style={{ width: '50%' }}
                                 >
                                 {
                                     this.minuteArray.map((minutes)=>{
@@ -445,9 +421,18 @@ class AirportToHotel extends Component {
                                 }
                             </Select>
                             }
+                        </Col>
+                        <Col span={7} style={{ marginLeft: "11px" }}>
+                            <Select
+                                placeholder="Format"
+                                onChange={this.handlePickupFormat}
+                                defaultValue={this.state.PickupFormat}
+                                >
+                                <Option key="AM" value="AM">AM</Option>
+                                <Option key="PM" value="PM">PM</Option>
+                            </Select>
                         </Col>
                     </Row>
-
                     <hr />
                     {/*<TimePicker
                         onChange={this.handlePickupChangeTime}
@@ -477,102 +462,108 @@ class AirportToHotel extends Component {
                         onChange={e => this.setState({ HotelBookingRef: e.target.value })}
                     />
                     <hr />
-                    <Row gutter={12}>
-                        <Col span={12}>
-                            <DatePicker
+                    <DatePicker
                                 className="dp"
                                 format="YYYY-MM-DD"
                                 disabledDate={disabledDate}
                                 onChange={this.handleDropoffDate}
                                 value={this.state.DropoffDate}
-                                defaultValue={(this.state.DropoffDate != null) ? moment(this.state.DropoffDate, dateFormat) : null} format={dateFormat}
+                                defaultValue={(this.state.DropoffDate != null) ? this.state.DropoffDate : null}
                                 placeholder="Delivery date" />
+                    <hr />
+                    <Row gutter={12}>
+                        <Col span={8} style={{ padding: '0 0 0 6px' }}>
+                            {
+                                (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATH') ? <Select
+                                placeholder="Hours"
+                                onChange={this.handleDropoffHours}
+                                defaultValue={this.state.DropoffHour}
+                                value={this.state.DropoffHour}
+                                >
+                                {
+                                    this.hourArray.map((hours)=>{
+                                        return <Option key={hours.id} value={hours.value}>{hours.value}</Option>
+                                    })
+                                }
+                            </Select> : <Select
+                                placeholder="Hours"
+                                onChange={this.handleDropoffHours}
+                                >
+                                {
+                                    this.hourArray.map((hours)=>{
+                                        return <Option key={hours.id} value={hours.value}>{hours.value}</Option>
+                                    })
+                                }
+                            </Select> : <Select
+                                placeholder="Hours"
+                                onChange={this.handleDropoffHours}
+                                >
+                                {
+                                    this.hourArray.map((hours)=>{
+                                        return <Option key={hours.id} value={hours.value}>{hours.value}</Option>
+                                    })
+                                }
+                            </Select>
+                            }
                         </Col>
-                        <Col span={12}>
-                            {
-                                (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATH') ? <Select
-                                placeholder="Hours"
-                                onChange={this.handleDropoffHours}
-                                defaultValue={this.state.DropoffHour}
-                                value={this.state.DropoffHour}
-                                style={{ width: '50%' }}
-                                >
-                                {
-                                    this.hourDropoffArray.map((hours)=>{
-                                        var opt = (hours.disabled) ? <Option key={hours.id} value={hours.value} disabled>{hours.value}</Option> : <Option key={hours.id} value={hours.value}>{hours.value}</Option>
-                                        return opt
-                                    })
-                                }
-                            </Select> : <Select
-                                placeholder="Hours"
-                                onChange={this.handleDropoffHours}
-                                defaultValue={this.state.DropoffHour}
-                                value={this.state.DropoffHour}
-                                style={{ width: '50%' }}
-                                >
-                                {
-                                    this.hourDropoffArray.map((hours)=>{
-                                        var opt = (hours.disabled) ? <Option key={hours.id} value={hours.value} disabled>{hours.value}</Option> : <Option key={hours.id} value={hours.value}>{hours.value}</Option>
-                                        return opt
-                                    })
-                                }
-                            </Select> : <Select
-                                placeholder="Hours"
-                                onChange={this.handleDropoffHours}
-                                defaultValue={this.state.DropoffHour}
-                                value={this.state.DropoffHour}
-                                style={{ width: '50%' }}
-                                >
-                                {
-                                    this.hourDropoffArray.map((hours)=>{
-                                        var opt = (hours.disabled) ? <Option key={hours.id} value={hours.value} disabled>{hours.value}</Option> : <Option key={hours.id} value={hours.value}>{hours.value}</Option>
-                                        return opt
-                                    })
-                                }
-                            </Select>
-                            }
+                        <Col span={8} style={{ padding: '0 0 0 3px' }}>
                             {
                                 (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATH') ? <Select
                                 placeholder="Minutes"
                                 onChange={this.handleDropoffMinutes}
                                 defaultValue={this.state.DropoffMinute}
                                 value={this.state.DropoffMinute}
-                                style={{ width: '50%' }}
                                 >
                                 {
-                                    this.minuteDropoffArray.map((minutes)=>{
-                                        var opt = (minutes.disabled) ? <Option key={minutes.id} value={minutes.value} disabled>{minutes.value}</Option> : <Option key={minutes.id} value={minutes.value}>{minutes.value}</Option>
-                                        return opt
+                                    this.minuteArray.map((minutes)=>{
+                                        return <Option key={minutes.id} value={minutes.value}>{minutes.value}</Option>
                                     })
                                 }
                             </Select> : <Select
                                 placeholder="Minutes"
                                 onChange={this.handleDropoffMinutes}
-                                defaultValue={this.state.DropoffMinute}
-                                value={this.state.DropoffMinute}
-                                style={{ width: '50%' }}
                                 >
                                 {
-                                    this.minuteDropoffArray.map((minutes)=>{
-                                        var opt = (minutes.disabled) ? <Option key={minutes.id} value={minutes.value} disabled>{minutes.value}</Option> : <Option key={minutes.id} value={minutes.value}>{minutes.value}</Option>
-                                        return opt
+                                    this.minuteArray.map((minutes)=>{
+                                        return <Option key={minutes.id} value={minutes.value}>{minutes.value}</Option>
                                     })
                                 }
                             </Select> : <Select
                                 placeholder="Minutes"
                                 onChange={this.handleDropoffMinutes}
-                                defaultValue={this.state.DropoffMinute}
-                                value={this.state.DropoffMinute}
-                                style={{ width: '50%' }}
                                 >
                                 {
-                                    this.minuteDropoffArray.map((minutes)=>{
-                                        var opt = (minutes.disabled) ? <Option key={minutes.id} value={minutes.value} disabled>{minutes.value}</Option> : <Option key={minutes.id} value={minutes.value}>{minutes.value}</Option>
-                                        return opt
+                                    this.minuteArray.map((minutes)=>{
+                                        return <Option key={minutes.id} value={minutes.value}>{minutes.value}</Option>
                                     })
                                 }
                             </Select>
                             }
+                        </Col>
+                        <Col span={7} style={{ marginLeft: '11px' }}>
+                            {
+                                (this.props.BookData.length > 0) ? (this.props.BookData[0].BookingType == 'ATH') ? <Select
+                                    placeholder="AM/PM"
+                                    onChange={this.handleDropoffFormat}
+                                    defaultValue={this.state.DropoffFormat}
+                                    >
+                                    <Option key="AM" value="AM">AM</Option>
+                                    <Option key="PM" value="PM">PM</Option>
+                                </Select> : <Select
+                                    placeholder="AM/PM"
+                                    onChange={this.handleDropoffFormat}
+                                    >
+                                    <Option key="AM" value="AM">AM</Option>
+                                    <Option key="PM" value="PM">PM</Option>
+                                </Select> : <Select
+                                    placeholder="AM/PM"
+                                    onChange={this.handleDropoffFormat}
+                                    >
+                                    <Option key="AM" value="AM">AM</Option>
+                                    <Option key="PM" value="PM">PM</Option>
+                                </Select>
+                            }
+                            <div className={this.state.restrictMessage}>Dropoff must be at least 4 hours after Pickup</div>
                         </Col>
                     </Row>
                     
