@@ -82,7 +82,14 @@ class Navbar extends React.Component {
                 {
                   !token ? <div></div>
                     :
-                    <Link to="/history">History</Link>
+                    <Link to="/history">My Bookings</Link>
+                }
+              </a>
+              <a id="admin" className="menu-item">
+                {
+                  !token ? <div></div>
+                    :
+                    <Link to="/admin">Admin</Link>
                 }
               </a>
               <a target="_blank" id="home" className="menu-item" href="https://www.luggageteleport.com/"><Link to="/home">Home</Link></a>
@@ -91,15 +98,13 @@ class Navbar extends React.Component {
               <a target="_blank" id="cnp" className="menu-item" href="https://www.luggageteleport.com/careers-partnerships/">Careers & Partnerships</a>
               <a target="_blank" id="contact" className="menu-item" href="https://www.luggageteleport.com/contact-us/">Contact Us </a>
               <a target="_blank" id="booking" className="menu-item SideBar" ><Link to="/booking">Booking</Link></a>
+              <a target="_blank" id="corporatebooking" className="menu-item SideBar" ><Link to="/booking">Corporate Booking</Link></a>
 
             </Menu>
           </div>
           <div className="container">
             <a className="navbar-brand" href="https://www.luggageteleport.com" target="_blank">
-              <img
-                src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png"
-                alt
-              />
+              <img src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png" width="200" height="auto" alt/>
             </a>
           </div>
         </nav>

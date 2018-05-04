@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { userPool } from '../config';
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { withRouter } from 'react-router-dom';
-
+import { Form, Input } from 'antd';
 import '../App.css';
+
+const FormItem = Form.Item;
 
 class ForgotPassword extends Component {
 
@@ -74,16 +76,22 @@ class ForgotPassword extends Component {
             <div>
                 <div className="bg-image">
                     <div align="center" style={{ marginTop: '100px' }}>
-
-                        <h1 style={{ color: 'yellow', marginBottom: '2em' }}>Forgot Password</h1>
-                        <form onSubmit={this.handleConfirmationSubmit}>
-                            <div className="form-group">
+                        <Form onSubmit={this.handleConfirmationSubmit}>
+                            <h3 style={{ color: 'yellow', marginBottom: '2em' }}>Forgot Password</h3>
+                            {/* <div className="form-group">
                                 <input
                                     className="form-control"
                                     type="text"
                                     onChange={e => this.setState({ email: e.target.value })}
                                     placeholder="Your Email" required />
-                            </div>
+                            </div> */}
+                            <FormItem>
+                                <Input
+                                    onChange={e => this.setState({ email: e.target.value })}
+                                    placeholder="Your Email"
+                                    style={{ width: 300 }}
+                                />
+                            </FormItem>
 
                             {
                                 !isLoading ?
@@ -105,7 +113,7 @@ class ForgotPassword extends Component {
                                         <i className="fa fa-spinner fa-spin"></i> Sending...
                                 </button>
                             }
-                        </form>
+                        </Form>
                     </div>
                 </div>
             </div>

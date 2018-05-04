@@ -4,6 +4,9 @@ import { verifyUserAccount } from '../aws_cognito';
 import { userPool } from '../config';
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { withRouter } from 'react-router-dom';
+import { Input, Form, Button } from 'antd';
+
+const FormItem = Form.Item;
 
 class VerifyAccount extends Component {
 
@@ -19,6 +22,7 @@ class VerifyAccount extends Component {
             isLoading: false
         }
         this.handleConfirmationSubmit = this.handleConfirmationSubmit.bind(this);
+        this.email = localStorage.getItem('EmailRegist');
     }
 
     validateForm() {
@@ -48,11 +52,11 @@ class VerifyAccount extends Component {
     }
 
     async handleConfirmationSubmit(event) {
-        const email = localStorage.getItem('EmailRegist');
+        
         event.preventDefault();
         this.setState({ isLoading: true })
         try {
-            await this.confirm(email, this.state.pin);
+            await this.confirm(this.email, this.state.pin);
             alert('Email verification success');
             this.props.history.push('/');
             localStorage.removeItem('EmailRegist');
@@ -69,39 +73,39 @@ class VerifyAccount extends Component {
         const { isLoading } = this.state;
         return (
             <div className="bg-image">
-                <div align="center" style={{ marginTop: '100px' }}>
-
-                    <h1 style={{ color: 'yellow', marginBottom: '2em' }}>Verify your Account</h1>
-                    <form onSubmit={this.handleConfirmationSubmit}>
-                        <div className="form-group">
-                            <input
-                                className="form-control"
+                <div align="center" >
+                    <Form onSubmit={this.handleConfirmationSubmit} style={{ position: 'relative', top: '100px', margin: 'auto', width: '60%' }}>
+                        <h2 style={{ color: 'yellow', marginBottom: '1em' }}>Complete your registration</h2>
+                        <span>We have sent a verification code to {this.email}. Please check your email to complete your registration</span>
+                        <FormItem style={{ marginTop: '10px' }}>
+                            <Input
                                 type="text"
                                 onChange={e => this.setState({ pin: e.target.value })}
-                                placeholder="Your Pin" required />
-                        </div>
+                                style={{width: 260}}
+                                placeholder="Your Pin"
+                            />
+                        </FormItem>
 
                         {
                             !isLoading ?
-                                <button
-                                    className="btn btn-lg btn-primary"
-                                    type="submit"
-                                    style={{ width: '160px' }}
+                                <Button
+                                    type="primary"
                                     disabled={!this.validateForm()}
+                                    htmlType="submit"
+                                    style={{ width: '150px' }}
                                 >
-                                    Verify
-                                </button>
+                                    Create Account
+                                </Button>
                                 :
-                                <button
-                                    className="btn btn-lg btn-primary"
-                                    type="submit"
-                                    style={{ width: '160px' }}
+                                <Button
+                                    type="primary"
                                     disabled={true}
+                                    style={{ width: '150px' }}
                                 >
-                                    <i className="fa fa-spinner fa-spin"></i> Verifying...
-                                </button>
+                                    <i className="fa fa-spinner fa-spin" style={{ textAlign: 'center' }}></i>
+                                </Button>
                         }
-                    </form>
+                    </Form>
                 </div>
             </div>
         )

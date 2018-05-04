@@ -15,6 +15,15 @@
   width: 35%;
 }
 
+.form-auth {
+    left: 50%;
+    top: 45%;
+    position: absolute;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    -moz-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+}
+
 .form-control{
   height: 40px;
   font-size: 0.9em;
@@ -32,22 +41,21 @@ hr{
   margin-top: 1.2em;
 }
 
-.bg-image {
-  position: absolute;
-  background-repeat: repeat;
+body {
+  background-image: url(https://www.luggageteleport.com/wp-content/uploads/2017/09/homebg.png);
+  background-attachment: fixed;
   width: 100%;
   height: 100%;
-  background-image: url(https://www.luggageteleport.com/wp-content/uploads/2017/09/homebg.png);
-  background-size: cover;
 }
 
 .history-bg-image {
-  background-image: url(https://www.luggageteleport.com/wp-content/uploads/2017/09/contact-bg.jpg);
-  background-repeat: repeat;
+  background-image: url(https://www.luggageteleport.com/wp-content/uploads/2017/09/contact-bg.jpg) no-repeat;
   position: absolute;
+  background-attachment: fixed;
+  background-position: center center;
+  background-size: cover; 
   width: 100%;
   height: 100%;
-  /* background-size: cover; */
 }
 
 .popup-image {
@@ -78,7 +86,7 @@ hr{
   width: 36px;
   height: 30px;
   right: 60px;
-  top: 40px;
+  top: 25px;
 }
 
 /* Color/shape of burger icon bars */
@@ -133,7 +141,7 @@ hr{
 
 /* Css for Progress bar */
 .containerProgressBar {
-  width: 600px;
+  width: 400px;
   margin: 100px auto; 
 }
 .progressbar {
@@ -188,9 +196,11 @@ hr{
 /** css for booking summary review*/
 
 .receipt {
-  border: 1px black dotted;
+  border: 1px #fff solid;
+  border-radius: 4px;
   padding: 20px;
   box-sizing: border-box;
+  background-color: #fff;
 }
 
 
@@ -300,7 +310,8 @@ hr{
 
 /* Define how SqPaymentForm iframes should look */
 .sq-input {
-  border: 1px solid rgb(223, 223, 223);
+  border: 0;
+  border-bottom: 1px solid rgb(223, 223, 223) !important;
   outline-offset: -2px;
   margin-bottom: 5px;
   display: inline-block;
@@ -426,3 +437,275 @@ pointer-events: none;
 
 /* add padding  */
 .left-addon input  { padding-left:  30px; }
+
+/*override places autocomplete */
+@font-face {
+  font-family: "Monospaced Number";
+  src: local("Tahoma");
+  unicode-range: U+30-39;
+}
+@font-face {
+  font-family: "Chinese Quote";
+  src: local("PingFang SC"), local("SimSun");
+  unicode-range: U+2018, U+2019, U+201c, U+201d;
+}
+
+/*override google places styling */
+.places-autocomplete, .places-autocomplete-item, .ant-input-number-input{
+  font-size:14px !important;
+  font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+/*override antd datepicker icon*/
+.ant-calendar-picker-icon{
+  left: 12px !important;
+}
+
+.ant-calendar-picker-icon:after{
+  color: rgb(26, 26, 255) !important;
+}
+
+.dp input {
+  padding-left: 30px !important;
+}
+
+.ant-btn{
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  background-color: yellow;
+  border: 0;
+  margin: 20px;
+  color: #333;  
+  width: 100px;
+}
+
+.ant-btn span, .ant-time-picker-panel-input-wrap, .ant-time-picker-panel-select ul li{
+  font-size: 14px;
+  font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+input.ant-input, .ant-select, .ant-select-selection, .ant-input-number, .ant-input-number-input, .ant-time-picker-input, .ant-calendar-picker{
+  background-color: #eee;
+  width:100%;
+}
+
+input.ant-input.TimeDisplayer{
+  width: 100%;
+  font-size:10px !important;
+  text-align: center !important;
+  font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  height:inherit !important;
+  top: -5px;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.ant-slider{
+  margin: 0 !important;
+}
+
+.timeInput{
+  height:15px;
+}
+
+.review_header{
+  position: relative;
+  margin: 30px auto;
+  text-align: center;
+  font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+.review_header hr{
+  width: 100%;
+}
+
+table.review_luggage{
+  margin-top: 1rem;
+}
+
+table.review_details td{
+  padding: 0 30px 0 0;
+}
+
+.origin_destination{
+  line-height: 2em;
+  font-size: 16px !important;
+}
+
+.origin_destination span,
+table.review_details td, 
+table.review_details td b, 
+table.review_luggage td, 
+table.review_luggage td b, 
+table.review_luggage thead th,
+.sq-input-wrapper label,
+.ant-alert-message,
+.promostatus,
+.updateStatus,
+.callout{
+  font-size: 14px;
+  font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+span.ant-input-group-addon{
+  background-color: #2a6fb3;
+  border: 1px #2a6fb3;
+}
+
+.ant-alert-icon{
+  top:10px !important;
+}
+
+.ant-alert{
+  margin-top: 5px;
+}
+
+.ant-form-item{
+  margin: 0;
+}
+
+.currentBookings{
+  margin-top: -10px;
+  width: inherit;
+  background-color: #fff;
+}
+
+.currentBookings span{
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+.even{
+  background-color: #d4ecfb;
+}
+
+.containerHistory{
+  width: 80%;
+  margin: 0 auto 50px auto; 
+}
+
+.containerBooking{
+  margin: 80px auto 0 auto; 
+}
+
+.ant-layout-header{
+  margin-bottom: 30px;
+  z-index: 999;
+  border:none;
+  height:inherit;
+}
+
+.ant-layout-header li, .ant-layout-header li a{
+  font-size: 14px;
+  font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+div.callout {
+  height: 50px;
+  width: 200px;
+  float: left;
+}
+
+div.callout {
+  background-color: #2a6fb3;
+  background-image: -moz-linear-gradient(top, #2a6fb3, #2a6fb3);
+  position: absolute;
+  color: #F1CF46;
+  padding: 2px;
+  border-radius: 3px;
+  box-shadow: 0px 2px 5px #333;
+  margin: 25px 25px 25px 100px;
+  top: -40px;
+  min-height: 50px;
+  border: 1px solid #2a6fb3;
+  
+  /*box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;*/
+}
+
+.callout::before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  border: 0.8em solid transparent;
+  position: absolute;
+}
+
+.callout.right::before {
+  left: -20px;
+  top: 30%;
+  border-right: 10px solid #2a6fb3;
+}
+
+/* header styles */
+
+/**
+   Coded by /u/j0be in scss.
+   See scss source here -> https://codepen.io/j0be/pen/MKRVyN
+*/
+
+/* VARIABLES */ /* BASE */ .site-content { padding-top: 66px; } /* HEADER */ .header { position: fixed; top: 0; left: 0; right: 0; height: 66px; line-height: 66px; color: #fff; background-color: #0070b8; z-index: 999} .header__logo { font-weight: 700; padding: 0 25px; float: left; } /* MENU */ .menu { float: left; margin-left: 200px } .menu a { padding: 0 10px; color: white; font-size: 16px; font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;} .menu a:hover { color: #c5cae9; } .menu a.profile_link { position: absolute; right: 60px; }/* RESPONSIVE */ @media only screen and (max-width: 768px) { .site-pusher, .site-container { height: 100%; } .site-container { overflow: hidden; } .site-pusher { -moz-transition-duration: 0.3s; -o-transition-duration: 0.3s; -webkit-transition-duration: 0.3s; transition-duration: 0.3s; -moz-transform: translateX(0px); -ms-transform: translateX(0px); -webkit-transform: translateX(0px); transform: translateX(0px); } .site-content { position: absolute; top: 66px; right: 0; left: 0; bottom: 0; padding-top: 0; overflow-y: scroll; -webkit-overflow-scrolling: touch; } .header__icon { position: relative; display: block; float: right; width: 50px; height: 66px; cursor: pointer; } .header__icon:after { content: ""; position: absolute; display: block; width: 1rem; height: 0; top: 16px; right: 15px; -moz-box-shadow: 0 10px 0 1px #fff, 0 16px 0 1px #fff, 0 22px 0 1px #fff; -webkit-box-shadow: 0 10px 0 1px #fff, 0 16px 0 1px #fff, 0 22px 0 1px #fff; box-shadow: 0 10px 0 1px #fff, 0 16px 0 1px #fff, 0 22px 0 1px #fff; } .menu { position: absolute; left: 0; top: 0; bottom: 0; background-color: #3849a2; /* overflow-y: scroll; -webkit-overflow-scrolling: touch;*/ width: 250px; -moz-transform: translateX(-250px); -ms-transform: translateX(-250px); -webkit-transform: translateX(-250px); transform: translateX(-250px); } .menu a { display: block; height: 40px; text-align: center; line-height: 40px; border-bottom: 1px solid #0070b8; } .with--sidebar .site-pusher { -moz-transform: translateX(250px); -ms-transform: translateX(250px); -webkit-transform: translateX(250px); transform: translateX(250px); } .with--sidebar .site-cache { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.6); } } 
+
+.menu { float: left; margin-left: 200px } .menu a { padding: 0 10px; color: white; font-size: 16px; font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;} .menu a:hover { color: #c5cae9; } .menu a.profile_link { position: absolute; right: 60px; }
+
+.hidden {
+   display:none;
+}
+.show{
+   display:block;
+}
+
+.luggage-blue{
+  background-color: #2a6fb3;
+  color: black;
+}
+
+.luggage-yellow{
+  background-color: #f1cf46;
+  color: black;
+}
+
+.timePickerButton{
+  margin: 0;
+}
+
+
+/* end header styles */
+
+/* profile styles */
+
+.containerProfile{
+  width: 25%;
+  min-width: 280px;
+  margin: 0 auto 30px auto; 
+  background-color: white;
+}
+
+.profilePicture{
+  padding: 40px 60px 20px 60px;
+}
+
+.profilePicture .pic{
+  width: 160px;
+ height: 160px;
+ background-size: cover;
+ background-position: center center;
+ display: block;
+ border-radius: 50%;
+ -webkit-border-radius: 50%;
+ -moz-border-radius: 50%;
+  margin: auto;
+}
+
+.profilePicture .pic:hover{
+  opacity: 0.8;
+}
+
+.updateStatus{
+  margin: 10px 0;
+  color: green;
+  text-align: center;
+}
+
+/* end profile styles */

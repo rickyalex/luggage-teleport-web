@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import '../App.css';
-
-import ATHHistory from './ath_history';
+// import Navbar from './navbar';
+import FixedNavbar from './fixed_navbar';
+import CurrentBooking from './current_booking';
+import PastBooking from './past_booking';
 import HTAHistory from './hta_history';
 import HTHHistory from './hth_history';
 import ATAHistory from './ata_history';
@@ -21,49 +23,32 @@ class History extends Component {
     render() {
         return (
             <div>
-                <Link to="/home" style={{ color: 'white', margin: '2em' }}>
-                    <button type="button" className="btn btn-danger">
-                        Back to Home
-                        </button>
-                </Link>
-                <div align="center">
-                    <div>
-                        <h1>Booking History</h1>
-                    </div>
-                    <div>
+                < FixedNavbar />
+                <div className="review_header">
+                    <h3 style={{ color: 'white' }}>My Bookings</h3>
+                    <hr style={{ border: '1px solid #fff' }} />
+                </div>
+                    <div className="containerHistory">
                         <Tabs>
                             <TabList>
                                 <Tab>
-                                    <span style={{ color: '#0066ff' }}>Airport</span> - <span style={{ color: '#999900' }}>Hotel</span>
+                                    <span style={{ color: '#fed400' }}>Current Bookings</span>
                                 </Tab>
                                 <Tab>
-                                    <span style={{ color: '#0066ff' }}>Hotel</span> - <span style={{ color: '#999900' }}>Airport</span>
-                                </Tab>
-                                <Tab>
-                                    <span style={{ color: '#0066ff' }}>Hotel</span> - <span style={{ color: '#999900' }}>Hotel</span>
-                                </Tab>
-                                <Tab>
-                                    <span style={{ color: '#0066ff' }}>Airport</span> - <span style={{ color: '#999900' }}>Airport</span>
+                                    <span style={{ color: '#fed400' }}>Past Bookings</span>
                                 </Tab>
                             </TabList>
 
-                            <div className="history-bg-image">
-                                <TabPanel>
-                                    <ATHHistory />
+                            <div>
+                                <TabPanel className="currentBookings">
+                                    <CurrentBooking />
                                 </TabPanel>
-                                <TabPanel>
-                                    <HTAHistory />
-                                </TabPanel>
-                                <TabPanel>
-                                    <HTHHistory />
-                                </TabPanel>
-                                <TabPanel>
-                                    <ATAHistory />
+                                <TabPanel className="currentBookings">
+                                    <PastBooking />
                                 </TabPanel>
                             </div>
                         </Tabs>
                     </div>
-                </div>
             </div>
         )
     }

@@ -4,7 +4,8 @@ import '../App.css';
 import axios from 'axios';
 import * as moment from 'moment';
 import ReactTable from 'react-table';
-import { OrderASC } from './helper';
+import { Select } from 'antd';
+import { OrderASC, getStatus } from './helper';
 import 'react-table/react-table.css';
 
 
@@ -23,6 +24,8 @@ class ATHHistory extends Component {
             }],
             isLoading: false
         }
+
+        this.handleAction = this.handleAction.bind(this);
     }
 
     componentWillMount() {
@@ -30,14 +33,27 @@ class ATHHistory extends Component {
     }
 
     GetATHData() {
-        const { Email } = this.props.user
-        axios.get(`https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-get/${Email}`)
-            .then((res) => {
-                OrderASC(res.data.result, 'date');
-                this.setState({ data: res.data.result, isLoading: true })
-            }).catch((err) => {
-                console.log(err);
-            })
+        if(localStorage.admin !== 'Y') {
+            const { Email } = this.props.user
+            let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-get/${Email}`;
+            axios.get(url)
+                .then((res) => {
+                    OrderASC(res.data.result, 'date');
+                    this.setState({ data: res.data.result, isLoading: true })
+                }).catch((err) => {
+                    console.log(err);
+                })
+        }
+        else{
+            let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-scan`
+            axios.get(url)
+                .then((res) => {
+                    OrderASC(res.data.result, 'date');
+                    this.setState({ data: res.data.result, isLoading: true })
+                }).catch((err) => {
+                    console.log(err);
+                })
+        }
     }
 
     handleLoading() {
@@ -48,15 +64,49 @@ class ATHHistory extends Component {
         }
     }
 
+    handleAction(row, value) {
+        let token = localStorage.getItem('token')
+        let config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': '*/*'
+            }
+        }
+        let id = row.original.id
+        let currentStatus = value
+        let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-update/${id}?status=${currentStatus}`;
+        this.setState({ isLoading: true })
+
+        axios.put(url, null, config)
+            .then((response) => {
+                alert('successfully updated!')
+            }, (err) => {
+                console.log(err)
+                this.setState({ isLoading: false })
+            })
+    }
+
+    handleAiport(airport) {
+        this.setState({
+            Airport: airport
+        })
+    }
+
 
     render() {
         const { data, isLoading } = this.state;
+        const Option = Select.Option;
         return (
             <div>
                 <ReactTable
                     data={data}
                     noDataText="No Booking Data"
                     columns={[{
+                        Header: 'Id',
+                        accessor: 'id'
+                    },
+                    {
                         Header: 'Booking Id',
                         accessor: 'BookingId'
                     },
@@ -67,7 +117,8 @@ class ATHHistory extends Component {
                     {
                         Header: 'Hotel',
                         accessor: 'hotel'
-                    }, {
+                    }, 
+                    {
                         id: 'createdAt',
                         Header: 'Booked At',
                         accessor: d => moment(d.createdAt).format('DD MMM YYYY, HH:mm')
@@ -76,6 +127,24 @@ class ATHHistory extends Component {
                         id: 'TotalCost',
                         Header: 'Total Cost',
                         accessor: d => `${'$'}${d.TotalCost}`
+                    },
+                    {
+                        Header: 'Status',
+                        accessor: 'status'
+
+                    },
+                    {
+                        Header: 'Action',
+                        Cell: row => (<Select
+                            style={{ width: 260 }}
+                            placeholder="Choose Status to Update"
+                            onChange={(e) => this.handleAction(row, e)}>
+                            {
+                                getStatus().map((status) => {
+                                    return <Option key={status.id} style={{ width: 260 }} value={status.name}>{status.name}</Option>
+                                })
+                            }
+                            </Select>)
                     }]}
                     defaultPageSize={10}
                     className="-striped -highlight"

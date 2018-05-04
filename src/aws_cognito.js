@@ -1,5 +1,5 @@
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
-import { USER_POOL_ID, CLIENT_ID } from './config';
+import { cognito } from './config';
 
 import AWS from 'aws-sdk'
 
@@ -21,8 +21,8 @@ export function getUserToken(currentUser) {
   
  export function getCurrentUser() {
     const userPool = new CognitoUserPool({
-      UserPoolId: USER_POOL_ID,
-      ClientId: CLIENT_ID
+      UserPoolId: cognito.USER_POOL_ID,
+      ClientId: cognito.CLIENT_ID
     });
     return userPool.getCurrentUser();
   }
