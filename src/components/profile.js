@@ -44,7 +44,7 @@ class Profile extends Component {
         console.log(this.state)
     }
 
-    changePassword(){
+    //changePassword(){
         // const user = new CognitoUser({ Username: email, Pool: userPool });
         // const authenticationData = { Username: email, Password: password };
         // const authenticationDetails = new AuthenticationDetails(authenticationData);
@@ -56,33 +56,7 @@ class Profile extends Component {
         //     }
         //     console.log('call result: ' + result);
         // });
-    }
-
-    componentWillMount() {
-        // axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Users-get/'+this.state.email)
-        //             .then((res) => {
-        //                 OrderASC(res.data.result, 'date');
-        //                 this.setState({
-        //                     Users: res.data.result
-        //                 })
-        //             }).catch((err) => {
-        //                 console.log(err)
-        //             })
-        
-    }
-
-    // async GetUserData() {
-    //     const { Email } = this.props.user
-    //         let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/Users-get/${Email}`;
-    //         axios.get(url)
-    //             .then((res) => {
-    //                 if(res.data.result.length > 0){
-    //                     this.setState({ data: res.data.result })   
-    //                 }
-    //             }).catch((err) => {
-    //                 console.log(err);
-    //             })
-    // }
+    //}
 
     readFile(e){
         this.setState({ isLoading: true })
