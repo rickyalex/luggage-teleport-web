@@ -18,14 +18,15 @@ class FixedNavbar extends React.Component {
 
     this.state = {
       sbState: 'menu',
-      navState: 'home'
+      navState: 'home',
+      img: localStorage.getItem('img') || 'https://s3-us-west-1.amazonaws.com/luggageteleport.net/img/default_img.png',
     }
 
     //this.setNavState = this.setNavState.bind(this);
     this.RenderLogoutButton = this.RenderLogoutButton.bind(this);
   }
 
-  signOutUser() {
+  signOutUser = () => {
     const currentUser = getCurrentUser();
     if (currentUser !== null) {
       currentUser.signOut();
@@ -37,9 +38,8 @@ class FixedNavbar extends React.Component {
       AWS.config.credentials.clearCachedId();
       AWS.config.credentials = new AWS.CognitoIdentityCredentials({});
     }
-    this.props.history.push('/')
+    this.props.history.push('/');
     window.location.reload();
-
   }
 
   handleClick = (e) => {
@@ -111,11 +111,27 @@ class FixedNavbar extends React.Component {
                 <a className="nav-link" href="https://www.luggageteleport.com/contact-us/">Contact Us</a>
               </li>
             </ul>
-            <div className="form-inline " style={{ width: '100px', marginLeft: '100px' }}>
-            {
+            <span className="navbar-text" style={{ width: '140px'}} >
+              <ul className="navbar-nav">
+                <li className="nav-item dropdown">
+                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <div className="minipic" style={{ float: 'left', margin: '3px 15px 0 0', cursor: 'pointer', backgroundImage: `url(${this.state.img})` }}></div>
+                      {
+                        (!token) ? <Link to="/login">Login</Link> : "Hi "+currentUser.pool.storage.CustName
+                      }
+                    </a>
+                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                      <Link className="dropdown-item" style={{ color: 'rgba(255,255,255,.5)' }} to="/profile">Profile</Link>
+                      <a className="dropdown-item" href="#" onClick={this.signOutUser}>Logout</a>
+                    </div>
+                  </li>
+              </ul>
+            </span>
+            {/*<div className="form-inline " style={{ width: '100px', marginLeft: '100px' }}>}
+            
               (!token) ? <Link style={{ color: 'rgba(255,255,255,.5)' }} to="/login">Login</Link> : <Link style={{ color: 'rgba(255,255,255,.5)' }} to="/profile">Hi {currentUser.pool.storage.CustName}</Link>
-            }
-            </div>
+            
+            </div> */}
           </div>
         </nav>
         
@@ -131,4 +147,4 @@ function mapsStateToProps(state) {
   }
 }
 
-export default connect(mapsStateToProps, { ToggleSB })(FixedNavbar);
+export default withRouter(connect(mapsStateToProps, { ToggleSB })(FixedNavbar));

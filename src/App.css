@@ -698,6 +698,18 @@ div.callout {
   margin: auto;
 }
 
+.minipic{
+  width: 20px;
+ height: 20px;
+ background-size: cover;
+ background-position: center center;
+ display: block;
+ border-radius: 50%;
+ -webkit-border-radius: 50%;
+ -moz-border-radius: 50%;
+  margin: auto;
+}
+
 .profilePicture .pic:hover{
   opacity: 0.8;
 }
@@ -706,6 +718,14 @@ div.callout {
   margin: 10px 0;
   color: green;
   text-align: center;
+}
+
+.navbar-text a.dropdown-item{
+  color: #212529 !important;
+}
+
+.dropdown-menu.show{
+  left: -50px !important;
 }
 
 /* end profile styles */
