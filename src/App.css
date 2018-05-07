@@ -543,7 +543,8 @@ table.review_luggage thead th,
 .ant-alert-message,
 .promostatus,
 .updateStatus,
-.callout{
+.callout,
+.paginator{
   font-size: 14px;
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }

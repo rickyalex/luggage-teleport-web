@@ -4,10 +4,11 @@ import '../App.css';
 import axios from 'axios';
 import * as moment from 'moment';
 import ReactTable from 'react-table';
-import { Select, Pagination, Button } from 'antd';
+import { Select, Input, Button } from 'antd';
 import { OrderASC, getStatus } from './helper';
 import 'react-table/react-table.css';
-
+import TiArrowLeftThick from 'react-icons/lib/ti/arrow-left-thick';
+import TiArrowRightThick from 'react-icons/lib/ti/arrow-right-thick';
 
 class PastBooking extends Component {
 
@@ -15,19 +16,17 @@ class PastBooking extends Component {
         super(props);
 
         this.state = {
-            data: [{
-                BookingId: '',
-                airport: '',
-                hotel: '',
-                createdAt: '',
-                TotalCost: 0,
-                PickupDate: ''
-            }],
+            data: [],
             res: [],
+            page: 1,
+            page_size: 5,
             isLoading: false
         }
 
-        this.paginate = this.paginate.bind(this);
+        this.handlePageInput = this.handlePageInput.bind(this);
+        this.loadBookingData = this.loadBookingData.bind(this);
+        this.paginateDown = this.paginateDown.bind(this);
+        this.paginateUp = this.paginateUp.bind(this);
     }
 
     componentWillMount() {
@@ -97,26 +96,103 @@ class PastBooking extends Component {
                                 this.setState({ data: [...this.state.data, data[i]] })    
                             }
                         }
-                    }    
+                    }   
+                    this.setState({ isLoading: false }); 
                 }).catch((err) => {
                     console.error(err);
                 })
 
-            await this.paginate(1,5);
+            await this.loadBookingData(this.state.page);
     }
 
-    paginate (page_number, page_size) {
-      
+    handlePageInput = (e) => {
+        this.loadBookingData(e.target.value);
+    }
+
+    loadBookingData(page){
+      this.setState({ isLoading: true });
       var arr = this.state.data.slice();
+      var size = this.state.page_size;
       
-      
-      --page_number;
-      console.log(page_number+' '+page_size);
+      --page;
       this.setState({
-        res: arr.splice(page_number * page_size, 5)
+        res: arr.splice(page * size, size),
       },()=>{
-        console.log(this.state);
+        this.setState({ isLoading: false });
       })
+    }
+
+    paginateDown (e) {
+      e.preventDefault();
+      this.setState({ isLoading: true });
+
+      var arr = this.state.data.slice();
+      var page = this.state.page-1;
+      var size = this.state.page_size;
+      
+      --page;
+      console.log(page+' '+size);
+      this.setState({
+        res: arr.splice(page * size, size),
+        page: this.state.page-1
+      },()=>{
+        this.setState({ isLoading: false });
+      })
+    }
+
+    paginateUp (e) {
+      e.preventDefault();
+      this.setState({ isLoading: true });
+
+      var arr = this.state.data.slice();
+      var page = this.state.page+1;
+      var size = this.state.page_size;
+      
+      --page;
+      console.log(page+' '+size);
+      this.setState({
+        res: arr.splice(page * size, size),
+        page: this.state.page+1
+      },()=>{
+        this.setState({ isLoading: false });
+      })
+    }
+
+    isFirstPage(){
+        return (this.state.page == 1)
+    }
+
+    isLastPage(){
+        return (this.state.page == Math.ceil(this.state.data.length/this.state.page_size) || this.state.data.length == 0)
+    }
+
+    renderPagination(){
+        return (
+            <div className="paginator" style={{ padding: "10px", width: "20%", position: "relative", margin: "auto" }}>
+                <button
+                    style={{ border: '0', background: 'none', cursor: 'pointer' }}
+                    type="submit"
+                    onClick={(e) => this.paginateDown(e)}
+                    disabled={this.isFirstPage()} >
+                    <TiArrowLeftThick style={{ fontSize: '1.1em', color: '#2a6fb3', margin: '0 10px'}} />
+                </button>
+                Page 
+                <Input 
+                    style={{ width: "40px", height: "20px", margin: "0 5px" }} 
+                    defaultValue={this.state.page} 
+                    value={this.state.page}
+                    onChange={this.handlePageInput}
+                    disabled={(this.state.data.length == 0)}/> 
+                of {Math.ceil(this.state.data.length/this.state.page_size)}
+                <button
+                    style={{ border: '0', background: 'none', cursor: 'pointer' }}
+                    type="submit"
+                    onClick={(e) => this.paginateUp(e)}
+                    disabled={this.isLastPage()}>
+                    <TiArrowRightThick style={{ fontSize: '1.1em', color: '#2a6fb3', margin: '0 10px'}} />
+                </button>
+            </div>
+        )
     }
 
 
@@ -126,6 +202,7 @@ class PastBooking extends Component {
         return(
                 <div>
                     {
+                        (isLoading) ? <i className="fa fa-spinner fa-spin" style={{ display: 'block', position: 'relative', padding: '20px 0', margin: 'auto', textAlign: 'center' }}></i> :
                         res.map((datas, i) =>  
                             <div style={{ padding: '10px', margin: '0', height: 'auto' }} className={i%2==0 ? "row odd" : "row even"}>
                                 <div className="col-lg-9">
@@ -193,7 +270,9 @@ class PastBooking extends Component {
                         )
                     }
                     <div style={{ width: '100%' }}>
-                        <Pagination simple onChange={this.paginate} defaultCurrent={1} defaultPageSize={5} total={this.state.data.length} style={{ width: '20%', margin: 'auto', padding: '5px' }} />
+                    {
+                        this.renderPagination()
+                    }
                     </div>
                 </div>
         )

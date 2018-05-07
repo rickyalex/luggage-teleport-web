@@ -97,7 +97,8 @@ class FinalReview extends Component {
     }
 
     applyPromoCode(){
-        console.log(this.state);
+        this.setState({ isLoading: true })
+
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/PromoCode-get/'+String(this.state.PromoCode).toUpperCase())
             .then((res) => {               
                 if(typeof res.data.result != "undefined"){
@@ -111,15 +112,15 @@ class FinalReview extends Component {
                             PromoCodeSuccess: 'promostatus show',
                             PromoCodeFailed: 'promostatus hidden',
                             TotalCost: total-priceCut,
-                            PromoCodeApplied: true
-                        }, () => {
-                            console.log(this.state);
+                            PromoCodeApplied: true,
+                            isLoading: false
                         })
                     }
                     else{
                         this.setState({
                             PromoCodeSuccess: 'promostatus hidden',
                             PromoCodeFailed: 'promostatus show',
+                            isLoading: false
                         })
                     }    
                 }
@@ -127,6 +128,7 @@ class FinalReview extends Component {
                     this.setState({
                         PromoCodeSuccess: 'promostatus hidden',
                         PromoCodeFailed: 'promostatus show',
+                        isLoading: false
                     })
                 }
                 
@@ -324,7 +326,15 @@ class FinalReview extends Component {
                                 />
                             </Col>
                             <Col span={6}>
-                                <Button disabled={this.state.PromoCodeApplied} type="primary" style={{ margin: 0 }} onClick={this.applyPromoCode}>Apply</Button>
+                                {
+                                    this.state.isLoading ? 
+                                    <Button type="primary" style={{ margin: 0 }} disabled={true}>
+                                        <i className="fa fa-spinner fa-spin" style={{ textAlign: 'center' }}></i>
+                                    </Button> : 
+                                    <Button disabled={this.state.PromoCodeApplied} type="primary" style={{ margin: 0 }} onClick={this.applyPromoCode}>
+                                        Apply
+                                    </Button>
+                                }
                             </Col>
                         </Row>
                         <span className={this.state.PromoCodeSuccess}>Your promo code has been successfully applied</span>
