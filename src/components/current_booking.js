@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../App.css';
 import axios from 'axios';
-import * as moment from 'moment';
-import ReactTable from 'react-table';
-import { Input, Select, Button } from 'antd';
-import { OrderASC, getStatus } from './helper';
+import { Input } from 'antd';
+import { OrderASC } from './helper';
 import 'react-table/react-table.css';
 import TiArrowLeftThick from 'react-icons/lib/ti/arrow-left-thick';
 import TiArrowRightThick from 'react-icons/lib/ti/arrow-right-thick';
@@ -41,16 +39,27 @@ class CurrentBooking extends Component {
             let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-get/${Email}`;
             await axios.get(url)
                 .then((res) => {
-                    if(res.data.result.length > 0){
-                        for(var key in res.data.result){
-                            if(key !== 'completed'){
-                                res.data.result.splice(key,1)
+                    let data = res.data.result
+                    if(data.length > 0){
+                        for(var i = 0; i < data.length; i++){
+                            if(String(data[i].status).toLowerCase() === "completed"){
+                                data.splice(i,1);
                             }
-                        }
-                        OrderASC(res.data.result, 'date');
-                        console.log(res.data.result)
-                        this.setState({ data: res.data.result, isLoading: true })   
+                        } 
+                        OrderASC(data, 'date');
+                        this.setState({ data: data }) 
                     }
+                    // if(res.data.result.length > 0){
+                    //     for(var key in res.data.result){
+                    //         if (res.data.result.hasOwnProperty(key)) {
+                    //             if(key === 'order being processed'){
+                    //                 res.data.result.splice(key,1)
+                    //             }    
+                    //         }
+                            
+                    //     }
+                          
+                    // }
                 }).catch((err) => {
                     console.log(err);
                 })
@@ -58,17 +67,18 @@ class CurrentBooking extends Component {
             url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToAirport-get/${Email}`;
             await axios.get(url)
                 .then((res2) => {
-                    if(res2.data.result.length > 0){
-                        for(var key in res2.data.result){
-                            if(key !== 'completed'){
-                                res2.data.result.splice(key,1)
+                    let data = res2.data.result
+                    if(data.length > 0){
+                        for(var i = 0; i < data.length; i++){
+                            if(String(data[i].status).toLowerCase() === "completed"){
+                                data.splice(i,1);
                             }
+                        } 
+                        OrderASC(data, 'date');
+                        for(var i=0;i<data.length;i++){
+                            this.setState({ data: [...this.state.data, data[i]] })    
                         }
-                        OrderASC(res2.data.result, 'date');
-                        for(var i=0;i<res2.data.result.length;i++){
-                            this.setState({ data: [...this.state.data, res2.data.result[i]] })    
-                        }
-                    }      
+                    }   
                 }).catch((err) => {
                     console.log(err);
                 })
@@ -76,17 +86,18 @@ class CurrentBooking extends Component {
             url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/HotelToAirport-get/${Email}`;
             await axios.get(url)
                 .then((res3) => {
-                    if(res3.data.result.length > 0){
-                        for(var key in res3.data.result){
-                            if(key !== 'completed'){
-                                res3.data.result.splice(key,1)
+                    let data = res3.data.result
+                    if(data.length > 0){
+                        for(var i = 0; i < data.length; i++){
+                            if(String(data[i].status).toLowerCase() === "completed"){
+                                data.splice(i,1);
                             }
+                        } 
+                        OrderASC(data, 'date');
+                        for(var i=0;i<data.length;i++){
+                            this.setState({ data: [...this.state.data, data[i]] })    
                         }
-                        OrderASC(res3.data.result, 'date');
-                        for(var i=0;i<res3.data.result.length;i++){
-                            this.setState({ data: [...this.state.data, res3.data.result[i]] })    
-                        }
-                    }      
+                    }   
                 }).catch((err) => {
                     console.log(err);
                 })
@@ -94,18 +105,22 @@ class CurrentBooking extends Component {
             url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/HotelToHotel-get/${Email}`;
             await axios.get(url)
                 .then((res4) => {
-                    if(res4.data.result.length > 0){
-                        for(var key in res4.data.result){
-                            if(key !== 'completed'){
-                                res4.data.result.splice(key,1)
+                    let data = res4.data.result
+                    if(data.length > 0){
+                        for(var i = 0; i < data.length; i++){
+                            if(String(data[i].status).toLowerCase() === "completed"){
+                                data.splice(i,1);
                             }
-                        }
-                        OrderASC(res4.data.result, 'date');
-                        for(var i=0;i<res4.data.result.length;i++){
-                            this.setState({ data: [...this.state.data, res4.data.result[i]] })    
+                        } 
+                        OrderASC(data, 'date');
+                        for(var i=0;i<data.length;i++){
+                            this.setState({ data: [...this.state.data, data[i]] })    
                         }
                     }
-                    this.setState({ isLoading: false });
+
+                    var arr = this.state.data;
+                    OrderASC(arr, 'date');
+                    this.setState({ data: arr, isLoading: false });
                 }).catch((err) => {
                     console.log(err);
                 })
@@ -139,11 +154,12 @@ class CurrentBooking extends Component {
       var size = this.state.page_size;
       
       --page;
-      console.log(page+' '+size);
+      
       this.setState({
         res: arr.splice(page * size, size),
         page: this.state.page-1
       },()=>{
+        console.log(this.state.data)
         this.setState({ isLoading: false })
       })
     }
@@ -157,21 +173,22 @@ class CurrentBooking extends Component {
       var size = this.state.page_size;
       
       --page;
-      console.log(page+' '+size);
+      
       this.setState({
         res: arr.splice(page * size, size),
         page: this.state.page+1
       },()=>{
+        console.log(this.state.res)
         this.setState({ isLoading: false })
       })
     }
 
     isFirstPage(){
-        return (this.state.page == 1)
+        return (this.state.page === 1)
     }
 
     isLastPage(){
-        return (this.state.page == Math.ceil(this.state.data.length/this.state.page_size) || this.state.data.length == 0)
+        return (this.state.page === Math.ceil(this.state.data.length/this.state.page_size) || this.state.data.length === 0)
     }
 
     renderPagination(){
@@ -190,7 +207,7 @@ class CurrentBooking extends Component {
                     defaultValue={this.state.page} 
                     value={this.state.page}
                     onChange={this.handlePageInput}
-                    disabled={(this.state.data.length == 0)}/> 
+                    disabled={(this.state.data.length === 0)}/> 
                 of {Math.ceil(this.state.data.length/this.state.page_size)}
                 <button
                     style={{ border: '0', background: 'none', cursor: 'pointer' }}
@@ -205,13 +222,12 @@ class CurrentBooking extends Component {
 
     render() {
         const { res, isLoading } = this.state;
-        let r = '';
         return(
                 <div>
                     {
                         (isLoading) ? <i className="fa fa-spinner fa-spin" style={{ display: 'block', position: 'relative', padding: '20px 0', margin: 'auto', textAlign: 'center' }}></i> :
                         res.map((datas, i) =>  
-                            <div style={{ padding: '10px', margin: '0', height: 'auto' }} className={i%2==0 ? "row odd" : "row even"}>
+                            <div style={{ padding: '10px', margin: '0', height: 'auto' }} className={i%2===0 ? "row odd" : "row even"}>
                                 <div className="col-lg-9">
                                     <div className="row">
                                         <div className="col-lg-12">
@@ -234,7 +250,12 @@ class CurrentBooking extends Component {
                                             <div className="row">
                                                 <div className="col-lg-4">
                                                     <span className="rowLabel">
-                                                        { res[i].airport }
+                                                        { 
+                                                            (res[i].bookingType==="ATH") ? res[i].airport : 
+                                                            (res[i].bookingType==="ATA") ? res[i].AirportPickup : 
+                                                            (res[i].bookingType==="HTA") ? res[i].hotel : 
+                                                            (res[i].bookingType==="HTH") ? res[i].HotelPickup : <span></span>
+                                                        }
                                                     </span>
                                                 </div>
                                                 <div className="col-lg-8">
@@ -250,7 +271,12 @@ class CurrentBooking extends Component {
                                             <div className="row">
                                                 <div className="col-lg-4">
                                                     <span className="rowLabel">
-                                                        { res[i].hotel }
+                                                        { 
+                                                            (res[i].bookingType==="ATH") ? res[i].hotel : 
+                                                            (res[i].bookingType==="ATA") ? res[i].AirportDropoff : 
+                                                            (res[i].bookingType==="HTA") ? res[i].airport : 
+                                                            (res[i].bookingType==="HTH") ? res[i].HotelDropoff : <span></span>
+                                                        }
                                                     </span>
                                                 </div>
                                                 <div className="col-lg-8">

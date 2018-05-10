@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Navbar from './navbar';
+import FixedNavbar from './fixed_navbar';
 import '../App.css';
 import { Icon, Button } from 'antd';
 
 class SuccessPage extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     buttonHome(){
         return (
@@ -26,7 +22,7 @@ class SuccessPage extends Component {
         return (
             <div className="bg-image">
                 <div>
-                  < Navbar />
+                  < FixedNavbar />
                 </div>
                 <div className="containerProgressBar" style={{ marginTop: '1em' }}>
                     <div className="receipt">

@@ -1,19 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import '../App.css';
 import axios from 'axios';
 import FixedNavbar from './fixed_navbar';
 import { Button, Icon, Input, Row, Col, Form } from 'antd';
-import {
-    CognitoUserPool,
-    AuthenticationDetails,
-    CognitoUser
-} from "amazon-cognito-identity-js";
-import { MdPerson } from 'react-icons/lib/md';
-import { getCurrentUser } from '../aws_cognito';
 import { s3 } from '../config';
-import { OrderASC } from './helper';
 //import ReactS3 from 'react-s3';
 import { Storage } from "aws-amplify";
 
@@ -185,7 +176,6 @@ class Profile extends Component {
                                             disabled={true}
                                             addonBefore={<Icon type="phone" style={{ color: 'white', }} /> }
                                             value={this.state.phone} 
-                                            suffix={<Icon type="edit" style={{ color: '#1a1aff', }} /> }
                                             />
                                         </Col>
                                     </Row>
@@ -193,10 +183,8 @@ class Profile extends Component {
                                         <Col span={24}>
                                           <Input
                                             disabled={true}
-
                                             addonBefore={<Icon type="mail" style={{ color: 'white', }} /> }
                                             value={this.state.email} 
-                                            suffix={<Icon type="edit" style={{ color: '#1a1aff', }} /> }
                                             />
                                         </Col>
                                     </Row>
@@ -207,8 +195,6 @@ class Profile extends Component {
                                             addonBefore={<Icon type="lock" style={{ color: 'white', }} /> }
                                             value={this.state.password} 
                                             type="password"
-                                            value="wedus"
-                                            suffix={<Icon type="edit" style={{ color: '#1a1aff', }} /> }
                                             />
                                         </Col>
                                     </Row>

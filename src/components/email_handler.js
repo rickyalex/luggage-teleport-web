@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import { Link, withRouter  } from 'react-router-dom';
-import axios from 'axios';
-import { sendEmail } from './helper';
+import { Component } from 'react';
+import { withRouter  } from 'react-router-dom';
 
 class EmailHandler extends Component {
 
@@ -12,11 +10,11 @@ class EmailHandler extends Component {
 			id: ''
 		}
 
-        const queryString = require('query-string');
-        const srch = queryString.parse(this.props.location.search);
+        //const queryString = require('query-string');
+        //const srch = queryString.parse(this.props.location.search);
 
         //console.log(srch.trackingNumber);
-        const send = sendEmail(srch.trackingNumber,srch.sequence);
+        //const send = sendEmail(srch.trackingNumber,srch.sequence);
 	}        
 
 	componentsDidMount(){
@@ -26,13 +24,6 @@ class EmailHandler extends Component {
 	render(){
 		return ('Status Updated !');
 	}
-}
-
-function mapsStateToProps(state) {
-    const { user } = state;
-    return {
-        user
-    }
 }
 
 export default withRouter(EmailHandler);

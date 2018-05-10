@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import '../App.css';
-import { Link } from 'react-router-dom';
-
 import AirportToHotel from './airport_to_hotel';
 import HotelToAirport from './hotel_to_airport';
 import HotelToHotel from './hotel_to_hotel';
@@ -13,10 +11,6 @@ import MdHotel from 'react-icons/lib/md/hotel';
 import GoArrowSmallRight from 'react-icons/lib/go/arrow-small-right';
 
 class BookingForm extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (

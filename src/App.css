@@ -456,6 +456,12 @@ pointer-events: none;
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
+svg.input-prefix{
+  font-size: 1.1em;
+  color: #2a6fb3; 
+  padding-right: 3px;
+}
+
 /*override antd datepicker icon*/
 .ant-calendar-picker-icon{
   left: 12px !important;

@@ -18,7 +18,8 @@ class ConfirmNewPassword extends Component {
             isLoading: false,
             error: {
                 message: ''
-            }
+            },
+            errorMessage: ''
         }
         this.handleConfirmationSubmit = this.handleConfirmationSubmit.bind(this);
     }
@@ -51,19 +52,32 @@ class ConfirmNewPassword extends Component {
 
     async handleConfirmationSubmit(event) {
         const email = localStorage.getItem('EmailForgot');
+        var message = "";
         event.preventDefault();
         this.setState({ isLoading: true })
         try {
             await this.ConfirmNewPassword(email, this.state.pin, this.state.newPassword);
-            alert('success change password!');
+            alert('Change password successful !');
             localStorage.removeItem('EmailForgot');
             this.props.history.push('/');
         } catch (e) {
+            //console.log(e.code);
+            if(e.code==="InvalidParameterException" || e.code==="InvalidPasswordException"){
+                message = "Password must be at least 8 characters";
+            }
+            else if(e.code==="CodeMismatchException"){
+                message = "Invalid verification code provided, please try again";
+            }
+            else if(e.code==="ExpiredCodeException"){
+                message = "PIN expired, please retry the forgot password"
+            }
+
             this.setState({
                 error: e,
-                isLoading: false
+                isLoading: false,
+                errorMessage: message
             })
-            alert(this.state.error.message);
+            alert(this.state.errorMessage);
         }
     }
 
@@ -111,14 +125,6 @@ class ConfirmNewPassword extends Component {
                                         <i className="fa fa-spinner fa-spin"></i> Submitting...
                                 </button>
                             }
-                            <div>
-                                <p><strong>Notes! </strong>
-                                    <i className="registerNotes">
-                                        Password <strong>must</strong> contain Lowercase, Uppercase,
-                                    and Special Character
-                                    and minimum length of Password is 8 character</i>
-                                </p>
-                            </div>
                         </Form>
                     </div>
                 </div>

@@ -1,15 +1,12 @@
 import React from "react";
 import { withRouter } from 'react-router-dom';
-import { LogUser, ToggleSB } from '../actions';
+import { ToggleSB } from '../actions';
 import { connect } from 'react-redux';
-import { USER_POOL_ID, CLIENT_ID } from '../config';
-import { CognitoUserPool } from "amazon-cognito-identity-js";
 // import { slide as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
 import '../App.css'
 import AWS from "aws-sdk";
-import { getCurrentUser, getUserToken } from '../aws_cognito';
+import { getCurrentUser } from '../aws_cognito';
 
 
 class FixedNavbar extends React.Component {
@@ -44,8 +41,8 @@ class FixedNavbar extends React.Component {
 
   handleClick = (e) => {
     console.log('click ', e);
-    if(e.key==1){ this.props.history.push('/') }
-    else if(e.key==2){ this.props.history.push('/history') }
+    if(e.key===1){ this.props.history.push('/') }
+    else if(e.key===2){ this.props.history.push('/history') }
   }
 
   setNavState(value){
@@ -54,7 +51,6 @@ class FixedNavbar extends React.Component {
 
   toggleSidebar(e){
     e.preventDefault();
-    const { sbState } = this.state;
     var css = (this.state.sbState === "menu") ? "menu show" : "menu";
     this.setState({"sbState":css});
   }
@@ -84,13 +80,12 @@ class FixedNavbar extends React.Component {
   }
 
   render() {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     const currentUser = getCurrentUser();
-    const {Header} = Layout;
     return (
 <nav className="navbar navbar-expand-lg navbar-dark luggage-blue">
-          <a className="navbar-brand" href="https://www.luggageteleport.com" target="_blank">
-            <img src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png" width="200" height="auto" alt/>
+          <a className="navbar-brand" href="https://www.luggageteleport.com" target="_blank" rel="noopener noreferrer">
+            <img src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png" width="200" height="auto" alt="logo"/>
           </a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
@@ -114,7 +109,7 @@ class FixedNavbar extends React.Component {
             <span className="navbar-text" style={{ width: '140px'}} >
               <ul className="navbar-nav">
                 <li className="nav-item dropdown">
-                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <div className="minipic" style={{ float: 'left', margin: '3px 15px 0 0', cursor: 'pointer', backgroundImage: `url(${this.state.img})` }}></div>
                       {
                         (!token) ? <Link to="/login">Login</Link> : "Hi "+currentUser.pool.storage.CustName
@@ -122,7 +117,7 @@ class FixedNavbar extends React.Component {
                     </a>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                       <Link className="dropdown-item" style={{ color: 'rgba(255,255,255,.5)' }} to="/profile">Profile</Link>
-                      <a className="dropdown-item" href="#" onClick={this.signOutUser}>Logout</a>
+                      <a className="dropdown-item" onClick={this.signOutUser}>Logout</a>
                     </div>
                   </li>
               </ul>

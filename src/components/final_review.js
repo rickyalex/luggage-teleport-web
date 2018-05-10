@@ -5,10 +5,10 @@ import FixedNavbar from './fixed_navbar';
 import '../App.css';
 import * as moment from 'moment';
 import axios from 'axios';
-import { Row, Col, Input, Button, Alert } from 'antd';
+import { Row, Col, Input, Button } from 'antd';
 import SquarePaymentForm from './square_payment_form';
 import { SQUARE_APP_ID } from '../config';
-import { BookingId, GetPayment } from './helper';
+import { BookingId } from './helper';
 
 class FinalReview extends Component {
     constructor(props) {
@@ -101,11 +101,11 @@ class FinalReview extends Component {
 
         axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/PromoCode-get/'+String(this.state.PromoCode).toUpperCase())
             .then((res) => {               
-                if(typeof res.data.result != "undefined"){
-                    if(String(this.state.PromoCode).toUpperCase() == String(res.data.result.id).toUpperCase()){
-                        let percentage = parseInt(res.data.result.PercentageOff);
-                        let dollar = parseInt(res.data.result.DollarsOff);
-                        let total = parseInt(this.state.TotalCost);
+                if(typeof res.data.result !== "undefined"){
+                    if(String(this.state.PromoCode).toUpperCase() === String(res.data.result.id).toUpperCase()){
+                        let percentage = parseInt(res.data.result.PercentageOff,10);
+                        let dollar = parseInt(res.data.result.DollarsOff,10);
+                        let total = parseInt(this.state.TotalCost,10);
                         let priceCut = (percentage > 0 && dollar <= 0) ? (percentage/100)*total : dollar;
 
                         this.setState({
@@ -150,10 +150,10 @@ class FinalReview extends Component {
         }
         this.setState({ isLoading: true })
 
-        if(this.BookingType == "ATH"){
+        if(this.BookingType === "ATH"){
             apiUrl = "AirportToHotel-create"
-            let { Airline, Airport, DropoffDate, DropoffDisplayTime, Email, FlightNumber, Hotel, HotelBookingRef,
-                NameUnderHotelRsv, PhoneNumber, PickupDate, PickupDisplayTime } = this.props.BookData[0]
+            let { Airline, Airport, DropoffDate, DropoffHour, DropoffMinute, DropoffFormat, Email, FlightNumber, Hotel, HotelBookingRef,
+                NameUnderHotelRsv, PhoneNumber, PickupDate, PickupHour, PickupMinute, PickupFormat } = this.props.BookData[0]
 
             data = JSON.stringify({
                 BookingId: `ATH${bookingId}`,
@@ -161,9 +161,9 @@ class FinalReview extends Component {
                 hotelReservationName: NameUnderHotelRsv,
                 airport: Airport,
                 hotel: Hotel,
-                pickupDate: moment(PickupDate).format('Do MMMM YYYY')+' '+PickupDisplayTime,
+                pickupDate: moment(PickupDate).format('Do MMMM YYYY')+' '+PickupHour+":"+PickupMinute+PickupFormat,
                 airline: Airline,
-                dropoffDate: moment(DropoffDate).format('Do MMMM YYYY')+' '+DropoffDisplayTime,
+                dropoffDate: moment(DropoffDate).format('Do MMMM YYYY')+' '+DropoffHour+":"+DropoffMinute+DropoffFormat,
                 hotelReference: HotelBookingRef,
                 email: Email,
                 phone: PhoneNumber,
@@ -174,10 +174,10 @@ class FinalReview extends Component {
             })
 
         }
-        else if(this.BookingType == "ATA"){
+        else if(this.BookingType === "ATA"){
             apiUrl = "AirportToAirport-create"
-            let { AirlineDropoff, AirlinePickup, AirportDropoff, AirportPickup, PickupDisplayTime, DropoffDisplayTime,
-                    DropoffFlightNumber, PickupFlightNumber, Email, PhoneNumber, PickupDate, DropoffDate } = this.props.BookData[0];
+            let { AirlineDropoff, AirlinePickup, AirportDropoff, AirportPickup, DropoffFlightNumber, PickupFlightNumber, Email, PhoneNumber, 
+                PickupDate, PickupHour, PickupMinute, PickupFormat, DropoffDate, DropoffHour, DropoffMinute, DropoffFormat } = this.props.BookData[0];
 
             data = JSON.stringify({
                 BookingId: `ATA${bookingId}`,
@@ -185,8 +185,8 @@ class FinalReview extends Component {
                 AirlinePickup: AirlinePickup,
                 AirportDropoff: AirportDropoff,
                 AirportPickup: AirportPickup,
-                pickupDate: moment(PickupDate).format('Do MMMM YYYY')+' '+PickupDisplayTime,
-                dropoffDate: moment(DropoffDate).format('Do MMMM YYYY')+' '+DropoffDisplayTime,
+                pickupDate: moment(PickupDate).format('Do MMMM YYYY')+' '+PickupHour+":"+PickupMinute+PickupFormat,
+                dropoffDate: moment(DropoffDate).format('Do MMMM YYYY')+' '+DropoffHour+":"+DropoffMinute+DropoffFormat,
                 DropoffFlightNumber: DropoffFlightNumber,
                 PickupFlightNumber: PickupFlightNumber,
                 email: Email,
@@ -197,18 +197,18 @@ class FinalReview extends Component {
                 cardNonce: nonce,
             })
         }
-        else if(this.BookingType == "HTA"){
+        else if(this.BookingType === "HTA"){
             apiUrl = "HotelToAirport-create"
-            const { Airline, Airport, DepartureTime, Email, FlightNumber, Hotel, HotelBookingRef, NameUnderHotelRsv,
-                    PhoneNumber, PickupDate, DropoffDate, PickupDisplayTime, DropoffDisplayTime } = this.props.BookData[0];
+            const { Airline, Airport, Email, FlightNumber, Hotel, HotelBookingRef, NameUnderHotelRsv, PhoneNumber, 
+                PickupDate, PickupHour, PickupMinute, PickupFormat, DropoffDate, DropoffHour, DropoffMinute, DropoffFormat } = this.props.BookData[0];
 
             data = JSON.stringify({
                 BookingId: `HTA${bookingId}`,
                 airport: Airport,
                 airline: Airline,
                 flightNumber: FlightNumber,
-                pickupDate: moment(PickupDate).format('Do MMMM YYYY')+' '+PickupDisplayTime,
-                dropoffDate: moment(DropoffDate).format('Do MMMM YYYY')+' '+DropoffDisplayTime,
+                pickupDate: moment(PickupDate).format('Do MMMM YYYY')+' '+PickupHour+":"+PickupMinute+PickupFormat,
+                dropoffDate: moment(DropoffDate).format('Do MMMM YYYY')+' '+DropoffHour+":"+DropoffMinute+DropoffFormat,
                 hotel: Hotel,
                 hotelReference: HotelBookingRef,
                 hotelReservationName: NameUnderHotelRsv,
@@ -220,20 +220,20 @@ class FinalReview extends Component {
                 cardNonce: nonce,
             })
         }
-        else if(this.BookingType == "HTH"){
+        else if(this.BookingType === "HTH"){
             apiUrl = "HotelToHotel-create"
-            const { HotelDropoff, HotelDropoffBookingRef, DropoffDate, Email, HotelPickup, HotelPickupBookingRef,
-                    PickupDate, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup, PickupDisplayTime, DropoffDisplayTime } = this.props.BookData[0];
+            const { HotelDropoff, HotelDropoffBookingRef, DropoffDate, DropoffHour, DropoffMinute, DropoffFormat, Email, HotelPickup, HotelPickupBookingRef,
+                    PickupDate, PickupHour, PickupMinute, PickupFormat, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup } = this.props.BookData[0];
 
             data = JSON.stringify({
                 BookingId: `HTH${bookingId}`,
                 HotelDropoff: HotelDropoff,
                 HotelDropoffBookingRef: HotelDropoffBookingRef,
-                DropoffDate: moment(DropoffDate).format('Do MMMM YYYY')+' '+DropoffDisplayTime,
+                dropoffDate: moment(DropoffDate).format('Do MMMM YYYY')+' '+DropoffHour+":"+DropoffMinute+DropoffFormat,
                 email: Email,
                 HotelPickup: HotelPickup,
                 HotelPickupBookingRef: HotelPickupBookingRef,
-                PickupDate: moment(PickupDate).format('Do MMMM YYYY')+' '+PickupDisplayTime,
+                pickupDate: moment(PickupDate).format('Do MMMM YYYY')+' '+PickupHour+":"+PickupMinute+PickupFormat,
                 phone: PhoneNumber,
                 RsvpNameHotelDropoff: RsvpNameHotelDropoff,
                 RsvpNameHotelPickup: RsvpNameHotelPickup,
@@ -258,8 +258,6 @@ class FinalReview extends Component {
     }
 
     render() {
-        //console.log(this.props.BookData[0])
-        let token = localStorage.getItem('token')
         const data = this.props.BookData[0]
         return (
             <div>
@@ -274,11 +272,11 @@ class FinalReview extends Component {
                     <div className="receipt">
                         <div className="row" style={{ lineHeight: '3em' }}>
                             <div className="col-lg-1 col-md-1 col-sm-1">
-                                <img src="origin_destination_icon.jpg" style={{ paddingTop: '0.5em' }} />
+                                <img src="origin_destination_icon.jpg" alt="origin_destination" style={{ paddingTop: '0.5em' }} />
                             </div>
                             <div className="col-lg-10 col-md-10 col-sm-10 origin_destination" >
-                                <span style={{ display: 'block' }}>{ (this.BookingType == 'ATH') ? data.Airport : (this.BookingType == 'ATA') ? data.AirportPickup : (this.BookingType == 'HTA') ? data.Hotel : (this.BookingType == 'HTH') ? data.HotelPickup : '' }</span>
-                                <span style={{ display: 'block' }}>{ (this.BookingType == 'ATH') ? data.Hotel : (this.BookingType == 'ATA') ? data.AirportDropoff : (this.BookingType == 'HTA') ? data.Airport : (this.BookingType == 'HTH') ? data.HotelDropoff : '' }</span>
+                                <span style={{ display: 'block' }}>{ (this.BookingType === 'ATH') ? data.Airport : (this.BookingType === 'ATA') ? data.AirportPickup : (this.BookingType === 'HTA') ? data.Hotel : (this.BookingType === 'HTH') ? data.HotelPickup : '' }</span>
+                                <span style={{ display: 'block' }}>{ (this.BookingType === 'ATH') ? data.Hotel : (this.BookingType === 'ATA') ? data.AirportDropoff : (this.BookingType === 'HTA') ? data.Airport : (this.BookingType === 'HTH') ? data.HotelDropoff : '' }</span>
                             </div>
                             
                             <br />
@@ -292,10 +290,10 @@ class FinalReview extends Component {
                                                 <b>Pick up Date</b>
                                             </td>
                                             <td>
-                                                {moment(data.PickupDate).format('Do MMMM YYYY')} {data.PickupDisplayTime} 
+                                                {moment(data.PickupDate).format('Do MMMM YYYY')} {data.PickupHour+":"+data.PickupMinute+data.PickupFormat} 
                                             </td>
                                         </tr>
-                                        { /* (this.BookingType == 'ATH') ? 
+                                        { /* (this.BookingType === 'ATH') ? 
                                         <tr>
                                             <td>
                                                 <b>Airline</b>
@@ -310,7 +308,7 @@ class FinalReview extends Component {
                                                 <b>Drop off Date</b>
                                             </td>
                                             <td>
-                                                {moment(data.DropoffDate).format('Do MMMM YYYY')} {data.DropoffDisplayTime}
+                                                {moment(data.DropoffDate).format('Do MMMM YYYY')} {data.DropoffHour+":"+data.DropoffMinute+data.DropoffFormat} 
                                             </td>
                                         </tr>
                                     </table>

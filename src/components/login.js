@@ -83,7 +83,7 @@ class Login extends Component {
 
         try {
             await this.Login(this.state.email, this.state.password);
-            if(this.state.email=="rickyalex88@gmail.com") {
+            if(this.state.email==="rickyalex88@gmail.com") {
                 localStorage.setItem('admin', 'Y');
                 this.props.history.push('/admin');
             }
@@ -107,6 +107,7 @@ class Login extends Component {
                         <img
                             src="https://www.luggageteleport.com/wp-content/themes/luggage/images/logo.png"
                             style={{ padding: '10px', margin: '10px' }}
+                            alt="logo"
                         />
                     </div>
                     <FormItem style={{ width: '280px' }}>

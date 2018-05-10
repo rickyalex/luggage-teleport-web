@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { verifyUserAccount } from '../aws_cognito';
 import { userPool } from '../config';
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { withRouter } from 'react-router-dom';

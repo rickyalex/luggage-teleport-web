@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../App.css';
 import axios from 'axios';
-import * as moment from 'moment';
-import ReactTable from 'react-table';
-import { Select, Input, Button } from 'antd';
-import { OrderASC, getStatus } from './helper';
+import { Input } from 'antd';
+import { OrderASC } from './helper';
 import 'react-table/react-table.css';
 import TiArrowLeftThick from 'react-icons/lib/ti/arrow-left-thick';
 import TiArrowRightThick from 'react-icons/lib/ti/arrow-right-thick';
@@ -43,11 +41,13 @@ class PastBooking extends Component {
                     let data = res.data.result
                     if(data.length > 0){
                         for(var i = 0; i < data.length; i++){
-                            if(String(data[i].status).toLowerCase() == "completed"){
-                                OrderASC(data, 'date');
-                                this.setState({ data: [...this.state.data, data[i]] })    
+                            if(String(data[i].status).toLowerCase() === "order being processed"){
+                                console.log(i);
+                                data.splice(i,1);
                             }
                         } 
+                        OrderASC(data, 'date');
+                        this.setState({ data: data })    
                     }
                 }).catch((err) => {
                     console.error(err);
@@ -59,10 +59,14 @@ class PastBooking extends Component {
                     let data = res2.data.result
                     if(data.length > 0){
                         for(var i = 0; i < data.length; i++){
-                            if(String(data[i].status).toLowerCase() == "completed"){
-                                OrderASC(data, 'date');
-                                this.setState({ data: [...this.state.data, data[i]] })    
+                            if(String(data[i].status).toLowerCase() !== "completed"){
+                                console.log(data[i]);
+                                data.splice(i,1);
                             }
+                        }
+                        OrderASC(data, 'date');
+                        for(var i=0;i<data.length;i++){
+                            this.setState({ data: [...this.state.data, data[i]] })    
                         }
                     }      
                 }).catch((err) => {
@@ -75,11 +79,15 @@ class PastBooking extends Component {
                     let data = res3.data.result
                     if(data.length > 0){
                         for(var i = 0; i < data.length; i++){
-                            if(String(data[i].status).toLowerCase() == "completed"){
-                                OrderASC(data, 'date');
-                                this.setState({ data: [...this.state.data, data[i]] })    
+                            if(String(data[i].status).toLowerCase() !== "completed"){
+                                console.log(data[i]);
+                                data.splice(i,1);
                             }
                         }
+                        OrderASC(data, 'date');
+                        for(var i=0;i<data.length;i++){
+                            this.setState({ data: [...this.state.data, data[i]] })    
+                        } 
                     }      
                 }).catch((err) => {
                     console.error(err);
@@ -91,13 +99,19 @@ class PastBooking extends Component {
                     let data = res4.data.result
                     if(data.length > 0){
                         for(var i = 0; i < data.length; i++){
-                            if(String(data[i].status).toLowerCase() == "completed"){
-                                OrderASC(data, 'date');
-                                this.setState({ data: [...this.state.data, data[i]] })    
+                            if(String(data[i].status).toLowerCase() !== "completed"){
+                                console.log(data[i]);
+                                data.splice(i,1);
                             }
                         }
+                        OrderASC(data, 'date');
+                        for(var i=0;i<data.length;i++){
+                            this.setState({ data: [...this.state.data, data[i]] })    
+                        }
                     }   
-                    this.setState({ isLoading: false }); 
+                    this.setState({ isLoading: false },()=>{
+                        console.log(this.state.data)
+                    }); 
                 }).catch((err) => {
                     console.error(err);
                 })
@@ -159,11 +173,11 @@ class PastBooking extends Component {
     }
 
     isFirstPage(){
-        return (this.state.page == 1)
+        return (this.state.page === 1)
     }
 
     isLastPage(){
-        return (this.state.page == Math.ceil(this.state.data.length/this.state.page_size) || this.state.data.length == 0)
+        return (this.state.page === Math.ceil(this.state.data.length/this.state.page_size) || this.state.data.length === 0)
     }
 
     renderPagination(){
@@ -182,7 +196,7 @@ class PastBooking extends Component {
                     defaultValue={this.state.page} 
                     value={this.state.page}
                     onChange={this.handlePageInput}
-                    disabled={(this.state.data.length == 0)}/> 
+                    disabled={(this.state.data.length === 0)}/> 
                 of {Math.ceil(this.state.data.length/this.state.page_size)}
                 <button
                     style={{ border: '0', background: 'none', cursor: 'pointer' }}
@@ -198,13 +212,12 @@ class PastBooking extends Component {
 
     render() {
         const { res, isLoading } = this.state;
-        let r = '';
         return(
                 <div>
                     {
                         (isLoading) ? <i className="fa fa-spinner fa-spin" style={{ display: 'block', position: 'relative', padding: '20px 0', margin: 'auto', textAlign: 'center' }}></i> :
                         res.map((datas, i) =>  
-                            <div style={{ padding: '10px', margin: '0', height: 'auto' }} className={i%2==0 ? "row odd" : "row even"}>
+                            <div style={{ padding: '10px', margin: '0', height: 'auto' }} className={i%2===0 ? "row odd" : "row even"}>
                                 <div className="col-lg-9">
                                     <div className="row">
                                         <div className="col-lg-12">
@@ -227,7 +240,12 @@ class PastBooking extends Component {
                                             <div className="row">
                                                 <div className="col-lg-4">
                                                     <span className="rowLabel">
-                                                        { res[i].airport }
+                                                        { 
+                                                            (res[i].bookingType==="ATH") ? res[i].airport : 
+                                                            (res[i].bookingType==="ATA") ? res[i].AirportPickup : 
+                                                            (res[i].bookingType==="HTA") ? res[i].hotel : 
+                                                            (res[i].bookingType==="HTH") ? res[i].HotelPickup : <span></span>
+                                                        }
                                                     </span>
                                                 </div>
                                                 <div className="col-lg-8">
@@ -243,7 +261,12 @@ class PastBooking extends Component {
                                             <div className="row">
                                                 <div className="col-lg-4">
                                                     <span className="rowLabel">
-                                                        { res[i].hotel }
+                                                        { 
+                                                            (res[i].bookingType==="ATH") ? res[i].hotel : 
+                                                            (res[i].bookingType==="ATA") ? res[i].AirportDropoff : 
+                                                            (res[i].bookingType==="HTA") ? res[i].airport : 
+                                                            (res[i].bookingType==="HTH") ? res[i].HotelDropoff : <span></span>
+                                                        }
                                                     </span>
                                                 </div>
                                                 <div className="col-lg-8">

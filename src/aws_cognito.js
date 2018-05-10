@@ -1,9 +1,6 @@
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import { cognito } from './config';
 
-import AWS from 'aws-sdk'
-
-
 export function getUserToken(currentUser) {
     return new Promise((resolve, reject) => {
       if (currentUser === null) {

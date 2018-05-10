@@ -3,11 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import '../App.css';
 
-import ATHHistory from './ath_history';
-import HTAHistory from './hta_history';
-import HTHHistory from './hth_history';
-import ATAHistory from './ata_history';
-
 class Admin extends Component {
 
     componentDidMount() {
@@ -16,7 +11,7 @@ class Admin extends Component {
         if (token === null || token === undefined) {
             this.props.history.push('/');
         }
-        else if(localStorage.admin != "Y"){
+        else if(localStorage.admin !== "Y"){
             alert('You are not authorized to view this page');
             this.props.history.push('/');
         }
@@ -53,16 +48,16 @@ class Admin extends Component {
 
                             <div className="history-bg-image">
                                 <TabPanel>
-                                    <ATHHistory />
+                                    
                                 </TabPanel>
                                 <TabPanel>
-                                    <HTAHistory />
+                                    
                                 </TabPanel>
                                 <TabPanel>
-                                    <HTHHistory />
+                                    
                                 </TabPanel>
                                 <TabPanel>
-                                    <ATAHistory />
+                                    
                                 </TabPanel>
                             </div>
                         </Tabs>

@@ -1,7 +1,5 @@
-import React from 'react';
 import * as moment from 'moment';
 import axios from 'axios';
-import { SENDGRID_API_KEY } from '../config';
 
 //Random Booking Id
 export function BookingId() {
@@ -16,12 +14,14 @@ export function BookingId() {
 
 //For auto complete
 export function inputProps(StateHotel, functionOnChange, placeHolder) {
-    return inputProps = {
+    const input = {
         value: StateHotel,
         onChange: functionOnChange,
         placeholder: placeHolder,
         types: ['establishment']
     }
+
+    return input;
 }
 
 //For Hotel Input Antd Styling
@@ -55,13 +55,14 @@ export function disabledDropoffHours(current, pickuptime) {
 //Ordering data Ascending
 export function OrderASC(data, dataType) {
 
-    if (dataType == 'string') {
+    if (dataType === 'string') {
         data.sort(function (a, b) {
             return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
         });
-    } else if (dataType == 'date') {
+    } else if (dataType === 'date') {
         data.sort(function (a, b) {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            //return new Date(parsedTime) - new Date(a.pickupDate);
+            return moment(a.pickupDate, 'Do MMMM YYYY h:mmA').diff(moment(b.pickupDate, 'Do MMMM YYYY h:mmA'));
         });
     }
 }

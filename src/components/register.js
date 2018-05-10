@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { signUpUser } from '../aws_cognito';
 import { cognito } from '../config';
 import {
     CognitoUserPool,
-    CognitoUserAttribute,
-    CognitoIdentityServiceProvider,
-    AuthenticationDetails,
-    CognitoUser
+    CognitoUserAttribute
 } from "amazon-cognito-identity-js";
-import { Input, Form, Row, Col, Button } from 'antd';
+import { Input, Form, Button } from 'antd';
 import '../App.css';
 
 const FormItem = Form.Item;
@@ -89,7 +85,7 @@ class Register extends Component {
         let name = this.state.FirstName+' '+this.state.LastName;
         let phone = this.state.countryCode+phoneNumber;
         try {
-            const newUser = await this.signup(name, this.state.email, phone, this.state.password);
+            await this.signup(name, this.state.email, phone, this.state.password);
             alert('Thank you for the registration. We have sent a verification email to your email address')
             this.props.history.push('/verify');
         } catch (e) {
