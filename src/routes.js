@@ -18,6 +18,10 @@ import SuccessPage from './components/success_page';
 class Routes extends Component {
 
     render() {
+        console.log('customer name', localStorage.getItem('CustName'));
+        console.log('email', localStorage.getItem('email'));
+        console.log('phone number',localStorage.getItem('PhoneNumber'));
+        console.log('token',localStorage.getItem('token'));
         const token = localStorage.getItem('token');
         return (
             <div>

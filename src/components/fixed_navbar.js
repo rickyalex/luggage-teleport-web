@@ -31,9 +31,9 @@ class FixedNavbar extends React.Component {
     if (currentUser !== null) {
       currentUser.signOut();
     }
-    localStorage.removeItem('state')
-    localStorage.removeItem('token')
-    localStorage.removeItem('CustName')
+    localStorage.removeItem('state');
+    localStorage.removeItem('token');
+    localStorage.removeItem('CustName');
     if (AWS.config.credentials) {
       AWS.config.credentials.clearCachedId();
       AWS.config.credentials = new AWS.CognitoIdentityCredentials({});
@@ -99,7 +99,7 @@ class FixedNavbar extends React.Component {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto ml-auto">
               <li className="nav-item" >
-                <Link className="nav-link" to="/">Home</Link>
+                <Link className="nav-link" to="/home">Home</Link>
               </li>
               <li className="nav-item" >
                 <Link className="nav-link" to="/history">My Bookings</Link>

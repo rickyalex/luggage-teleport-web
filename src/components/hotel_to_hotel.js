@@ -226,7 +226,7 @@ class HotelToHotel extends Component {
                     />
                     <hr />
                     <Input
-                        prefix={<MdPerson style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
+                        prefix={<MdPerson style={{ fontSize: '1.1em', color: '#2a6fb3', paddingRight: '3px' }} />}
                         defaultValue={this.state.RsvpNameHotelPickup}
                         placeholder="Guest name"
                         onChange={e => this.setState({ RsvpNameHotelPickup: e.target.value })}
@@ -234,7 +234,7 @@ class HotelToHotel extends Component {
                     <hr />
                     <Input
                         defaultValue={this.state.HotelPickupBookingRef}
-                        prefix={<MdHotel style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
+                        prefix={<MdHotel style={{ fontSize: '1.1em', color: '#2a6fb3', paddingRight: '3px' }} />}
                         placeholder="Hotel room number"
                         onChange={e => this.setState({ HotelPickupBookingRef: e.target.value })}
                     />
@@ -338,7 +338,7 @@ class HotelToHotel extends Component {
                     <hr />
                     <Input
                         defaultValue={this.state.HotelDropoffBookingRef}
-                        prefix={<MdHotel style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
+                        prefix={<MdHotel style={{ fontSize: '1.1em', color: '#2a6fb3', paddingRight: '3px' }} />}
                         placeholder="Hotel confirmation number"
                         onChange={e => this.setState({ HotelDropoffBookingRef: e.target.value })}
                     />

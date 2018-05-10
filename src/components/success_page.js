@@ -1,28 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+
 import Navbar from './navbar';
 import '../App.css';
 import { Icon, Button } from 'antd';
 
 class SuccessPage extends Component {
-    constructor(props) {
-        super(props);
+
+    handleClick = () => {
+        this.props.history.push('/home');
     }
 
-    buttonHome(){
+    buttonHome = () => {
         return (
-            <Link to="/" style={{ color: 'black' }}>
                 <Button 
-                    style={{ width: 200 }}
-                    type="primary">
+                    style={{ width: 200, color: 'black'}}
+                    type="primary"
+                    onClick= {this.handleClick}
+                    >
                     Back to Home
                 </Button>
-            </Link>
         )
     }
 
     render() {
+        console.log(this.props);
         return (
             <div className="bg-image">
                 <div>

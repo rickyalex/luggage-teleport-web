@@ -17,7 +17,6 @@ class App extends Component {
 
   componentDidMount(){
     const token = localStorage.getItem('token');
-
     if(token === null || token === undefined){
       this.props.history.push('/')
     }

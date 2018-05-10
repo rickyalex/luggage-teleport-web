@@ -255,7 +255,7 @@ class HotelToAirport extends Component {
                     />
                     <hr />
                     <Input
-                        prefix={<MdPerson style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
+                        prefix={<MdPerson style={{ fontSize: '1.1em', color: '#2a6fb3', paddingRight: '3px' }} />}
                         defaultValue={this.state.NameUnderHotelRsv}
                         placeholder="Guest name"
                         onChange={e => this.setState({ NameUnderHotelRsv: e.target.value })}
@@ -263,7 +263,7 @@ class HotelToAirport extends Component {
                     <hr />
                     <Input
                         defaultValue={this.state.HotelBookingRef}
-                        prefix={<MdHotel style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
+                        prefix={<MdHotel style={{ fontSize: '1.1em', color: '#2a6fb3', paddingRight: '3px' }} />}
                         placeholder="Hotel room number"
                         onChange={e => this.setState({ HotelBookingRef: e.target.value })}
                     />
@@ -440,7 +440,7 @@ class HotelToAirport extends Component {
                     <hr />
                     <Input
                         defaultValue={this.state.FlightNumber}
-                        prefix={<MdFlightTakeoff style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
+                        prefix={<MdFlightTakeoff style={{ fontSize: '1.1em', color: '#2a6fb3', paddingRight: '3px' }} />}
                         placeholder="Flight Number"
                         onChange={e => this.setState({ FlightNumber: e.target.value })}
                     />

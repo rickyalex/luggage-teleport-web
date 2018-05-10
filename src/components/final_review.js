@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { PassBookData, GetLuggageData } from '../actions';
+import { Redirect } from 'react-router-dom';
+import { PassBookData, GetLuggageData, ClearForms } from '../actions';
 import FixedNavbar from './fixed_navbar';
 import '../App.css';
 import * as moment from 'moment';
@@ -43,10 +44,7 @@ class FinalReview extends Component {
         else{
             props.history.push('/');
         }
-        
-
     }
-
 
     PushData() {
         //const { dispatch } = this.props;
@@ -246,6 +244,7 @@ class FinalReview extends Component {
 
         axios.post('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/'+apiUrl, data, config)
             .then((response) => {
+                this.props.ClearForms();
                 this.props.history.push('/successpage');
             }, (err) => {
                 this.setState({ isLoading: false })
@@ -258,10 +257,11 @@ class FinalReview extends Component {
     }
 
     render() {
-        //console.log(this.props.BookData[0])
-        let token = localStorage.getItem('token')
-        const data = this.props.BookData[0]
+        console.log("bookdata" , this.props.BookData[0]);
+        let token = localStorage.getItem('token');
+        const data = this.props.BookData[0];
         return (
+            data ? 
             <div>
                 <div>
                   < FixedNavbar />
@@ -387,7 +387,8 @@ class FinalReview extends Component {
 
                     </div>
                 </div>
-            </div>
+            </div>:
+            <Redirect to='/home' />
         )
     }
 }
@@ -399,4 +400,5 @@ function mapStateToProps(state) {
         LuggageData
     }
 }
-export default connect(mapStateToProps, {PassBookData, GetLuggageData})(FinalReview);
+
+export default connect(mapStateToProps, {PassBookData, GetLuggageData, ClearForms})(FinalReview);
