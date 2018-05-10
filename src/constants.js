@@ -5,3 +5,4 @@ export const GET_AIRPORT_DATA = 'GET_AIRPORT_DATA';
 export const GET_HOTEL_DATA = 'GET_HOTEL_DATA';
 export const GET_LUGGAGE_DATA = 'GET_LUGGAGE_DATA';
 export const TOGGLE_SB = 'TOGGLE_SB';
+export const CLEAR_FORMS = 'CLEAR_FORMS';

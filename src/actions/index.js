@@ -5,7 +5,8 @@ import {
     GET_AIRPORT_DATA,
     GET_HOTEL_DATA,
     GET_LUGGAGE_DATA,
-    TOGGLE_SB
+    TOGGLE_SB,
+    CLEAR_FORMS
 } from '../constants';
 
 export function LogUser(Email, PhoneNumber) {
@@ -66,6 +67,13 @@ export function ToggleSB(sbState) {
     const action = {
         type: TOGGLE_SB,
         sbState
+    }
+    return action;
+}
+
+export function ClearForms() {
+    const action = {
+        type: CLEAR_FORMS,
     }
     return action;
 }

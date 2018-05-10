@@ -327,7 +327,7 @@ class AirportToAirport extends Component {
                     <hr />
                     <Input
                         defaultValue={this.state.PickupFlightNumber}
-                        prefix={<MdFlightTakeoff style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
+                        prefix={<MdFlightTakeoff style={{ fontSize: '1.1em', color: '#2a6fb3', paddingRight: '3px' }} />}
                         placeholder="Flight Number"
                         onChange={e => this.setState({ PickupFlightNumber: e.target.value })}
                     />
@@ -497,7 +497,7 @@ class AirportToAirport extends Component {
                     <hr />
                     <Input
                         defaultValue={this.state.DropoffFlightNumber}
-                        prefix={<MdFlightTakeoff style={{ fontSize: '1.1em', color: '#1a1aff', paddingRight: '3px' }} />}
+                        prefix={<MdFlightTakeoff style={{ fontSize: '1.1em', color: '#2a6fb3', paddingRight: '3px' }} />}
                         placeholder="Flight Number"
                         onChange={e => this.setState({ DropoffFlightNumber: e.target.value })}
                     />
