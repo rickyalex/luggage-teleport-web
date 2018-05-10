@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+import Provider from 'react-redux/es/components/Provider';
 import Routes from './routes';
 import reducer from './reducers';
 import { loadState, saveState } from './localStorage';

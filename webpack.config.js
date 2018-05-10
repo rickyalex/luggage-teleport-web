@@ -33,6 +33,12 @@ module.exports = {
     extensions: ['.js', '.jsx'],
   },
   plugins: [
+    new webpack.optimize.AggressiveMergingPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: { warnings: false },
+      comments: false,
+      minimize: false
+    }),
     new ExtractTextPlugin({ filename: 'app.css', allChunks: true })
   ],
   devServer: {

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import connect from 'react-redux/es/connect/connect';
 import '../App.css';
 import axios from 'axios';
 import FixedNavbar from './fixed_navbar';
 import { Button, Icon, Input, Row, Col, Form } from 'antd';
 import { s3 } from '../config';
 //import ReactS3 from 'react-s3';
-import { Storage } from "aws-amplify";
+import { Storage } from "aws-amplify/lib/Storage/Storage";
 
 
 const FormItem = Form.Item;

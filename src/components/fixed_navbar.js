@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from 'react-router-dom';
 import { ToggleSB } from '../actions';
-import { connect } from 'react-redux';
+import connect from 'react-redux/es/connect/connect';
 // import { slide as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
 import '../App.css'

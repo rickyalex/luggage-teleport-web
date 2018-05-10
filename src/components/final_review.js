@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import connect from 'react-redux/es/connect/connect';
 import { Redirect } from 'react-router-dom';
 import { PassBookData, GetLuggageData, ClearForms } from '../actions';
 import FixedNavbar from './fixed_navbar';
