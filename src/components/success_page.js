@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import FixedNavbar from './fixed_navbar';
 import '../App.css';
 import { Icon, Button } from 'antd';
 
 class SuccessPage extends Component {
 
-    buttonHome(){
+    handleClick = () => {
+        this.props.history.push('/home');
+    }
+
+    buttonHome = () => {
         return (
-            <Link to="/" style={{ color: 'black' }}>
                 <Button 
-                    style={{ width: 200 }}
-                    type="primary">
+                    style={{ width: 200, color: 'black'}}
+                    type="primary"
+                    onClick= {this.handleClick}
+                    >
                     Back to Home
                 </Button>
-            </Link>
         )
     }
 
     render() {
+        console.log(this.props);
         return (
             <div className="bg-image">
                 <div>

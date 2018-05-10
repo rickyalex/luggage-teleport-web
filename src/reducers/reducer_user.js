@@ -11,11 +11,11 @@ export default (state = user, action) => {
         case SIGNED_IN:
             const { Email, PhoneNumber } = action;
 
-            user = {
+            let newUser = {
                 Email,
                 PhoneNumber
             }
-            return user;
+            return newUser;
         default:
             return state;
     }
