@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { cognito } from '../config';
-import CognitoUserPool from "amazon-cognito-identity-js/es/CognitoUserPool";
-import CognitoUserAttribute from "amazon-cognito-identity-js/es/CognitoUserAttribute";
+import {
+    CognitoUserPool,
+    CognitoUserAttribute
+} from "amazon-cognito-identity-js";
 import { Input, Form, Button } from 'antd';
 import '../App.css';
 

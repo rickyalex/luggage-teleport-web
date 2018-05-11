@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import connect from 'react-redux/es/connect/connect';
+import { connect } from 'react-redux';
 import '../App.css';
 import axios from 'axios';
 import { Input } from 'antd';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import connect from 'react-redux/es/connect/connect';
+import { connect } from 'react-redux';
 import { PassBookData, GetAirlineData, GetAirportData, GetLuggageData } from '../actions';
 import '../App.css';
 import axios from 'axios';
@@ -8,9 +8,7 @@ import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { inputProps, OrderASC, cssClasses, disabledDate } from './helper';
 import { Input, Button, Select, Row, Col, InputNumber, DatePicker } from 'antd';
-import { MdFlightTakeoff } from 'react-icons/lib/md/flight-takeoff';
-import { MdPerson } from 'react-icons/lib/md/person';
-import { MdHotel } from 'react-icons/lib/md/hotel';
+import { MdFlightTakeoff, MdPerson, MdHotel } from 'react-icons/lib/md';
 
 const Option = Select.Option;
 

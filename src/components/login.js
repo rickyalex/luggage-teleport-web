@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import connect from 'react-redux/es/connect/connect';
+import { connect } from 'react-redux';
 import { LogUser } from '../actions';
 import { cognito } from '../config';
 import { OrderASC } from './helper';
-import CognitoUserPool from "amazon-cognito-identity-js/es/CognitoUserPool";
-import CognitoUser from "amazon-cognito-identity-js/es/CognitoUser";
-import AuthenticationDetails from "amazon-cognito-identity-js/es/AuthenticationDetails";
+import {
+    CognitoUserPool,
+    AuthenticationDetails,
+    CognitoUser
+} from "amazon-cognito-identity-js";
 import { Input, Form, Icon, Button } from 'antd';
 import axios from 'axios';
 import '../App.css';

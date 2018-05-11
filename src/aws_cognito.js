@@ -1,4 +1,4 @@
-import CognitoUserPool from 'amazon-cognito-identity-js/es/CognitoUserPool';
+import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import { cognito } from './config';
 
 export function getUserToken(currentUser) {

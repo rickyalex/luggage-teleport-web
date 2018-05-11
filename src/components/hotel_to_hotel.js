@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import connect from 'react-redux/es/connect/connect';
+import { connect } from 'react-redux';
 import { PassBookData, GetLuggageData } from '../actions';
 import '../App.css';
 import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { inputProps, disabledDate, cssClasses } from './helper';
 import { Input, Button, Select, Row, Col, InputNumber, DatePicker } from 'antd';
-import { MdPerson } from 'react-icons/lib/md/person';
-import { MdHotel } from 'react-icons/lib/md/hotel';
+import { MdPerson, MdHotel } from 'react-icons/lib/md';
 
 const Option = Select.Option;
 
