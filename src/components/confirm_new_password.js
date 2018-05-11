@@ -85,7 +85,7 @@ class ConfirmNewPassword extends Component {
         const { isLoading } = this.state;
         return (
             <div>
-                <div className="bg-image">
+                <div>
                     <div align="center" style={{ marginTop: '100px' }}>
                         <Form onSubmit={this.handleConfirmationSubmit}>
                             <h3 style={{ color: 'yellow', marginBottom: '2em' }}>Change Password</h3>

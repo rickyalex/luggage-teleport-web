@@ -42,14 +42,7 @@ hr{
 }
 
 body {
-  background-image: url(https://www.luggageteleport.com/wp-content/uploads/2017/09/homebg.png);
-  background-attachment: fixed;
-  width: 100%;
-  height: 100%;
-}
-
-.history-bg-image {
-  background-image: url(https://www.luggageteleport.com/wp-content/uploads/2017/09/contact-bg.jpg) no-repeat;
+  background-image: url(https://s3-us-west-1.amazonaws.com/luggageteleport.net/img/contact-bg.jpg);
   position: absolute;
   background-attachment: fixed;
   background-position: center center;
@@ -58,12 +51,6 @@ body {
   height: 100%;
 }
 
-.popup-image {
-  width: 100%;
-  height: 100%;
-  background-image: url(https://www.luggageteleport.com/wp-content/uploads/2017/09/homebg.png);
-  /* background-size: cover; */
-}
 .registerNotes{
   font-size: 78.5%;
 }
@@ -468,7 +455,7 @@ svg.input-prefix{
 }
 
 .ant-calendar-picker-icon:after{
-  color: #2a6fb3;  !important;
+  color: #2a6fb3 !important;
 }
 
 .dp input {

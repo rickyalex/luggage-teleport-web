@@ -71,7 +71,7 @@ class VerifyAccount extends Component {
     render() {
         const { isLoading } = this.state;
         return (
-            <div className="bg-image">
+            <div>
                 <div align="center" >
                     <Form onSubmit={this.handleConfirmationSubmit} style={{ position: 'relative', top: '100px', margin: 'auto', width: '60%' }}>
                         <h2 style={{ color: 'yellow', marginBottom: '1em' }}>Complete your registration</h2>

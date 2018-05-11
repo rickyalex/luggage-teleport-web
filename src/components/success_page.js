@@ -24,7 +24,7 @@ class SuccessPage extends Component {
     render() {
         console.log(this.props);
         return (
-            <div className="bg-image">
+            <div>
                 <div>
                   < FixedNavbar />
                 </div>
