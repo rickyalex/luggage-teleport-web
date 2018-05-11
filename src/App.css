@@ -468,7 +468,7 @@ svg.input-prefix{
 }
 
 .ant-calendar-picker-icon:after{
-  color: rgb(26, 26, 255) !important;
+  color: #2a6fb3;  !important;
 }
 
 .dp input {
