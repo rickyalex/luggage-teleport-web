@@ -33,7 +33,7 @@ class PastBooking extends Component {
 
     async GetBookingData() {
         this.setState({ isLoading: true });
-
+        let arr = [];
         const { Email } = this.props.user
             let url = `https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/AirportToHotel-get/${Email}`;
             await axios.get(url)
@@ -41,13 +41,11 @@ class PastBooking extends Component {
                     let data = res.data.result
                     if(data.length > 0){
                         for(var i = 0; i < data.length; i++){
-                            if(String(data[i].status).toLowerCase() === "order being processed"){
+                            if(String(data[i].status).toLowerCase() === "completed"){
                                 console.log(i);
-                                data.splice(i,1);
+                                arr.push(data[i])
                             }
-                        } 
-                        OrderASC(data, 'date');
-                        this.setState({ data: data })    
+                        }
                     }
                 }).catch((err) => {
                     console.error(err);
@@ -59,14 +57,10 @@ class PastBooking extends Component {
                     let data = res2.data.result
                     if(data.length > 0){
                         for(var i = 0; i < data.length; i++){
-                            if(String(data[i].status).toLowerCase() !== "completed"){
+                            if(String(data[i].status).toLowerCase() === "completed"){
                                 console.log(data[i]);
-                                data.splice(i,1);
+                                arr.push(data[i])
                             }
-                        }
-                        OrderASC(data, 'date');
-                        for(var i=0;i<data.length;i++){
-                            this.setState({ data: [...this.state.data, data[i]] })    
                         }
                     }      
                 }).catch((err) => {
@@ -79,15 +73,11 @@ class PastBooking extends Component {
                     let data = res3.data.result
                     if(data.length > 0){
                         for(var i = 0; i < data.length; i++){
-                            if(String(data[i].status).toLowerCase() !== "completed"){
+                            if(String(data[i].status).toLowerCase() === "completed"){
                                 console.log(data[i]);
-                                data.splice(i,1);
+                                arr.push(data[i])
                             }
                         }
-                        OrderASC(data, 'date');
-                        for(var i=0;i<data.length;i++){
-                            this.setState({ data: [...this.state.data, data[i]] })    
-                        } 
                     }      
                 }).catch((err) => {
                     console.error(err);
@@ -99,19 +89,14 @@ class PastBooking extends Component {
                     let data = res4.data.result
                     if(data.length > 0){
                         for(var i = 0; i < data.length; i++){
-                            if(String(data[i].status).toLowerCase() !== "completed"){
+                            if(String(data[i].status).toLowerCase() === "completed"){
                                 console.log(data[i]);
-                                data.splice(i,1);
+                                arr.push(data[i])
                             }
                         }
-                        OrderASC(data, 'date');
-                        for(var i=0;i<data.length;i++){
-                            this.setState({ data: [...this.state.data, data[i]] })    
-                        }
-                    }   
-                    this.setState({ isLoading: false },()=>{
-                        console.log(this.state.data)
-                    }); 
+                    }
+                    OrderASC(arr,'date');
+                    this.setState({ data: arr, isLoading: false }); 
                 }).catch((err) => {
                     console.error(err);
                 })
@@ -194,7 +179,7 @@ class PastBooking extends Component {
                 <Input 
                     style={{ width: "40px", height: "20px", margin: "0 5px" }} 
                     defaultValue={this.state.page} 
-                    value={this.state.page}
+                    value={this.state.page} 
                     onChange={this.handlePageInput}
                     disabled={(this.state.data.length === 0)}/> 
                 of {Math.ceil(this.state.data.length/this.state.page_size)}

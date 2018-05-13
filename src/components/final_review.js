@@ -136,7 +136,18 @@ class FinalReview extends Component {
     }
 
     async handleNonce(nonce, cardData) {
-        const bookingId = BookingId();
+        //const bookingId = BookingId();
+        this.setState({ isLoading: true })
+
+        await axios.get('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/IDcounter-get/lugg-last-id')
+            .then((res) => {
+                this.setState({
+                    BookingId: res.data.result[0].lastID
+                })
+            }).catch((err) => {
+                console.log(err);
+            })
+
         let apiUrl = ""
         let data = ""
         let token = localStorage.getItem('token')
@@ -146,7 +157,9 @@ class FinalReview extends Component {
                 'Content-Type': 'application/json'
             }
         }
-        this.setState({ isLoading: true })
+        let newID = {
+            lastID: parseInt(this.state.BookingId)+1
+        }
 
         if(this.BookingType === "ATH"){
             apiUrl = "AirportToHotel-create"
@@ -154,7 +167,7 @@ class FinalReview extends Component {
                 NameUnderHotelRsv, PhoneNumber, PickupDate, PickupHour, PickupMinute, PickupFormat } = this.props.BookData[0]
 
             data = JSON.stringify({
-                BookingId: `ATH${bookingId}`,
+                BookingId: newID.lastID,
                 flightNumber: FlightNumber,
                 hotelReservationName: NameUnderHotelRsv,
                 airport: Airport,
@@ -178,7 +191,7 @@ class FinalReview extends Component {
                 PickupDate, PickupHour, PickupMinute, PickupFormat, DropoffDate, DropoffHour, DropoffMinute, DropoffFormat } = this.props.BookData[0];
 
             data = JSON.stringify({
-                BookingId: `ATA${bookingId}`,
+                BookingId: newID.lastID,
                 AirlineDropoff: AirlineDropoff,
                 AirlinePickup: AirlinePickup,
                 AirportDropoff: AirportDropoff,
@@ -201,7 +214,7 @@ class FinalReview extends Component {
                 PickupDate, PickupHour, PickupMinute, PickupFormat, DropoffDate, DropoffHour, DropoffMinute, DropoffFormat } = this.props.BookData[0];
 
             data = JSON.stringify({
-                BookingId: `HTA${bookingId}`,
+                BookingId: newID.lastID,
                 airport: Airport,
                 airline: Airline,
                 flightNumber: FlightNumber,
@@ -224,7 +237,7 @@ class FinalReview extends Component {
                     PickupDate, PickupHour, PickupMinute, PickupFormat, PhoneNumber, RsvpNameHotelDropoff, RsvpNameHotelPickup } = this.props.BookData[0];
 
             data = JSON.stringify({
-                BookingId: `HTH${bookingId}`,
+                BookingId: newID.lastID,
                 HotelDropoff: HotelDropoff,
                 HotelDropoffBookingRef: HotelDropoffBookingRef,
                 dropoffDate: moment(DropoffDate).format('Do MMMM YYYY')+' '+DropoffHour+":"+DropoffMinute+DropoffFormat,
@@ -242,10 +255,17 @@ class FinalReview extends Component {
             })
         }
 
-        axios.post('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/'+apiUrl, data, config)
+        await axios.post('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/'+apiUrl, data, config)
             .then((response) => {
                 this.props.ClearForms();
                 this.props.history.push('/successpage');
+            }, (err) => {
+                this.setState({ isLoading: false })
+            })
+
+        await axios.put('https://el3ceo7dwe.execute-api.us-west-1.amazonaws.com/dev/handler/IDcounter-update/lugg-last-id', newID, config)
+            .then((response) => {
+                console.log(response)
             }, (err) => {
                 this.setState({ isLoading: false })
             })

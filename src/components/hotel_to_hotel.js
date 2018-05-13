@@ -7,7 +7,8 @@ import * as moment from 'moment';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { inputProps, disabledDate, cssClasses } from './helper';
 import { Input, Button, Select, Row, Col, InputNumber, DatePicker } from 'antd';
-import { MdPerson, MdHotel } from 'react-icons/lib/md';
+import MdPerson from 'react-icons/lib/md/person';
+import MdHotel from 'react-icons/lib/md/hotel';
 
 const Option = Select.Option;
 

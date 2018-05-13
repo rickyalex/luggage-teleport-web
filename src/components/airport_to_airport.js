@@ -7,7 +7,7 @@ import axios from 'axios';
 import * as moment from 'moment';
 import { OrderASC, disabledDate } from './helper';
 import { Input, Button, Select, Row, Col, InputNumber, DatePicker } from 'antd';
-import { MdFlightTakeoff } from 'react-icons/lib/md';
+import MdFlightTakeoff from 'react-icons/lib/md/flight-takeoff';
 
 const Option = Select.Option;
 
